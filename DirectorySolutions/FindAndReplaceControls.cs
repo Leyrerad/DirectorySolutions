@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace DirectorySolutions
 {
@@ -15,10 +16,12 @@ namespace DirectorySolutions
         public event EventHandler FindReplaceClicked;
         private string inText;
         private string outText;
+        private Form mainForm;
 
         public FindAndReplaceControls()
         {
             InitializeComponent();
+            mainForm = (Parent as Form);
         }
 
         private void FindAndReplaceControls_Load(object sender, EventArgs e)
@@ -26,7 +29,7 @@ namespace DirectorySolutions
 
         }
 
-        public bool SetReplacementTexts()
+        public bool SetAndValidateReplacementTexts()
         {
             var tempInText = inTxt.Text;
             var tempOutText = outTxt.Text;
@@ -58,15 +61,6 @@ namespace DirectorySolutions
                         inTxtErrorProv.Clear();
                     }
 
-                    if (string.IsNullOrEmpty(tempOutText))
-                    {
-                        outTxt.Focus();
-                        outTxtErrorProv.SetError(outTxt, "Text cannot be blank.");
-                    }
-                    else
-                    {
-                        outTxtErrorProv.Clear();
-                    }
                     return false;
                 }
             }
@@ -92,6 +86,15 @@ namespace DirectorySolutions
         public string getOutText()
         {
             return outText;
+        }
+
+        private void btnPreAppend_Click(object sender, EventArgs e)
+        {
+            var path = mainForm.Controls.Find("filePath", true)[0].Text;
+            if (Directory.Exists(path) && FileOperations.getFiles() != null)
+            {
+
+            }
         }
     }
 }

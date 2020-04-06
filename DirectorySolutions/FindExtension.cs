@@ -16,5 +16,18 @@ namespace DirectorySolutions
         {
             InitializeComponent();
         }
+
+        private void brnFileExtSearch_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(findExtTxt.Text))
+            {
+                findExtTxt.Focus();
+                findExtErrorProv.SetError(findExtTxt, "Extension cannot be blank.");
+            }
+            else
+            {
+                findExtErrorProv.Clear();
+            }
+        }
     }
 }

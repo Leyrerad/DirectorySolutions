@@ -52,6 +52,7 @@
     <Compile Include="DirectorySelection.Designer.cs">
       <DependentUpon>DirectorySelection.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileInformation.cs" />
     <Compile Include="FileOperations.cs" />
     <Compile Include="FileSelection.cs">
       <SubType>UserControl</SubType>

@@ -37,8 +37,15 @@
             this.outTxt = new System.Windows.Forms.TextBox();
             this.btnFindReplace = new System.Windows.Forms.Button();
             this.inTxtErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.prependTxt = new System.Windows.Forms.TextBox();
+            this.appendTxt = new System.Windows.Forms.TextBox();
+            this.prependLbl = new System.Windows.Forms.Label();
+            this.appendLbl = new System.Windows.Forms.Label();
+            this.btnPreAppend = new System.Windows.Forms.Button();
             this.outTxtErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -97,6 +104,53 @@
             // 
             this.inTxtErrorProv.ContainerControl = this;
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // prependTxt
+            // 
+            this.prependTxt.Location = new System.Drawing.Point(58, 52);
+            this.prependTxt.Name = "prependTxt";
+            this.prependTxt.Size = new System.Drawing.Size(282, 20);
+            this.prependTxt.TabIndex = 24;
+            // 
+            // appendTxt
+            // 
+            this.appendTxt.Location = new System.Drawing.Point(430, 52);
+            this.appendTxt.Name = "appendTxt";
+            this.appendTxt.Size = new System.Drawing.Size(282, 20);
+            this.appendTxt.TabIndex = 25;
+            // 
+            // prependLbl
+            // 
+            this.prependLbl.AutoSize = true;
+            this.prependLbl.Location = new System.Drawing.Point(3, 55);
+            this.prependLbl.Name = "prependLbl";
+            this.prependLbl.Size = new System.Drawing.Size(50, 13);
+            this.prependLbl.TabIndex = 26;
+            this.prependLbl.Text = "Prepend:";
+            // 
+            // appendLbl
+            // 
+            this.appendLbl.AutoSize = true;
+            this.appendLbl.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.appendLbl.Location = new System.Drawing.Point(373, 55);
+            this.appendLbl.Name = "appendLbl";
+            this.appendLbl.Size = new System.Drawing.Size(47, 13);
+            this.appendLbl.TabIndex = 27;
+            this.appendLbl.Text = "Append:";
+            // 
+            // btnPreAppend
+            // 
+            this.btnPreAppend.Location = new System.Drawing.Point(758, 50);
+            this.btnPreAppend.Name = "btnPreAppend";
+            this.btnPreAppend.Size = new System.Drawing.Size(115, 23);
+            this.btnPreAppend.TabIndex = 28;
+            this.btnPreAppend.Text = "Pre/Append";
+            this.btnPreAppend.UseVisualStyleBackColor = true;
+            this.btnPreAppend.Click += new System.EventHandler(this.btnPreAppend_Click);
+            // 
             // outTxtErrorProv
             // 
             this.outTxtErrorProv.ContainerControl = this;
@@ -105,15 +159,21 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnPreAppend);
+            this.Controls.Add(this.appendLbl);
+            this.Controls.Add(this.prependLbl);
+            this.Controls.Add(this.appendTxt);
+            this.Controls.Add(this.prependTxt);
             this.Controls.Add(this.btnFindReplace);
             this.Controls.Add(this.outTxt);
             this.Controls.Add(this.txtOutLbl);
             this.Controls.Add(this.inTxt);
             this.Controls.Add(this.textInLbl);
             this.Name = "FindAndReplaceControls";
-            this.Size = new System.Drawing.Size(886, 48);
+            this.Size = new System.Drawing.Size(886, 82);
             this.Load += new System.EventHandler(this.FindAndReplaceControls_Load);
             ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -133,6 +193,12 @@
         private System.Windows.Forms.TextBox outTxt;
         private System.Windows.Forms.Button btnFindReplace;
         private System.Windows.Forms.ErrorProvider inTxtErrorProv;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Button btnPreAppend;
+        private System.Windows.Forms.Label appendLbl;
+        private System.Windows.Forms.Label prependLbl;
+        private System.Windows.Forms.TextBox appendTxt;
+        private System.Windows.Forms.TextBox prependTxt;
         private System.Windows.Forms.ErrorProvider outTxtErrorProv;
     }
 }

@@ -89,4 +89,14 @@ namespace DirectorySolutions
             }
         }
     }
+
+    public enum DisplaySortOptionEnum
+    {
+        SizeAsc,
+        SizeDesc,
+        NameAsc,
+        NameDesc,
+        DateAsc,
+        DateDesc
+    }
 }
