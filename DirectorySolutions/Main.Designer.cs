@@ -39,8 +39,10 @@ namespace DirectorySolutions
             this.directoryOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findAllExtensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.display = new System.Windows.Forms.RichTextBox();
+            this.findExtensionControls = new DirectorySolutions.FindExtension();
             this.findAndReplaceControls = new DirectorySolutions.FindAndReplaceControls();
             this.directorySelectionControls = new DirectorySolutions.DirectorySelection();
             this.statusStrip1.SuspendLayout();
@@ -51,7 +53,7 @@ namespace DirectorySolutions
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 578);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 486);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(990, 22);
             this.statusStrip1.TabIndex = 1;
@@ -107,7 +109,8 @@ namespace DirectorySolutions
             // fileOperationsToolStripMenuItem
             // 
             this.fileOperationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.searchAndReplaceToolStripMenuItem});
+            this.searchAndReplaceToolStripMenuItem,
+            this.findAllExtensionsToolStripMenuItem});
             this.fileOperationsToolStripMenuItem.Name = "fileOperationsToolStripMenuItem";
             this.fileOperationsToolStripMenuItem.Size = new System.Drawing.Size(98, 20);
             this.fileOperationsToolStripMenuItem.Text = "File Operations";
@@ -115,9 +118,16 @@ namespace DirectorySolutions
             // searchAndReplaceToolStripMenuItem
             // 
             this.searchAndReplaceToolStripMenuItem.Name = "searchAndReplaceToolStripMenuItem";
-            this.searchAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.searchAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.searchAndReplaceToolStripMenuItem.Text = "Search and Replace";
             this.searchAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.searchAndReplaceToolStripMenuItem_Click);
+            // 
+            // findAllExtensionsToolStripMenuItem
+            // 
+            this.findAllExtensionsToolStripMenuItem.Name = "findAllExtensionsToolStripMenuItem";
+            this.findAllExtensionsToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.findAllExtensionsToolStripMenuItem.Text = "Find all Extensions";
+            this.findAllExtensionsToolStripMenuItem.Click += new System.EventHandler(this.findAllExtensionsToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -127,23 +137,30 @@ namespace DirectorySolutions
             // 
             // display
             // 
-            this.display.Location = new System.Drawing.Point(12, 302);
+            this.display.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.display.Location = new System.Drawing.Point(0, 247);
             this.display.Name = "display";
-            this.display.Size = new System.Drawing.Size(951, 239);
+            this.display.Size = new System.Drawing.Size(990, 239);
             this.display.TabIndex = 3;
             this.display.Text = "";
             // 
-            // findAndReplaceControls1
+            // findExtensionControls
+            // 
+            this.findExtensionControls.Location = new System.Drawing.Point(203, 228);
+            this.findExtensionControls.Name = "findExtensionControls";
+            this.findExtensionControls.Size = new System.Drawing.Size(491, 82);
+            this.findExtensionControls.TabIndex = 5;
+            // 
+            // findAndReplaceControls
             // 
             this.findAndReplaceControls.Location = new System.Drawing.Point(33, 250);
-            this.findAndReplaceControls.Name = "findAndReplaceControls1";
+            this.findAndReplaceControls.Name = "findAndReplaceControls";
             this.findAndReplaceControls.Size = new System.Drawing.Size(900, 46);
             this.findAndReplaceControls.TabIndex = 4;
-            this.findAndReplaceControls.Hide();
             // 
             // directorySelectionControls
             // 
-            this.directorySelectionControls.Location = new System.Drawing.Point(12, 36);
+            this.directorySelectionControls.Location = new System.Drawing.Point(12, 35);
             this.directorySelectionControls.Name = "directorySelectionControls";
             this.directorySelectionControls.Size = new System.Drawing.Size(954, 203);
             this.directorySelectionControls.TabIndex = 0;
@@ -152,7 +169,8 @@ namespace DirectorySolutions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(990, 600);
+            this.ClientSize = new System.Drawing.Size(990, 508);
+            this.Controls.Add(this.findExtensionControls);
             this.Controls.Add(this.findAndReplaceControls);
             this.Controls.Add(this.display);
             this.Controls.Add(this.statusStrip1);
@@ -167,17 +185,7 @@ namespace DirectorySolutions
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.directorySelectionControls.FilePathChanged += DirectorySelectionControls_FilePathChanged;
 
-        }
-
-        private void DirectorySelectionControls_FilePathChanged(object sender, System.EventArgs e)
-        {
-            var path = directorySelectionControls.Controls.Find("filePath", true)[0].Text;
-            if (Directory.Exists(path))
-            {
-                UpdateDisplay(path);
-            }
         }
 
         #endregion
@@ -195,5 +203,7 @@ namespace DirectorySolutions
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.RichTextBox display;
         private FindAndReplaceControls findAndReplaceControls;
+        private System.Windows.Forms.ToolStripMenuItem findAllExtensionsToolStripMenuItem;
+        private FindExtension findExtensionControls;
     }
 }

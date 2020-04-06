@@ -16,5 +16,21 @@ namespace DirectorySolutions
         {
             InitializeComponent();
         }
+
+        //private void btnFileImport_Click(object sender, EventArgs e)
+        //{
+        //    if (openImportFile.ShowDialog() == DialogResult.OK)
+        //    {
+        //        fileImportTxt.Text = openImportFile.FileName;
+        //    }
+        //}
+
+        //private void btnFileExport_Click(object sender, EventArgs e)
+        //{
+        //    if (openExportFile.ShowDialog() == DialogResult.OK)
+        //    {
+        //        fileExportTxt.Text = openExportFile.FileName;
+        //    }
+        //}
     }
 }

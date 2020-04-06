@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.openImportFile = new System.Windows.Forms.OpenFileDialog();
             this.openExportFile = new System.Windows.Forms.OpenFileDialog();
             this.textInLbl = new System.Windows.Forms.Label();
@@ -35,6 +36,10 @@
             this.txtOutLbl = new System.Windows.Forms.Label();
             this.outTxt = new System.Windows.Forms.TextBox();
             this.btnFindReplace = new System.Windows.Forms.Button();
+            this.inTxtErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
+            this.outTxtErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).BeginInit();
             this.SuspendLayout();
             // 
             // openImportFile
@@ -80,13 +85,21 @@
             // 
             // btnFindReplace
             // 
-            this.btnFindReplace.Location = new System.Drawing.Point(737, 12);
+            this.btnFindReplace.Location = new System.Drawing.Point(758, 12);
             this.btnFindReplace.Name = "btnFindReplace";
             this.btnFindReplace.Size = new System.Drawing.Size(115, 23);
             this.btnFindReplace.TabIndex = 23;
             this.btnFindReplace.Text = "Replace All";
             this.btnFindReplace.UseVisualStyleBackColor = true;
             this.btnFindReplace.Click += new System.EventHandler(this.btnFindReplace_Click);
+            // 
+            // inTxtErrorProv
+            // 
+            this.inTxtErrorProv.ContainerControl = this;
+            // 
+            // outTxtErrorProv
+            // 
+            this.outTxtErrorProv.ContainerControl = this;
             // 
             // FindAndReplaceControls
             // 
@@ -100,9 +113,10 @@
             this.Name = "FindAndReplaceControls";
             this.Size = new System.Drawing.Size(886, 48);
             this.Load += new System.EventHandler(this.FindAndReplaceControls_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.FindReplaceClicked += FindAndReplaceControls_FindReplaceClicked1;
 
         }
 
@@ -118,5 +132,7 @@
         private System.Windows.Forms.Label txtOutLbl;
         private System.Windows.Forms.TextBox outTxt;
         private System.Windows.Forms.Button btnFindReplace;
+        private System.Windows.Forms.ErrorProvider inTxtErrorProv;
+        private System.Windows.Forms.ErrorProvider outTxtErrorProv;
     }
 }

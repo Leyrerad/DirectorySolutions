@@ -13,7 +13,6 @@ namespace DirectorySolutions
 {
     public partial class DirectorySelection : UserControl
     {
-        private List<FileInformation> Files;
         public event EventHandler FilePathChanged;
         public DirectorySelection()
         {
@@ -80,21 +79,6 @@ namespace DirectorySolutions
             OnFilePathTextChanged(e);
         }
 
-        //private void btnFileImport_Click(object sender, EventArgs e)
-        //{
-        //    if(openImportFile.ShowDialog() == DialogResult.OK)
-        //    {
-        //        fileImportTxt.Text = openImportFile.FileName;
-        //    }
-        //}
-
-        //private void btnFileExport_Click(object sender, EventArgs e)
-        //{
-        //    if (openExportFile.ShowDialog() == DialogResult.OK)
-        //    {
-        //        fileExportTxt.Text = openExportFile.FileName;
-        //    }
-        //}
 
     }
 }

@@ -9,7 +9,7 @@ namespace DirectorySolutions
 {
     public static class FileOperations
     {
-        public static List<FileInformation> Files = new List<FileInformation>();
+        public static List<FileInfo> Files = new List<FileInfo>();
 
         public static void DirSearchRecursive(string path)
         {
@@ -17,17 +17,9 @@ namespace DirectorySolutions
             {
                 foreach (string d in Directory.GetDirectories(path))
                 {
-                    var directory = new DirectoryInfo(d);
-
                     foreach (string f in Directory.GetFiles(d))
                     {
-                        var fileInfo = new FileInfo(f);
-
-                        Files.Add(new FileInformation()
-                        {
-                            ParentDirectory = directory,
-                            FileInfo = fileInfo
-                        });
+                        Files.Add(new FileInfo(f));
                     }
 
                     DirSearchRecursive(d);
@@ -45,13 +37,7 @@ namespace DirectorySolutions
             {
                 foreach (string f in Directory.GetFiles(path))
                 {
-                    var fileInfo = new FileInfo(f);
-
-                    Files.Add(new FileInformation()
-                    {
-                        ParentDirectory = new DirectoryInfo(path),
-                        FileInfo = fileInfo
-                    });
+                    Files.Add(new FileInfo(f));
                 }
              
             }
@@ -61,18 +47,18 @@ namespace DirectorySolutions
             }
         }
 
-        public static bool FindAndReplace(List<FileInformation> files, string inString, string outString)
+        public static bool FindAndReplace(List<FileInfo> files, string inString, string outString)
         {
             try
             {
                 foreach(var file in files)
                 {
-                    if(file.FileInfo != null && !string.IsNullOrEmpty(file.FileInfo.Name) && file.FileInfo.Name.Contains(inString))
+                    if(file != null && !string.IsNullOrEmpty(file.Name) && file.Name.Contains(inString))
                     {
-                        var newName = file.FileInfo.Name.Replace(inString, outString);
-                        if(!string.Equals(file.FileInfo.FullName, newName))
+                        var newName = file.Name.Replace(inString, outString);
+                        if(!string.Equals(file.FullName, Path.Combine(file.DirectoryName, newName)))
                         {
-                            File.Move(file.FileInfo.FullName, Path.Combine(file.FileInfo.DirectoryName, newName));
+                            File.Move(file.FullName, Path.Combine(file.DirectoryName, newName));
                         }
                     }
                 }
@@ -85,7 +71,7 @@ namespace DirectorySolutions
             }
         }
 
-        public static List<FileInformation> getFiles()
+        public static List<FileInfo> getFiles()
         {
             return Files;
         }
@@ -102,12 +88,5 @@ namespace DirectorySolutions
                 return false;
             }
         }
-    }
-
-    public class FileInformation
-    {
-        public DirectoryInfo ParentDirectory { get; set; }
-        public FileInfo FileInfo { get; set; }
-     
     }
 }
