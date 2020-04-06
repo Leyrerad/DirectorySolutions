@@ -16,7 +16,7 @@ namespace DirectorySolutions
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DirecotrySolutions());
+            Application.Run(new Main());
         }
     }
 }

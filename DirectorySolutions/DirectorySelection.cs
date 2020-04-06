@@ -11,11 +11,11 @@ using System.Windows.Forms;
 
 namespace DirectorySolutions
 {
-    public partial class DirecotrySolutions : Form
+    public partial class DirectorySelection : UserControl
     {
         private List<FileInformation> Files;
 
-        public DirecotrySolutions()
+        public DirectorySelection()
         {
             InitializeComponent();
         }
@@ -88,7 +88,7 @@ namespace DirectorySolutions
         {
             if (!string.IsNullOrEmpty(status))
             {
-                toolStripStatusLabel1.Text = status;
+                //toolStripStatusLabel1.Text = status;
             }
         }
 
