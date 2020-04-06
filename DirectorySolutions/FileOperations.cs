@@ -61,6 +61,30 @@ namespace DirectorySolutions
             }
         }
 
+        public static bool FindAndReplace(List<FileInformation> files, string inString, string outString)
+        {
+            try
+            {
+                foreach(var file in files)
+                {
+                    if(file.FileInfo != null && !string.IsNullOrEmpty(file.FileInfo.Name) && file.FileInfo.Name.Contains(inString))
+                    {
+                        var newName = file.FileInfo.Name.Replace(inString, outString);
+                        if(!string.Equals(file.FileInfo.FullName, newName))
+                        {
+                            File.Move(file.FileInfo.FullName, Path.Combine(file.FileInfo.DirectoryName, newName));
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+        }
+
         public static List<FileInformation> getFiles()
         {
             return Files;

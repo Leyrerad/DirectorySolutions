@@ -53,6 +53,18 @@
       <DependentUpon>DirectorySelection.cs</DependentUpon>
     </Compile>
     <Compile Include="FileOperations.cs" />
+    <Compile Include="FileSelection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FileSelection.Designer.cs">
+      <DependentUpon>FileSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FindAndReplaceControls.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FindAndReplaceControls.Designer.cs">
+      <DependentUpon>FindAndReplaceControls.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +75,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="DirectorySelection.resx">
       <DependentUpon>DirectorySelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileSelection.resx">
+      <DependentUpon>FileSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FindAndReplaceControls.resx">
+      <DependentUpon>FindAndReplaceControls.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

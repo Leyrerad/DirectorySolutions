@@ -14,7 +14,7 @@ namespace DirectorySolutions
     public partial class DirectorySelection : UserControl
     {
         private List<FileInformation> Files;
-
+        public event EventHandler FilePathChanged;
         public DirectorySelection()
         {
             InitializeComponent();
@@ -68,61 +68,33 @@ namespace DirectorySolutions
 
         }
 
-        private void btnFileImport_Click(object sender, EventArgs e)
+        protected virtual void OnFilePathTextChanged(EventArgs e)
         {
-            if(openImportFile.ShowDialog() == DialogResult.OK)
-            {
-                fileImportTxt.Text = openImportFile.FileName;
-            }
-        }
-
-        private void btnFileExport_Click(object sender, EventArgs e)
-        {
-            if (openExportFile.ShowDialog() == DialogResult.OK)
-            {
-                fileExportTxt.Text = openExportFile.FileName;
-            }
-        }
-
-        private void UpdateStatus(string status)
-        {
-            if (!string.IsNullOrEmpty(status))
-            {
-                //toolStripStatusLabel1.Text = status;
-            }
-        }
-
-        private async void UpdateDisplay(string path)
-        {
-            UpdateStatus("Loading...");
-            FileOperations.clearFiles();
-            display.Text = "";
-            if (!Directory.GetDirectories(path).Any())
-            {
-                await Task.Run(() => { FileOperations.DirSearch(path); });
-            }
-            else
-            {
-                await Task.Run(() => { FileOperations.DirSearchRecursive(path); }); ;
-            }
-
-            Files = FileOperations.getFiles();
-            foreach (var info in Files)
-            {
-                if(info != null && info.FileInfo != null && !string.IsNullOrEmpty(info.FileInfo.FullName))
-                {
-                    display.Text += info.FileInfo.FullName + " \n";
-                }
-            }
-            UpdateStatus("Ready.");
+            var handler = FilePathChanged;
+            if (handler != null)
+                handler(this, e);
         }
 
         private void filePath_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(filePath.Text))
-            {
-                UpdateDisplay(filePath.Text);
-            }
+            OnFilePathTextChanged(e);
         }
+
+        //private void btnFileImport_Click(object sender, EventArgs e)
+        //{
+        //    if(openImportFile.ShowDialog() == DialogResult.OK)
+        //    {
+        //        fileImportTxt.Text = openImportFile.FileName;
+        //    }
+        //}
+
+        //private void btnFileExport_Click(object sender, EventArgs e)
+        //{
+        //    if (openExportFile.ShowDialog() == DialogResult.OK)
+        //    {
+        //        fileExportTxt.Text = openExportFile.FileName;
+        //    }
+        //}
+
     }
 }
