@@ -85,7 +85,6 @@
             this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 4;
             this.label1.Text = "Path:";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // webBrowser1
             // 
@@ -116,7 +115,6 @@
             this.Controls.Add(this.btnBack);
             this.Name = "DirectorySelection";
             this.Size = new System.Drawing.Size(960, 203);
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

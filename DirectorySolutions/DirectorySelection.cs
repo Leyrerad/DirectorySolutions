@@ -14,15 +14,13 @@ namespace DirectorySolutions
     public partial class DirectorySelection : UserControl
     {
         public event EventHandler FilePathChanged;
+        
         public DirectorySelection()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
+        public string path { get => filePath.Text; set => filePath.Text = value; }
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
@@ -33,11 +31,6 @@ namespace DirectorySolutions
                     webBrowser1.Url = new Uri(fbd.SelectedPath);
                 }
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void btnBack_Click(object sender, EventArgs e)
@@ -60,11 +53,6 @@ namespace DirectorySolutions
         {
             var path = e.Url.ToString().Replace("file:///", "").Replace("file://","");
             filePath.Text = path;
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
         }
 
         protected virtual void OnFilePathTextChanged(EventArgs e)
