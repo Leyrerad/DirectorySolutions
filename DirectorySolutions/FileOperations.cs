@@ -11,6 +11,33 @@ namespace DirectorySolutions
     {
         public static List<FileInfo> Files = new List<FileInfo>();
 
+        public static bool PopulateFileInformation(string path, out string errorMsg)
+        {
+            Files.Clear();
+            errorMsg = "";
+            try
+            {
+                string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+
+                foreach (var file in files)
+                {
+                    Files.Add(new FileInfo(file));
+                }
+
+                return true;
+            }
+            catch(UnauthorizedAccessException e)
+            {
+                errorMsg = "An attempt was made to open an unathorized directory or file.";
+                return false;
+            }
+            catch(Exception e)
+            {
+                errorMsg = e.Message;
+                return false;
+            }
+        }
+
         public static void DirSearchRecursive(string path)
         {
             try
@@ -90,13 +117,5 @@ namespace DirectorySolutions
         }
     }
 
-    public enum DisplaySortOptionEnum
-    {
-        SizeAsc,
-        SizeDesc,
-        NameAsc,
-        NameDesc,
-        DateAsc,
-        DateDesc
-    }
+   
 }

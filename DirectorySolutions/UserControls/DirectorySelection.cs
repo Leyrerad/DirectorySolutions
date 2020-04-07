@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DirectorySolutions.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -51,7 +52,7 @@ namespace DirectorySolutions
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            var path = e.Url.ToString().Replace("file:///", "").Replace("file://","");
+            var path = e.Url.ToString().Replace("file:///", "").Replace("file://","");            
             filePath.Text = path;
         }
 
