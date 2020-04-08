@@ -1,5 +1,6 @@
 ﻿using DirectorySolutions.Models;
 using DirectorySolutions.Presenters;
+using DirectorySolutions.UserControls;
 using DirectorySolutions.Views;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace DirectorySolutions
     {
         private MainPresenter presenter = null;
         private readonly MainModel m_Model;
-        
+        private int mainFormStartingHeight;
+
         public string path
         {
             get
@@ -36,6 +38,8 @@ namespace DirectorySolutions
             m_Model = model;
             InitializeComponent();
             presenter = new MainPresenter(this, m_Model);
+            mainFormStartingHeight = Height;
+            freshDir.Checked = true;
             SubscribeToModelEvents();
         }
 
@@ -44,7 +48,9 @@ namespace DirectorySolutions
             m_Model.filePathChanged += M_Model_filePathChanged1;
             m_Model.fileListChanged += M_Model_fileListChanged;
             m_Model.appStateChanged += M_Model_appStateChanged;
+            m_Model.activeControlChanged += M_Model_activeControlChanged;
         }
+
 
         #region DisplayUpdates
 
@@ -53,11 +59,13 @@ namespace DirectorySolutions
             countLbl.Text = m_Model.GetFileCount().ToString() + " Files";
             sizeLbl.Text = m_Model.GetSumFileLengths();
             sortedByLbl.Text = m_Model.GetSortedBy(false).GetDescription();
+            instructionLbl.Text = presenter.DetermineInstructions();
         }
 
         #endregion
 
         #region DirectorySelection
+
         private void M_Model_appStateChanged(object sender, MainModel.StateChangeEventArgs args)
         {
             statusLabel.Text = m_Model.GetApplicationState().GetDescription();
@@ -84,8 +92,8 @@ namespace DirectorySolutions
             if (Directory.Exists(args.Data))
             {
                 string error;
-                instructionLbl.Text = presenter.DetermineInstructions();
-                if(!presenter.FindAllFilesInTheDirectory(args.Data, out error))
+               
+                if(!presenter.FindAllFilesInTheDirectory(args.AllPaths, out error, m_Model.GetSortedBy(false)))
                 {
                     filePathErrorProv.SetError(filePath, error);
                 }
@@ -95,96 +103,14 @@ namespace DirectorySolutions
                 }                
             }
         }
-
-        //private void FindAndReplaceControls_FindReplaceClicked1(object sender, EventArgs e)
-        //{
-        //    if (findAndReplaceControls.SetAndValidateReplacementTexts())
-        //    {
-        //        if (FileOperations.FindAndReplace(FileOperations.getFiles(),
-        //            findAndReplaceControls.getInText(),
-        //            findAndReplaceControls.getOutText()))
-        //        {
-        //            if (Directory.Exists(path))
-        //            {
-        //                UpdateDisplay(path);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void searchAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    if (!isExpanded)
-        //    {
-        //        ExpandOrContractMainForm(800, isExpanded);
-        //    }
-        //    if(!string.IsNullOrEmpty(path))
-        //    {
-        //        SetInstructionsForUserControls(findAndReplaceControls);
-        //    }
-        //    RemoveUnusedUserControls(new List<UserControl>() { directorySelectionControls, findAndReplaceControls });
-        //    activeControl = findAndReplaceControls;
-        //    findAndReplaceControls.Show();
-        //}
-
-        //public void ExpandOrContractMainForm(int height, bool expanded)
-        //{
-        //    Size = new Size(Size.Width, height);
-        //    isExpanded = expanded ? false : true;
-        //}
-
-        //private void RemoveUnusedUserControls(List<UserControl> usedControls)
-        //{
-        //    List<UserControl> allUserControls = new List<UserControl>() { findAndReplaceControls, directorySelectionControls, findExtensionControls };
-        //    foreach(var control in allUserControls)
-        //    {
-        //        if (!usedControls.Contains(control))
-        //        {
-        //            control.Hide();
-        //        }
-        //    }
-        //}
-     
-        //private void findAllExtensionsToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    if (!isExpanded)
-        //    {
-        //        ExpandOrContractMainForm(800, isExpanded);
-        //    }
-        //    if (!string.IsNullOrEmpty(path))
-        //    {
-        //        SetInstructionsForUserControls(findExtensionControls);
-        //    }
-        //    RemoveUnusedUserControls(new List<UserControl>() { directorySelectionControls, findExtensionControls });
-        //    activeControl = findExtensionControls;
-        //    findExtensionControls.Show();
-        //}
-              
-        //private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    if(sortedByEnum != DisplaySortOptionEnum.SizeAsc)
-        //    {
-        //        sortedByEnum = DisplaySortOptionEnum.SizeAsc;
-        //        files = files.OrderBy(x => x.Length).ToList();
-        //        displayGrid.DataSource = null;
-        //        displayGrid.DataSource = files;
-        //    }
-        //    else
-        //    {
-        //        sortedByEnum = DisplaySortOptionEnum.SizeDesc;
-        //        files = files.OrderByDescending(x => x.Length).ToList();
-        //        displayGrid.DataSource = null;
-        //        displayGrid.DataSource = files;
-        //    }
-        //}
-
+      
         private void btnOpenDir_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog() { Description = "Select your directory path." })
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    webBrowser1.Url = new Uri(fbd.SelectedPath);
+                    webBrowser1.Url = new Uri(fbd.SelectedPath);                    
                 }
             }
         }
@@ -207,43 +133,49 @@ namespace DirectorySolutions
 
         private void filePath_TextChanged(object sender, EventArgs e)
         {
-            m_Model.SetFilePath(filePath.Text);
+            m_Model.SetActiveFilePath(filePath.Text, saveDir.Checked);
         }
 
         private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            var path = e.Url.ToString().Replace("file:///", "").Replace("file://", "");
-            filePath.Text = path;
+            var path = e.Url.ToString().Replace("file:///", "").Replace("file://", "");           
+            if(string.Equals(filePath.Text, path))
+            {
+                m_Model.RaiseFilePathChangedEvent(path, m_Model.GetAllFilePaths());
+            }
+            else
+            {
+                filePath.Text = path;
+            }
         }
 
         #endregion
 
         #region FileSorting
+
         private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.SizeAsc)
             {
-                presenter.SortFileList(DisplaySortOptionEnum.SizeDesc);
+                presenter.SortMainFileList(DisplaySortOptionEnum.SizeDesc);
             }
             else
             {
-                presenter.SortFileList(DisplaySortOptionEnum.SizeAsc);
+                presenter.SortMainFileList(DisplaySortOptionEnum.SizeAsc);
             }
 
             UpdateStatusDisplay();
         }
-
-     
-
+        
         private void dateModifiedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.DateAsc)
             {
-                presenter.SortFileList(DisplaySortOptionEnum.DateDesc);
+                presenter.SortMainFileList(DisplaySortOptionEnum.DateDesc);
             }
             else
             {
-                presenter.SortFileList(DisplaySortOptionEnum.DateAsc);
+                presenter.SortMainFileList(DisplaySortOptionEnum.DateAsc);
             }
 
             UpdateStatusDisplay();
@@ -253,14 +185,71 @@ namespace DirectorySolutions
         {
             if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.NameAsc)
             {
-                presenter.SortFileList(DisplaySortOptionEnum.NameDesc);
+                presenter.SortMainFileList(DisplaySortOptionEnum.NameDesc);
             }
             else
             {
-                presenter.SortFileList(DisplaySortOptionEnum.NameAsc);
+                presenter.SortMainFileList(DisplaySortOptionEnum.NameAsc);
             }
 
             UpdateStatusDisplay();
+        }
+
+        #endregion
+
+        #region FileOperations
+
+        private void searchAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("FindAndReplaceControls", true);
+            if (controls.Length < 1)
+            {
+                FindAndReplaceControls findAndReplaceControls = new FindAndReplaceControls(m_Model, presenter);
+                ShiftUserControlDisplay(findAndReplaceControls);
+            }            
+        }
+
+        private void nameFilesAfterPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            Control[] controls = Controls.Find("RenameFileForPath", true);
+            if (controls.Length < 1)
+            {
+                RenameFileForPath renameFileForPath = new RenameFileForPath(m_Model, presenter);
+                ShiftUserControlDisplay(renameFileForPath);           
+            }
+        }
+
+        #endregion
+
+        #region UserControl
+
+        private void M_Model_activeControlChanged(object sender, MainModel.ControlEventArgs args)
+        {
+            instructionLbl.Text = presenter.DetermineInstructions();
+        }
+
+        private void RemoveUnactiveUserControl()
+        {
+            var activeControl = m_Model.GetActiveUserControl();
+            if(activeControl != null)
+            {
+                var controls = Controls.Find(activeControl.Name, true);
+                if(controls.Length > 0)
+                {
+                    Controls.Remove(controls[0]);
+                }
+            }
+        }
+
+        private void ShiftUserControlDisplay(UserControl control)
+        {
+            RemoveUnactiveUserControl();
+            m_Model.SetActiveControl(control);
+            Height = mainFormStartingHeight + control.Height + 10;
+            Controls.Add(control);
+            control.Location =
+                new Point(Width / 2 - (control.Width / 2), webBrowser1.Top + webBrowser1.Height + 10);
         }
 
         #endregion

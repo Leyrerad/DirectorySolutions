@@ -11,18 +11,19 @@ namespace DirectorySolutions.Models
 {
     public class MainModel : IMainModel
     {
-        public delegate void PathEventEventHandler(object sender, PathEventArgs args);
+        public delegate void PathEventHandler(object sender, PathEventArgs args);
         public delegate void FilesEventEventHandler(object sender, FilesEventArgs args);
         public delegate void ControlEventHandler(object sender, ControlEventArgs args);
         public delegate void SortOptionEventHandler(object sender, SortOptionEventArgs args);
         public delegate void StateChangeEventHandler(object sender, StateChangeEventArgs args);
         public event StateChangeEventHandler appStateChanged;
-        public event PathEventEventHandler filePathChanged;
+        public event PathEventHandler filePathChanged;
         public event FilesEventEventHandler fileListChanged;
         public event ControlEventHandler activeControlChanged;
         public event SortOptionEventHandler sortOptionChanged;        
 
-        private string filePath;
+        private string activeFilePath;
+        private List<string> allFilePaths;
         private string genericErrorMessage;
         private List<FileInfo> files;
         private List<DirectoryInfo> directories;
@@ -33,9 +34,10 @@ namespace DirectorySolutions.Models
         
         public MainModel()
         {
-            filePath = "";
+            activeFilePath = "";
             files = new List<FileInfo>();
             directories = new List<DirectoryInfo>();
+            allFilePaths = new List<string>();
             filesSortedBy = DisplaySortOptionEnum.None;
             dirsSortedBy = DisplaySortOptionEnum.None;
             appState = ApplicationStateEnum.Ready;
@@ -43,29 +45,55 @@ namespace DirectorySolutions.Models
 
         #region filePath
 
-        public void SetFilePath(string value)
+        public void SetActiveFilePath(string value, bool saveDir)
         {
-            filePath = value;
-            RaiseFilePathChangedEvent(value);
+            activeFilePath = value;
+            if (saveDir)
+            {
+                allFilePaths.Add(value);
+            }
+            else
+            {
+                allFilePaths.Clear();
+                allFilePaths.Add(value);
+            }
+            RaiseFilePathChangedEvent(value, allFilePaths);
         }
 
-        public string GetFilePath()
+        public void ClearFilePaths()
         {
-            return filePath;
+            allFilePaths.Clear();
+        }
+
+        public string GetActiveFilePath()
+        {
+            return activeFilePath;
+        }
+
+        public List<string> GetAllFilePaths()
+        {
+            return allFilePaths;
         }
 
         public class PathEventArgs : EventArgs
         {
             public string Data { get; set; }
-            public PathEventArgs(string data)
+            public List<string> AllPaths { get; set; }
+            public PathEventArgs(string data, List<string> allPaths)
             {
                 Data = data;
+                AllPaths = allPaths;
             }
         }
 
-        public void RaiseFilePathChangedEvent(string filePath)
+        public void RaiseFilePathChangedEvent(string filePath, List<string> allFilePaths)
         {
-            filePathChanged(this, new PathEventArgs(filePath));
+            filePathChanged(this, new PathEventArgs(filePath, allFilePaths));
+        }
+
+        public void RaiseAddFilePathEvent(List<string> allFilePaths)
+        {
+
         }
 
         #endregion
@@ -251,6 +279,25 @@ namespace DirectorySolutions.Models
 
         #endregion
 
+        public Tuple<string, string> GetFileNameByPathSeperatorTuple(NameByPathSeperatorEnum seperator)
+        {
+            switch (seperator)
+            {
+                case NameByPathSeperatorEnum.Underscore:
+                    return Tuple.Create("_", "_");
+                case NameByPathSeperatorEnum.Dash:
+                    return Tuple.Create("-", "-");
+                case NameByPathSeperatorEnum.Space:
+                    return Tuple.Create(" ", " ");
+                case NameByPathSeperatorEnum.Brackets:
+                    return Tuple.Create("[", "]");
+                case NameByPathSeperatorEnum.Parentheses:
+                    return Tuple.Create("(", ")");
+                default:
+                    return Tuple.Create("_", "_");
+            }
+        }
+
     }
 
     public enum DisplaySortOptionEnum
@@ -270,7 +317,7 @@ namespace DirectorySolutions.Models
         [Description("Date Descending")]
         DateDesc
     }
-
+       
     public enum ApplicationStateEnum
     {
         [Description("Ready")]
@@ -279,14 +326,29 @@ namespace DirectorySolutions.Models
         LoadingFiles,
         [Description("Sorting Files...")]
         SortingFiles,
+        [Description("File Operation In Progress...")]
+        FileOperation
        
     }
 
+    public enum NameByPathSeperatorEnum
+    {
+        Underscore,
+        Dash,
+        Space,
+        Brackets,
+        Parentheses
+    }   
+
     public interface IMainModel
     {
-        void SetFilePath(string value);
+        void SetActiveFilePath(string value, bool saveDir);
+        
+        void ClearFilePaths();
 
-        string GetFilePath();
+        string GetActiveFilePath();
+
+        List<string> GetAllFilePaths();
 
         void SetFileList(List<FileInfo> fileList);
 
@@ -303,6 +365,10 @@ namespace DirectorySolutions.Models
         void SetApplicationState(ApplicationStateEnum state);
 
         ApplicationStateEnum GetApplicationState();
+
+        void RaiseFileListChangedEvent(List<FileInfo> fileList);
+
+        Tuple<string, string> GetFileNameByPathSeperatorTuple(NameByPathSeperatorEnum seperator);
 
     }
 

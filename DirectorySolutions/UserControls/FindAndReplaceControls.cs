@@ -8,42 +8,37 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using DirectorySolutions.Models;
+using DirectorySolutions.Presenters;
 
 namespace DirectorySolutions
 {
     public partial class FindAndReplaceControls : UserControl
     {
-        public event EventHandler FindReplaceClicked;
-        private string inText;
-        private string outText;
-        private Form mainForm;
+        private MainModel mainModel;
+        private MainPresenter presenter = null;
 
-        public FindAndReplaceControls()
+        public FindAndReplaceControls(MainModel model, MainPresenter presenter)
         {
             InitializeComponent();
-            mainForm = (Parent as Form);
+            mainModel = model;
+            this.presenter = presenter;
+            SetToolTips();
         }
-
-        private void FindAndReplaceControls_Load(object sender, EventArgs e)
+        
+        private bool ValidateFindAndReplaceInputs()
         {
-
-        }
-
-        public bool SetAndValidateReplacementTexts()
-        {
-            var tempInText = inTxt.Text;
-            var tempOutText = outTxt.Text;
-            if (!string.IsNullOrEmpty(tempInText) && !string.IsNullOrEmpty(tempOutText) && !string.Equals(tempInText, tempOutText))
+            var inText = inTxt.Text;
+            var outText = outTxt.Text;
+            if (!string.IsNullOrEmpty(inText) && !string.Equals(inText, outText))
             {
-                inText = tempInText;
-                outText = tempOutText;
                 inTxtErrorProv.Clear();
                 outTxtErrorProv.Clear();
                 return true;
             }
             else
             {
-                if(!string.IsNullOrEmpty(tempInText) && string.Equals(tempInText, tempOutText))
+                if(!string.IsNullOrEmpty(inText) && string.Equals(inText, outText))
                 {
                     inTxtErrorProv.SetError(inTxt, "Texts cannot be the same.");
                     outTxtErrorProv.SetError(outTxt, "Texts cannot be the same.");
@@ -51,7 +46,7 @@ namespace DirectorySolutions
                 }
                 else
                 {
-                    if (string.IsNullOrEmpty(tempInText))
+                    if (string.IsNullOrEmpty(inText))
                     {
                         inTxt.Focus();
                         inTxtErrorProv.SetError(inTxt, "Text cannot be blank.");
@@ -65,35 +60,79 @@ namespace DirectorySolutions
                 }
             }
         }
-        
-        protected virtual void OnBtnFindReplaceClicked(EventArgs e)
+
+        private bool ValidateAppendInputs()
         {
-            var handler = FindReplaceClicked;
-            if (handler != null)
-                handler(this, e);
+            var prependText = prependTxt.Text;
+            var appendText = appendTxt.Text;
+            if (!string.IsNullOrEmpty(prependText) || !string.IsNullOrEmpty(appendText))
+            {
+                prependErrorProv.Clear();
+                appendErrorProv.Clear();
+                return true;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(prependText) && string.IsNullOrEmpty(appendText))
+                {
+                    prependErrorProv.SetError(prependTxt, "Text cannot be blank.");
+                    appendErrorProv.SetError(appendTxt, "Text cannot be blank.");
+                }
+                else
+                {
+                    prependErrorProv.Clear();
+                    appendErrorProv.Clear();
+                }
+                return false;
+            }
+        }
+      
+        private void SetToolTips()
+        {
+            replaceAllTooltip.SetToolTip(btnFindReplace, "This will replace all of the text in the left box with all the text in the right box for all file names " +
+                "in this directory.");
         }
 
         private void btnFindReplace_Click(object sender, EventArgs e)
         {
-            OnBtnFindReplaceClicked(e);
-        }
+            var confirmResult = MessageBox.Show("Are you sure to replace all file names in this root directory?","Confirm Replacement", MessageBoxButtons.YesNo);
 
-        public string getInText()
-        {
-            return inText;
-        }
-        
-        public string getOutText()
-        {
-            return outText;
+            if (confirmResult == DialogResult.Yes)
+            {
+                if (ValidateFindAndReplaceInputs())
+                {
+                    string error;
+                    if (!presenter.FindAndReplace(inTxt.Text, outTxt.Text, out error))
+                    {
+                        replaceAllErrorProv.SetError(btnFindReplace, error);
+                    }
+                    else
+                    {
+                        replaceAllErrorProv.Clear();
+                    }
+                }
+            }
+              
         }
 
         private void btnPreAppend_Click(object sender, EventArgs e)
         {
-            var path = mainForm.Controls.Find("filePath", true)[0].Text;
-            if (Directory.Exists(path) && FileOperations.getFiles() != null)
-            {
+            var confirmResult = MessageBox.Show("Are you sure to replace all file names in this root directory?", "Confirm Replacement", MessageBoxButtons.YesNo);
 
+            if (confirmResult == DialogResult.Yes)
+            {
+                if (ValidateAppendInputs())
+                {
+                    string error;
+                    if (!presenter.PreAndAppend(prependTxt.Text, appendTxt.Text, out error))
+                    {
+                       PreAppendErrorProv.SetError(btnPreAppend, error);
+                    }
+                    else
+                    {
+                        PreAppendErrorProv.Clear();
+                    }
+                }
             }
         }
     }

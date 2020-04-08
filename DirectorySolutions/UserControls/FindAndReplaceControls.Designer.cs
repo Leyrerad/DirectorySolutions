@@ -37,16 +37,23 @@
             this.outTxt = new System.Windows.Forms.TextBox();
             this.btnFindReplace = new System.Windows.Forms.Button();
             this.inTxtErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.prependErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             this.prependTxt = new System.Windows.Forms.TextBox();
             this.appendTxt = new System.Windows.Forms.TextBox();
             this.prependLbl = new System.Windows.Forms.Label();
             this.appendLbl = new System.Windows.Forms.Label();
             this.btnPreAppend = new System.Windows.Forms.Button();
             this.outTxtErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
+            this.replaceAllTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.appendErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
+            this.replaceAllErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
+            this.PreAppendErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.prependErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.appendErrorProv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.replaceAllErrorProv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PreAppendErrorProv)).BeginInit();
             this.SuspendLayout();
             // 
             // openImportFile
@@ -104,9 +111,9 @@
             // 
             this.inTxtErrorProv.ContainerControl = this;
             // 
-            // errorProvider1
+            // prependErrorProv
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.prependErrorProv.ContainerControl = this;
             // 
             // prependTxt
             // 
@@ -155,6 +162,22 @@
             // 
             this.outTxtErrorProv.ContainerControl = this;
             // 
+            // replaceAllTooltip
+            // 
+            this.replaceAllTooltip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            // 
+            // appendErrorProv
+            // 
+            this.appendErrorProv.ContainerControl = this;
+            // 
+            // replaceAllErrorProv
+            // 
+            this.replaceAllErrorProv.ContainerControl = this;
+            // 
+            // PreAppendErrorProv
+            // 
+            this.PreAppendErrorProv.ContainerControl = this;
+            // 
             // FindAndReplaceControls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -170,11 +193,13 @@
             this.Controls.Add(this.inTxt);
             this.Controls.Add(this.textInLbl);
             this.Name = "FindAndReplaceControls";
-            this.Size = new System.Drawing.Size(886, 82);
-            this.Load += new System.EventHandler(this.FindAndReplaceControls_Load);
+            this.Size = new System.Drawing.Size(907, 82);
             ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.prependErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.appendErrorProv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.replaceAllErrorProv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PreAppendErrorProv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -193,12 +218,16 @@
         private System.Windows.Forms.TextBox outTxt;
         private System.Windows.Forms.Button btnFindReplace;
         private System.Windows.Forms.ErrorProvider inTxtErrorProv;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ErrorProvider prependErrorProv;
         private System.Windows.Forms.Button btnPreAppend;
         private System.Windows.Forms.Label appendLbl;
         private System.Windows.Forms.Label prependLbl;
         private System.Windows.Forms.TextBox appendTxt;
         private System.Windows.Forms.TextBox prependTxt;
         private System.Windows.Forms.ErrorProvider outTxtErrorProv;
+        private System.Windows.Forms.ToolTip replaceAllTooltip;
+        private System.Windows.Forms.ErrorProvider appendErrorProv;
+        private System.Windows.Forms.ErrorProvider replaceAllErrorProv;
+        private System.Windows.Forms.ErrorProvider PreAppendErrorProv;
     }
 }

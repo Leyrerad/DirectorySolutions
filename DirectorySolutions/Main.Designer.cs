@@ -35,6 +35,8 @@ namespace DirectorySolutions
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.countLbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.sizeLbl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.sortedBy = new System.Windows.Forms.ToolStripStatusLabel();
+            this.sortedByLbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,6 +45,7 @@ namespace DirectorySolutions
             this.fileOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findAllExtensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nameFilesAfterPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortDisplayByToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,7 +53,6 @@ namespace DirectorySolutions
             this.dateModifiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.instructionLbl = new System.Windows.Forms.Label();
-            this.displayGrid = new System.Windows.Forms.DataGridView();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.label1 = new System.Windows.Forms.Label();
             this.btnOpenDir = new System.Windows.Forms.Button();
@@ -60,12 +62,15 @@ namespace DirectorySolutions
             this.openImportFile = new System.Windows.Forms.OpenFileDialog();
             this.openExportFile = new System.Windows.Forms.OpenFileDialog();
             this.filePathErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
-            this.sortedBy = new System.Windows.Forms.ToolStripStatusLabel();
-            this.sortedByLbl = new System.Windows.Forms.ToolStripStatusLabel();
+            this.displayGrid = new System.Windows.Forms.DataGridView();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.saveDir = new System.Windows.Forms.RadioButton();
+            this.freshDir = new System.Windows.Forms.RadioButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -99,6 +104,17 @@ namespace DirectorySolutions
             this.sizeLbl.Name = "sizeLbl";
             this.sizeLbl.Size = new System.Drawing.Size(44, 17);
             this.sizeLbl.Text = "0 Bytes";
+            // 
+            // sortedBy
+            // 
+            this.sortedBy.Name = "sortedBy";
+            this.sortedBy.Size = new System.Drawing.Size(60, 17);
+            this.sortedBy.Text = "Sorted By:";
+            // 
+            // sortedByLbl
+            // 
+            this.sortedByLbl.Name = "sortedByLbl";
+            this.sortedByLbl.Size = new System.Drawing.Size(0, 17);
             // 
             // menuStrip1
             // 
@@ -145,7 +161,8 @@ namespace DirectorySolutions
             // 
             this.fileOperationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.searchAndReplaceToolStripMenuItem,
-            this.findAllExtensionsToolStripMenuItem});
+            this.findAllExtensionsToolStripMenuItem,
+            this.nameFilesAfterPathToolStripMenuItem});
             this.fileOperationsToolStripMenuItem.Name = "fileOperationsToolStripMenuItem";
             this.fileOperationsToolStripMenuItem.Size = new System.Drawing.Size(98, 20);
             this.fileOperationsToolStripMenuItem.Text = "File Operations";
@@ -153,14 +170,22 @@ namespace DirectorySolutions
             // searchAndReplaceToolStripMenuItem
             // 
             this.searchAndReplaceToolStripMenuItem.Name = "searchAndReplaceToolStripMenuItem";
-            this.searchAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.searchAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.searchAndReplaceToolStripMenuItem.Text = "Search and Replace";
+            this.searchAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.searchAndReplaceToolStripMenuItem_Click);
             // 
             // findAllExtensionsToolStripMenuItem
             // 
             this.findAllExtensionsToolStripMenuItem.Name = "findAllExtensionsToolStripMenuItem";
-            this.findAllExtensionsToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.findAllExtensionsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.findAllExtensionsToolStripMenuItem.Text = "Find all Extensions";
+            // 
+            // nameFilesAfterPathToolStripMenuItem
+            // 
+            this.nameFilesAfterPathToolStripMenuItem.Name = "nameFilesAfterPathToolStripMenuItem";
+            this.nameFilesAfterPathToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.nameFilesAfterPathToolStripMenuItem.Text = "Name Files After Path";
+            this.nameFilesAfterPathToolStripMenuItem.Click += new System.EventHandler(this.nameFilesAfterPathToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -183,7 +208,7 @@ namespace DirectorySolutions
             this.dateModifiedToolStripMenuItem,
             this.nameToolStripMenuItem});
             this.sortDisplayByToolStripMenuItem.Name = "sortDisplayByToolStripMenuItem";
-            this.sortDisplayByToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sortDisplayByToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.sortDisplayByToolStripMenuItem.Text = "Sort Display By";
             // 
             // sizeToolStripMenuItem
@@ -196,14 +221,14 @@ namespace DirectorySolutions
             // dateModifiedToolStripMenuItem
             // 
             this.dateModifiedToolStripMenuItem.Name = "dateModifiedToolStripMenuItem";
-            this.dateModifiedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dateModifiedToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.dateModifiedToolStripMenuItem.Text = "Date Modified";
             this.dateModifiedToolStripMenuItem.Click += new System.EventHandler(this.dateModifiedToolStripMenuItem_Click);
             // 
             // nameToolStripMenuItem
             // 
             this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.nameToolStripMenuItem.Text = "Name";
             this.nameToolStripMenuItem.Click += new System.EventHandler(this.nameToolStripMenuItem_Click);
             // 
@@ -211,25 +236,16 @@ namespace DirectorySolutions
             // 
             this.instructionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.instructionLbl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.instructionLbl.Location = new System.Drawing.Point(266, 24);
+            this.instructionLbl.Location = new System.Drawing.Point(253, 30);
             this.instructionLbl.Name = "instructionLbl";
             this.instructionLbl.Size = new System.Drawing.Size(684, 23);
             this.instructionLbl.TabIndex = 6;
             this.instructionLbl.Text = "Please select a directory to get started.";
             this.instructionLbl.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // displayGrid
-            // 
-            this.displayGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.displayGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.displayGrid.Location = new System.Drawing.Point(0, 259);
-            this.displayGrid.Name = "displayGrid";
-            this.displayGrid.Size = new System.Drawing.Size(1245, 396);
-            this.displayGrid.TabIndex = 7;
-            // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(12, 83);
+            this.webBrowser1.Location = new System.Drawing.Point(12, 96);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.Size = new System.Drawing.Size(1221, 146);
@@ -239,7 +255,7 @@ namespace DirectorySolutions
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(253, 58);
+            this.label1.Location = new System.Drawing.Point(233, 60);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 12;
@@ -248,9 +264,9 @@ namespace DirectorySolutions
             // btnOpenDir
             // 
             this.btnOpenDir.AccessibleName = "btnOpenDir";
-            this.btnOpenDir.Location = new System.Drawing.Point(807, 54);
+            this.btnOpenDir.Location = new System.Drawing.Point(782, 56);
             this.btnOpenDir.Name = "btnOpenDir";
-            this.btnOpenDir.Size = new System.Drawing.Size(216, 23);
+            this.btnOpenDir.Size = new System.Drawing.Size(142, 23);
             this.btnOpenDir.TabIndex = 11;
             this.btnOpenDir.Text = "Open Directory";
             this.btnOpenDir.UseVisualStyleBackColor = true;
@@ -258,7 +274,7 @@ namespace DirectorySolutions
             // 
             // filePath
             // 
-            this.filePath.Location = new System.Drawing.Point(291, 56);
+            this.filePath.Location = new System.Drawing.Point(271, 58);
             this.filePath.Name = "filePath";
             this.filePath.Size = new System.Drawing.Size(481, 20);
             this.filePath.TabIndex = 10;
@@ -266,7 +282,7 @@ namespace DirectorySolutions
             // 
             // btnForward
             // 
-            this.btnForward.Location = new System.Drawing.Point(191, 53);
+            this.btnForward.Location = new System.Drawing.Point(171, 55);
             this.btnForward.Name = "btnForward";
             this.btnForward.Size = new System.Drawing.Size(56, 23);
             this.btnForward.TabIndex = 9;
@@ -276,7 +292,7 @@ namespace DirectorySolutions
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(126, 53);
+            this.btnBack.Location = new System.Drawing.Point(106, 55);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(59, 23);
             this.btnBack.TabIndex = 8;
@@ -296,22 +312,51 @@ namespace DirectorySolutions
             // 
             this.filePathErrorProv.ContainerControl = this;
             // 
-            // sortedBy
+            // displayGrid
             // 
-            this.sortedBy.Name = "sortedBy";
-            this.sortedBy.Size = new System.Drawing.Size(60, 17);
-            this.sortedBy.Text = "Sorted By:";
+            this.displayGrid.AllowUserToAddRows = false;
+            this.displayGrid.AllowUserToDeleteRows = false;
+            this.displayGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.displayGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.displayGrid.Location = new System.Drawing.Point(0, 276);
+            this.displayGrid.Name = "displayGrid";
+            this.displayGrid.ReadOnly = true;
+            this.displayGrid.Size = new System.Drawing.Size(1245, 379);
+            this.displayGrid.TabIndex = 7;
             // 
-            // sortedByLbl
+            // errorProvider1
             // 
-            this.sortedByLbl.Name = "sortedByLbl";
-            this.sortedByLbl.Size = new System.Drawing.Size(0, 17);
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // saveDir
+            // 
+            this.saveDir.AutoSize = true;
+            this.saveDir.Location = new System.Drawing.Point(942, 59);
+            this.saveDir.Name = "saveDir";
+            this.saveDir.Size = new System.Drawing.Size(106, 17);
+            this.saveDir.TabIndex = 14;
+            this.saveDir.TabStop = true;
+            this.saveDir.Text = "Save Directory(s)";
+            this.saveDir.UseVisualStyleBackColor = true;
+            // 
+            // freshDir
+            // 
+            this.freshDir.AutoSize = true;
+            this.freshDir.Location = new System.Drawing.Point(1054, 59);
+            this.freshDir.Name = "freshDir";
+            this.freshDir.Size = new System.Drawing.Size(96, 17);
+            this.freshDir.TabIndex = 15;
+            this.freshDir.TabStop = true;
+            this.freshDir.Text = "Fresh Directory";
+            this.freshDir.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1245, 677);
+            this.Controls.Add(this.freshDir);
+            this.Controls.Add(this.saveDir);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnOpenDir);
@@ -329,8 +374,9 @@ namespace DirectorySolutions
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,7 +395,6 @@ namespace DirectorySolutions
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem findAllExtensionsToolStripMenuItem;
         private System.Windows.Forms.Label instructionLbl;
-        private System.Windows.Forms.DataGridView displayGrid;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sortDisplayByToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sizeToolStripMenuItem;
@@ -368,5 +413,10 @@ namespace DirectorySolutions
         private System.Windows.Forms.ErrorProvider filePathErrorProv;
         private System.Windows.Forms.ToolStripStatusLabel sortedBy;
         private System.Windows.Forms.ToolStripStatusLabel sortedByLbl;
+        private System.Windows.Forms.ToolStripMenuItem nameFilesAfterPathToolStripMenuItem;
+        private System.Windows.Forms.DataGridView displayGrid;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.RadioButton freshDir;
+        private System.Windows.Forms.RadioButton saveDir;
     }
 }

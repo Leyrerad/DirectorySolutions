@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DirectorySolutions.Models;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,11 +11,11 @@ namespace DirectorySolutions
 {
     public static class FileOperations
     {
-        public static List<FileInfo> Files = new List<FileInfo>();
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static bool PopulateFileInformation(string path, out string errorMsg)
+        public static List<FileInfo> PopulateFileInformation(string path, out string errorMsg)
         {
-            Files.Clear();
+            var fileList = new List<FileInfo>();
             errorMsg = "";
             try
             {
@@ -21,63 +23,30 @@ namespace DirectorySolutions
 
                 foreach (var file in files)
                 {
-                    Files.Add(new FileInfo(file));
+                    fileList.Add(new FileInfo(file));
                 }
 
-                return true;
+                return fileList;
             }
             catch(UnauthorizedAccessException e)
             {
+                logger.Fatal(e);
                 errorMsg = "An attempt was made to open an unathorized directory or file.";
-                return false;
+                return null;
             }
             catch(Exception e)
             {
+                logger.Fatal(e);
                 errorMsg = e.Message;
-                return false;
+                return null;
             }
         }
 
-        public static void DirSearchRecursive(string path)
+        public static bool FindAndReplace(List<FileInfo> files, string inString, string outString, out string error)
         {
             try
             {
-                foreach (string d in Directory.GetDirectories(path))
-                {
-                    foreach (string f in Directory.GetFiles(d))
-                    {
-                        Files.Add(new FileInfo(f));
-                    }
-
-                    DirSearchRecursive(d);
-                }
-            }
-            catch (Exception excpt)
-            {
-                Console.WriteLine(excpt);
-            }
-        }
-
-        public static void DirSearch(string path)
-        {
-            try
-            {
-                foreach (string f in Directory.GetFiles(path))
-                {
-                    Files.Add(new FileInfo(f));
-                }
-             
-            }
-            catch (Exception excpt)
-            {
-                Console.WriteLine(excpt);
-            }
-        }
-
-        public static bool FindAndReplace(List<FileInfo> files, string inString, string outString)
-        {
-            try
-            {
+                error = "";
                 foreach(var file in files)
                 {
                     if(file != null && !string.IsNullOrEmpty(file.Name) && file.Name.Contains(inString))
@@ -94,27 +63,86 @@ namespace DirectorySolutions
             }
             catch(Exception ex)
             {
+                logger.Fatal(ex);
+                error = ex.Message;
                 return false;
             }
         }
 
-        public static List<FileInfo> getFiles()
-        {
-            return Files;
-        }
-
-        public static bool clearFiles()
+        public static bool PreAndAppendFileNames(List<FileInfo> files, string prepend, string append, out string error)
         {
             try
             {
-                Files.Clear();
+                error = "";
+                foreach (var file in files)
+                {
+                    if (file != null && !string.IsNullOrEmpty(file.Name))
+                    {
+                        var newName = prepend + Path.GetFileNameWithoutExtension(file.Name) + append + Path.GetExtension(file.Name);
+                        if (!string.Equals(file.FullName, Path.Combine(file.DirectoryName, newName)))
+                        {
+                            File.Move(file.FullName, Path.Combine(file.DirectoryName, newName));
+                        }
+                    }
+                }
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                logger.Fatal(ex);
+                error = ex.Message;
                 return false;
             }
         }
+
+        public static bool RenameFilesByDirectory(List<FileInfo> files, int numberOfDirs, Tuple<string, string> seperatorTuple, DisplaySortOptionEnum sortBy, out string error,
+            bool incrementNames = false, int containsIncrements = 0, bool spaceBuffer = false)
+        {
+            try
+            {
+                error = "";
+                int count = 0;
+
+                if (spaceBuffer)
+                {
+                    seperatorTuple = Tuple.Create(" " + seperatorTuple.Item1 + " ", " " + seperatorTuple.Item2 + " ");
+                }
+                foreach (var file in files)
+                {
+                    var name = Path.GetFileNameWithoutExtension(file.Name);
+                    string fullPath = file.FullName.Replace(file.Name, "");
+                    var dirNames = fullPath.Split(Path.DirectorySeparatorChar).ToList().TakeLast(numberOfDirs + 1).ToList();
+                    dirNames.Remove("");
+
+                    for (int i = 0; i < dirNames.Count; i++)
+                    {
+                        if (!string.IsNullOrEmpty(dirNames[i]))
+                        {
+                            dirNames[i] = seperatorTuple.Item1 + dirNames[i] + seperatorTuple.Item2;
+                        }
+                    }
+
+                    var filePathCombined = string.Join("", dirNames);
+                    var completedFileName = incrementNames ?
+                        filePathCombined +  name + seperatorTuple.Item1 + count.ToString() 
+                        + seperatorTuple.Item2:
+                        filePathCombined +  name;
+                    completedFileName = completedFileName.Trim() + file.Extension;
+
+                    File.Move(file.FullName, Path.Combine(file.DirectoryName, completedFileName));
+                    count += 1;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal(ex);
+                error = ex.Message;
+                return false;
+            }
+        }
+
     }
 
    
