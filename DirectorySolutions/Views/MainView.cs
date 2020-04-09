@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DirectorySolutions
+namespace DirectorySolutions.Views
 {
-    class FileInformation
+    public interface IMainView
     {
-        string Name { get; set; }
+       string path { get; set; }
     }
 }

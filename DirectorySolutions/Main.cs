@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DirectorySolutions.Models;
+using DirectorySolutions.Presenters;
+using DirectorySolutions.UserControls;
+using DirectorySolutions.Views;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,176 +15,315 @@ using System.Windows.Forms;
 
 namespace DirectorySolutions
 {
-    public partial class Main : Form
+    public partial class MainForm : Form, IMainView
     {
-        private bool isExpanded = false;
-        private string path;
-        private UserControl activeControl;
-        private List<FileInfo> files;
-        private DisplaySortOptionEnum sortedByEnum;
+        private MainPresenter presenter = null;
+        private readonly MainModel m_Model;
+        private int mainFormStartingHeight;
 
-        public Main()
+        public string path
         {
+            get
+            {
+                return filePath.Text;
+            }
+            set
+            {
+                filePath.Text = value;
+            }
+        }
+
+        public MainForm(MainModel model)
+        {
+            m_Model = model;
             InitializeComponent();
-            findAndReplaceControls.Hide();
-            findExtensionControls.Hide();
-            findAndReplaceControls.FindReplaceClicked += FindAndReplaceControls_FindReplaceClicked1;
-            directorySelectionControls.FilePathChanged += DirectorySelectionControls_FilePathChanged1;
+            presenter = new MainPresenter(this, m_Model);
+            mainFormStartingHeight = Height;
+            freshDir.Checked = true;
+            SubscribeToModelEvents();
+            SetToolTips();
         }
 
-        private void DirectorySelectionControls_FilePathChanged1(object sender, EventArgs e)
+        private void SubscribeToModelEvents()
         {
-            var tempPath = directorySelectionControls.Controls.Find("filePath", true)[0].Text;
-            if (Directory.Exists(tempPath))
-            {
-                path = tempPath;
-                if (!isExpanded && activeControl == null)
-                {
-                    SetInstructionsForUserControls(directorySelectionControls);
-                }
-                else
-                {
-                    SetInstructionsForUserControls(activeControl);
-                }
-               
-                UpdateDisplay(path);
-            }
+            m_Model.filePathChanged += M_Model_filePathChanged1;
+            m_Model.fileListChanged += M_Model_fileListChanged;
+            m_Model.appStateChanged += M_Model_appStateChanged;
+            m_Model.activeControlChanged += M_Model_activeControlChanged;
+            m_Model.movieListChanged += M_Model_movieListChanged;
+            m_Model.gridViewOptionChanged += M_Model_gridViewOptionChanged;
         }
 
-        private void FindAndReplaceControls_FindReplaceClicked1(object sender, EventArgs e)
+        #region DisplayUpdates
+
+        private void SetToolTips()
         {
-            if (findAndReplaceControls.SetAndValidateReplacementTexts())
+            tooltipFreshDir.SetToolTip(picInfoFreshDir, "By clicking 'Save Directory' the previously compiled file list " +
+                "will be appended to that of the next path that is opened.");
+        }
+
+        private void UpdateStatusDisplay(GridViewOptionEnum displayOption)
+        {
+            countLbl.Text = m_Model.GetFileCount(displayOption).ToString() + " Files";
+            sizeLbl.Text = m_Model.GetSumFileLengths(displayOption);
+            sortedByLbl.Text = m_Model.GetSortedBy(false).GetDescription();
+            instructionLbl.Text = presenter.DetermineInstructions();
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+        }
+
+        private void M_Model_appStateChanged(object sender, MainModel.StateChangeEventArgs args)
+        {
+            statusLabel.Text = m_Model.GetApplicationState().GetDescription();
+        }
+
+        private void M_Model_gridViewOptionChanged(object sender, MainModel.GridViewEventArgs args)
+        {
+            string error;
+            switch (args.Option)
             {
-                if (FileOperations.FindAndReplace(FileOperations.getFiles(),
-                    findAndReplaceControls.getInText(),
-                    findAndReplaceControls.getOutText()))
-                {
-                    if (Directory.Exists(path))
+                case GridViewOptionEnum.Files:
+                    m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+                    break;
+                case GridViewOptionEnum.Movies:                    
+                    if (!presenter.ParseMovieInfoFilesInPath(out error))
                     {
-                        UpdateDisplay(path);
+                        MessageBox.Show(error);
                     }
-                }
+                    break;
+                default:
+                    break;
             }
         }
 
-        private void searchAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!isExpanded)
-            {
-                ExpandOrContractMainForm(800, isExpanded);
-            }
-            if(!string.IsNullOrEmpty(path))
-            {
-                SetInstructionsForUserControls(findAndReplaceControls);
-            }
-            RemoveUnusedUserControls(new List<UserControl>() { directorySelectionControls, findAndReplaceControls });
-            activeControl = findAndReplaceControls;
-            findAndReplaceControls.Show();
-        }
+        #endregion
 
-        public void ExpandOrContractMainForm(int height, bool expanded)
-        {
-            Size = new Size(Size.Width, height);
-            isExpanded = expanded ? false : true;
-        }
+        #region DirectorySelection
 
-        private void RemoveUnusedUserControls(List<UserControl> usedControls)
+        private void M_Model_fileListChanged(object sender, MainModel.FilesEventArgs args)
         {
-            List<UserControl> allUserControls = new List<UserControl>() { findAndReplaceControls, directorySelectionControls, findExtensionControls };
-            foreach(var control in allUserControls)
+            try
             {
-                if (!usedControls.Contains(control))
+                displayGrid.DataSource = null;
+                var option = m_Model.GetGridViewOption();
+                switch (option)
                 {
-                    control.Hide();
+                    case GridViewOptionEnum.Files:
+                        displayGrid.DataSource = m_Model.GetFiles();
+                        break;
+                    case GridViewOptionEnum.Movies:
+                        displayGrid.DataSource = m_Model.GetMovieList();
+                        break;
+                    default:
+                        displayGrid.DataSource = m_Model.GetFiles();
+                        break;
                 }
+                
+                UpdateStatusDisplay(m_Model.GetGridViewOption());
+                filePathErrorProv.Clear();
             }
+            catch(Exception e)
+            {
+                filePathErrorProv.SetError(filePath, e.Message);
+            } 
         }
 
-        public async void UpdateDisplay(string path)
+        private void M_Model_filePathChanged1(object sender, MainModel.PathEventArgs args)
         {
-            UpdateStatus("Loading...");
-            FileOperations.clearFiles();
-            if (!Directory.GetDirectories(path).Any())
+            string error;               
+            if(!presenter.RefreshModelLists(out error))
             {
-                await Task.Run(() => { FileOperations.DirSearch(path); });
+                filePathErrorProv.SetError(filePath, error);
             }
             else
             {
-                await Task.Run(() => { FileOperations.DirSearchRecursive(path); }); ;
+                filePathErrorProv.Clear();
             }
-            files = FileOperations.getFiles();
-            displayGrid.DataSource = null;
-            displayGrid.DataSource = files;
-            UpdateStatus("Ready.");
+            
+        }
+      
+        private void btnOpenDir_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog() { Description = "Select your directory path." })
+            {
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    webBrowser1.Url = new Uri(fbd.SelectedPath);                    
+                }
+            }
         }
 
-        private void UpdateStatus(string status)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(status))
+            if (webBrowser1.CanGoBack)
             {
-                toolStripStatusLabel1.Text = status;
+                webBrowser1.GoBack();
             }
         }
 
-        private void findAllExtensionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnForward_Click(object sender, EventArgs e)
         {
-            if (!isExpanded)
+            if (webBrowser1.CanGoForward)
             {
-                ExpandOrContractMainForm(800, isExpanded);
+                webBrowser1.GoForward();
             }
-            if (!string.IsNullOrEmpty(path))
-            {
-                SetInstructionsForUserControls(findExtensionControls);
-            }
-            RemoveUnusedUserControls(new List<UserControl>() { directorySelectionControls, findExtensionControls });
-            activeControl = findExtensionControls;
-            findExtensionControls.Show();
         }
 
-        private void SetInstructionsForUserControls(UserControl control)
+        private void filePath_TextChanged(object sender, EventArgs e)
         {
-            switch (control.Name)
+            m_Model.SetActiveFilePath(filePath.Text, saveDir.Checked);
+        }
+
+        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            var path = e.Url.ToString().Replace("file:///", "").Replace("file://", "");           
+            if(string.Equals(filePath.Text, path))
             {
-                case "findAndReplaceControls":
-                    instructionLbl.Font = new Font(instructionLbl.Font.FontFamily, 8);
-                    instructionLbl.Text = "Please enter the text you would like to replace for all file names in the directory.";
-                    break;
-                case "findExtensionControls":
-                    instructionLbl.Font = new Font(instructionLbl.Font.FontFamily, 8);
-                    instructionLbl.Text = "Please enter the extension you would like to find for all files in this directory.";
-                    break;
-                case "directorySelectionControls":
-                    instructionLbl.Font = new Font(instructionLbl.Font.FontFamily, 10);
-                    instructionLbl.Text = "Please select a directory to get started.";
-                    break;
-                default:
-                    instructionLbl.Font = new Font(instructionLbl.Font.FontFamily, 10);
-                    instructionLbl.Text = "Please select an operation to execute on this directory.";
-                    break;
+                m_Model.RaiseFilePathChangedEvent(path, m_Model.GetAllFilePaths());
+            }
+            else
+            {
+                filePath.Text = path;
             }
         }
+
+        #endregion
+
+        #region FileSorting
 
         private void sizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(sortedByEnum != DisplaySortOptionEnum.SizeAsc)
+            if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.SizeAsc)
             {
-                sortedByEnum = DisplaySortOptionEnum.SizeAsc;
-                files = files.OrderBy(x => x.Length).ToList();
-                displayGrid.DataSource = null;
-                displayGrid.DataSource = files;
+                presenter.SortMainDisplay(DisplaySortOptionEnum.SizeDesc);
             }
             else
             {
-                sortedByEnum = DisplaySortOptionEnum.SizeDesc;
-                files = files.OrderByDescending(x => x.Length).ToList();
-                displayGrid.DataSource = null;
-                displayGrid.DataSource = files;
+                presenter.SortMainDisplay(DisplaySortOptionEnum.SizeAsc);
+            }
+
+            UpdateStatusDisplay(m_Model.GetGridViewOption());
+        }
+        
+        private void dateModifiedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.DateAsc)
+            {
+                presenter.SortMainDisplay(DisplaySortOptionEnum.DateDesc);
+            }
+            else
+            {
+                presenter.SortMainDisplay(DisplaySortOptionEnum.DateAsc);
+            }
+
+            UpdateStatusDisplay(m_Model.GetGridViewOption());
+        }
+
+        private void nameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.NameAsc)
+            {
+                presenter.SortMainDisplay(DisplaySortOptionEnum.NameDesc);
+            }
+            else
+            {
+                presenter.SortMainDisplay(DisplaySortOptionEnum.NameAsc);
+            }
+
+            UpdateStatusDisplay(m_Model.GetGridViewOption());
+        }
+
+        #endregion
+
+        #region FileOperations
+
+        private void searchAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("FindAndReplaceControls", true);
+            if (controls.Length < 1)
+            {
+                FindAndReplaceControls findAndReplaceControls = new FindAndReplaceControls(m_Model, presenter);
+                ShiftUserControlDisplay(findAndReplaceControls);
+            }            
+        }
+
+        private void nameFilesAfterPathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            Control[] controls = Controls.Find("RenameFileForPath", true);
+            if (controls.Length < 1)
+            {
+                RenameFileForPath renameFileForPath = new RenameFileForPath(m_Model, presenter);
+                ShiftUserControlDisplay(renameFileForPath);           
             }
         }
 
-        public string GetPathFromMainForm()
+        private void movieManagementToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            return path;
+            Control[] controls = Controls.Find("MovieManagement", true);
+            if (controls.Length < 1)
+            {
+                MovieManagement movieManagement = new MovieManagement(m_Model, presenter);
+                ShiftUserControlDisplay(movieManagement);
+            }
         }
+
+        #endregion
+
+        #region MovieOperations
+
+        private void M_Model_movieListChanged(object sender, MainModel.MoviesEventArgs args)
+        {
+            try
+            {
+                displayGrid.DataSource = null;
+                displayGrid.DataSource = m_Model.GetMovieList();
+                UpdateStatusDisplay(m_Model.GetGridViewOption());
+                filePathErrorProv.Clear();
+            }
+            catch (Exception e)
+            {
+                filePathErrorProv.SetError(filePath, e.Message);
+            }
+        }
+
+        #endregion
+
+        #region UserControl
+
+        private void M_Model_activeControlChanged(object sender, MainModel.ControlEventArgs args)
+        {
+            instructionLbl.Text = presenter.DetermineInstructions();
+        }
+
+        private void RemoveUnactiveUserControl()
+        {
+            var activeControl = m_Model.GetActiveUserControl();
+            if(activeControl != null)
+            {
+                var controls = Controls.Find(activeControl.Name, true);
+                if(controls.Length > 0)
+                {
+                    Controls.Remove(controls[0]);
+                }
+            }
+        }
+
+        private void ShiftUserControlDisplay(UserControl control)
+        {
+            RemoveUnactiveUserControl();
+            m_Model.SetActiveControl(control);
+            m_Model.SetGridViewOption(m_Model.DetermineGridViewOption(control));
+            Height = mainFormStartingHeight + control.Height + 10;
+            Controls.Add(control);
+            control.Location =
+                new Point(Width / 2 - (control.Width / 2), webBrowser1.Top + webBrowser1.Height + 10);
+        }
+
+        #endregion
+
     }
 }

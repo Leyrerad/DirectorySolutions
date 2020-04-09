@@ -5,6 +5,27 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectorySolutions", "DirectorySolutions\DirectorySolutions.csproj", "{7B1EBAF3-5B6E-4D16-9853-CB581C88BAE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2CA552AF-2480-40B5-BBF0-0F8482D8E597}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Downloads\blue_question_mark_icon_svg_JHW_icon.ico = ..\..\..\Downloads\blue_question_mark_icon_svg_JHW_icon.ico
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\Monaco_StatusHelp_whiteNohalo_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\Monaco_StatusHelp_whiteNohalo_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\Question\Question_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\Question\Question_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_cyan_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_cyan_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_grey_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_grey_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_grey_disabled_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelp_grey_disabled_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelpOutline_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusHelp\StatusHelpOutline_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_12x_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_12x_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_cyan_12x_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_cyan_12x_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_cyan_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_cyan_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_exp_12x_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_exp_12x_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_exp_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_exp_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_grey_12x_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_grey_12x_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_grey_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_grey_16x.png
+		..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_grey_disabled_16x.png = ..\..\..\Downloads\VS2019 Image Library\vswin2019\StatusInformation\StatusInformation_grey_disabled_16x.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

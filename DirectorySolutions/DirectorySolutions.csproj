@@ -33,8 +33,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.7.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,30 +62,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DirectorySelection.cs">
+    <Compile Include="ApiManager.cs" />
+    <Compile Include="Models\Movie.cs" />
+    <Compile Include="UserControls\DirectorySelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DirectorySelection.Designer.cs">
+    <Compile Include="UserControls\DirectorySelection.Designer.cs">
       <DependentUpon>DirectorySelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileInformation.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="FileOperations.cs" />
-    <Compile Include="FileSelection.cs">
+    <Compile Include="UserControls\FileSelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FileSelection.Designer.cs">
+    <Compile Include="UserControls\FileSelection.Designer.cs">
       <DependentUpon>FileSelection.cs</DependentUpon>
     </Compile>
-    <Compile Include="FindAndReplaceControls.cs">
+    <Compile Include="UserControls\FindAndReplaceControls.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FindAndReplaceControls.Designer.cs">
+    <Compile Include="UserControls\FindAndReplaceControls.Designer.cs">
       <DependentUpon>FindAndReplaceControls.cs</DependentUpon>
     </Compile>
-    <Compile Include="FindExtension.cs">
+    <Compile Include="UserControls\FindExtension.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="FindExtension.Designer.cs">
+    <Compile Include="UserControls\FindExtension.Designer.cs">
       <DependentUpon>FindExtension.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
@@ -78,18 +96,51 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\MainModel.cs" />
+    <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DirectorySelection.resx">
+    <Compile Include="UserControls\MovieManagement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\MovieManagement.Designer.cs">
+      <DependentUpon>MovieManagement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RenameFileForPath.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RenameFileForPath.Designer.cs">
+      <DependentUpon>RenameFileForPath.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.cs" />
+    <None Include="Resources\StatusHelpOutline_16x.png" />
+    <None Include="Resources\StatusHelp_grey_disabled_16x.png" />
+    <None Include="Resources\StatusHelp_grey_16x.png" />
+    <None Include="Resources\StatusHelp_cyan_16x.png" />
+    <None Include="Resources\StatusHelp_16x.png" />
+    <None Include="Resources\Monaco_StatusHelp_whiteNohalo_16x.png" />
+    <None Include="Resources\StatusInformation_grey_disabled_16x.png" />
+    <None Include="Resources\StatusInformation_grey_16x.png" />
+    <None Include="Resources\StatusInformation_grey_12x_16x.png" />
+    <None Include="Resources\StatusInformation_exp_16x.png" />
+    <None Include="Resources\StatusInformation_exp_12x_16x.png" />
+    <None Include="Resources\StatusInformation_cyan_16x.png" />
+    <None Include="Resources\StatusInformation_cyan_12x_16x.png" />
+    <None Include="Resources\StatusInformation_16x.png" />
+    <None Include="Resources\StatusInformation_12x_16x.png" />
+    <None Include="Resources\Question_16x.png" />
+    <None Include="Resources\blue_question_mark_icon_svg_JHW_icon.ico" />
+    <None Include="Resources\Blue_question_mark_icon.svg.png" />
+    <EmbeddedResource Include="UserControls\DirectorySelection.resx">
       <DependentUpon>DirectorySelection.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileSelection.resx">
+    <EmbeddedResource Include="UserControls\FileSelection.resx">
       <DependentUpon>FileSelection.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FindAndReplaceControls.resx">
+    <EmbeddedResource Include="UserControls\FindAndReplaceControls.resx">
       <DependentUpon>FindAndReplaceControls.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FindExtension.resx">
+    <EmbeddedResource Include="UserControls\FindExtension.resx">
       <DependentUpon>FindExtension.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
@@ -103,7 +154,22 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UserControls\MovieManagement.resx">
+      <DependentUpon>MovieManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RenameFileForPath.resx">
+      <DependentUpon>RenameFileForPath.cs</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="Info.ico" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -117,5 +183,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
