@@ -51,7 +51,7 @@ namespace DirectorySolutions
                 {
                     if(file != null && !string.IsNullOrEmpty(file.Name) && file.Name.Contains(inString))
                     {
-                        var newName = file.Name.Replace(inString, outString);
+                        var newName = Path.GetFileNameWithoutExtension(file.Name).Replace(inString, outString).Trim() + file.Extension;
                         if(!string.Equals(file.FullName, Path.Combine(file.DirectoryName, newName)))
                         {
                             File.Move(file.FullName, Path.Combine(file.DirectoryName, newName));
@@ -107,6 +107,11 @@ namespace DirectorySolutions
                 {
                     seperatorTuple = Tuple.Create(" " + seperatorTuple.Item1 + " ", " " + seperatorTuple.Item2 + " ");
                 }
+
+                if(sortBy != DisplaySortOptionEnum.None)
+                {
+                    files = SortFileList(files, sortBy);
+                }
                 foreach (var file in files)
                 {
                     var name = Path.GetFileNameWithoutExtension(file.Name);
@@ -140,6 +145,27 @@ namespace DirectorySolutions
                 logger.Fatal(ex);
                 error = ex.Message;
                 return false;
+            }
+        }
+
+        public static List<FileInfo> SortFileList(List<FileInfo> files, DisplaySortOptionEnum sortBy = DisplaySortOptionEnum.None)
+        {
+            switch (sortBy)
+            {
+                case (DisplaySortOptionEnum.DateAsc):
+                    return files.OrderBy(x => x.LastWriteTime).ToList();
+                case (DisplaySortOptionEnum.DateDesc):
+                    return files.OrderByDescending(x => x.LastWriteTime).ToList();
+                case (DisplaySortOptionEnum.SizeAsc):
+                    return files.OrderBy(x => x.Length).ToList();
+                case (DisplaySortOptionEnum.SizeDesc):
+                    return files.OrderByDescending(x => x.Length).ToList();
+                case (DisplaySortOptionEnum.NameAsc):
+                    return files.OrderBy(x => x.Name).ToList();
+                case (DisplaySortOptionEnum.NameDesc):
+                    return files.OrderByDescending(x => x.Name).ToList();
+                default:
+                    return files;
             }
         }
 

@@ -44,8 +44,8 @@ namespace DirectorySolutions
             this.directoryOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findAllExtensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameFilesAfterPathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.movieManagementToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortDisplayByToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,12 +65,16 @@ namespace DirectorySolutions
             this.displayGrid = new System.Windows.Forms.DataGridView();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.saveDir = new System.Windows.Forms.RadioButton();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.freshDir = new System.Windows.Forms.RadioButton();
+            this.tooltipFreshDir = new System.Windows.Forms.ToolTip(this.components);
+            this.picInfoFreshDir = new System.Windows.Forms.PictureBox();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picInfoFreshDir)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -161,8 +165,8 @@ namespace DirectorySolutions
             // 
             this.fileOperationsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.searchAndReplaceToolStripMenuItem,
-            this.findAllExtensionsToolStripMenuItem,
-            this.nameFilesAfterPathToolStripMenuItem});
+            this.nameFilesAfterPathToolStripMenuItem,
+            this.movieManagementToolStripMenuItem});
             this.fileOperationsToolStripMenuItem.Name = "fileOperationsToolStripMenuItem";
             this.fileOperationsToolStripMenuItem.Size = new System.Drawing.Size(98, 20);
             this.fileOperationsToolStripMenuItem.Text = "File Operations";
@@ -174,18 +178,19 @@ namespace DirectorySolutions
             this.searchAndReplaceToolStripMenuItem.Text = "Search and Replace";
             this.searchAndReplaceToolStripMenuItem.Click += new System.EventHandler(this.searchAndReplaceToolStripMenuItem_Click);
             // 
-            // findAllExtensionsToolStripMenuItem
-            // 
-            this.findAllExtensionsToolStripMenuItem.Name = "findAllExtensionsToolStripMenuItem";
-            this.findAllExtensionsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-            this.findAllExtensionsToolStripMenuItem.Text = "Find all Extensions";
-            // 
             // nameFilesAfterPathToolStripMenuItem
             // 
             this.nameFilesAfterPathToolStripMenuItem.Name = "nameFilesAfterPathToolStripMenuItem";
             this.nameFilesAfterPathToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
             this.nameFilesAfterPathToolStripMenuItem.Text = "Name Files After Path";
             this.nameFilesAfterPathToolStripMenuItem.Click += new System.EventHandler(this.nameFilesAfterPathToolStripMenuItem_Click);
+            // 
+            // movieManagementToolStripMenuItem
+            // 
+            this.movieManagementToolStripMenuItem.Name = "movieManagementToolStripMenuItem";
+            this.movieManagementToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.movieManagementToolStripMenuItem.Text = "Movie Management";
+            this.movieManagementToolStripMenuItem.Click += new System.EventHandler(this.movieManagementToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -255,7 +260,7 @@ namespace DirectorySolutions
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(233, 60);
+            this.label1.Location = new System.Drawing.Point(250, 62);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(32, 13);
             this.label1.TabIndex = 12;
@@ -264,7 +269,7 @@ namespace DirectorySolutions
             // btnOpenDir
             // 
             this.btnOpenDir.AccessibleName = "btnOpenDir";
-            this.btnOpenDir.Location = new System.Drawing.Point(782, 56);
+            this.btnOpenDir.Location = new System.Drawing.Point(799, 58);
             this.btnOpenDir.Name = "btnOpenDir";
             this.btnOpenDir.Size = new System.Drawing.Size(142, 23);
             this.btnOpenDir.TabIndex = 11;
@@ -274,7 +279,7 @@ namespace DirectorySolutions
             // 
             // filePath
             // 
-            this.filePath.Location = new System.Drawing.Point(271, 58);
+            this.filePath.Location = new System.Drawing.Point(288, 60);
             this.filePath.Name = "filePath";
             this.filePath.Size = new System.Drawing.Size(481, 20);
             this.filePath.TabIndex = 10;
@@ -282,7 +287,7 @@ namespace DirectorySolutions
             // 
             // btnForward
             // 
-            this.btnForward.Location = new System.Drawing.Point(171, 55);
+            this.btnForward.Location = new System.Drawing.Point(188, 57);
             this.btnForward.Name = "btnForward";
             this.btnForward.Size = new System.Drawing.Size(56, 23);
             this.btnForward.TabIndex = 9;
@@ -292,7 +297,7 @@ namespace DirectorySolutions
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(106, 55);
+            this.btnBack.Location = new System.Drawing.Point(123, 57);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(59, 23);
             this.btnBack.TabIndex = 8;
@@ -331,7 +336,7 @@ namespace DirectorySolutions
             // saveDir
             // 
             this.saveDir.AutoSize = true;
-            this.saveDir.Location = new System.Drawing.Point(942, 59);
+            this.saveDir.Location = new System.Drawing.Point(959, 61);
             this.saveDir.Name = "saveDir";
             this.saveDir.Size = new System.Drawing.Size(106, 17);
             this.saveDir.TabIndex = 14;
@@ -339,10 +344,20 @@ namespace DirectorySolutions
             this.saveDir.Text = "Save Directory(s)";
             this.saveDir.UseVisualStyleBackColor = true;
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(42, 58);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 16;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // freshDir
             // 
             this.freshDir.AutoSize = true;
-            this.freshDir.Location = new System.Drawing.Point(1054, 59);
+            this.freshDir.Location = new System.Drawing.Point(1071, 61);
             this.freshDir.Name = "freshDir";
             this.freshDir.Size = new System.Drawing.Size(96, 17);
             this.freshDir.TabIndex = 15;
@@ -350,11 +365,32 @@ namespace DirectorySolutions
             this.freshDir.Text = "Fresh Directory";
             this.freshDir.UseVisualStyleBackColor = true;
             // 
+            // tooltipFreshDir
+            // 
+            this.tooltipFreshDir.AutoPopDelay = 10000;
+            this.tooltipFreshDir.InitialDelay = 500;
+            this.tooltipFreshDir.IsBalloon = true;
+            this.tooltipFreshDir.ReshowDelay = 100;
+            // 
+            // picInfoFreshDir
+            // 
+            this.picInfoFreshDir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.picInfoFreshDir.Image = global::DirectorySolutions.Properties.Resources.StatusHelp_16x;
+            this.picInfoFreshDir.InitialImage = global::DirectorySolutions.Properties.Resources.Question_16x;
+            this.picInfoFreshDir.Location = new System.Drawing.Point(1173, 61);
+            this.picInfoFreshDir.Name = "picInfoFreshDir";
+            this.picInfoFreshDir.Size = new System.Drawing.Size(21, 17);
+            this.picInfoFreshDir.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picInfoFreshDir.TabIndex = 17;
+            this.picInfoFreshDir.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1245, 677);
+            this.Controls.Add(this.picInfoFreshDir);
+            this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.freshDir);
             this.Controls.Add(this.saveDir);
             this.Controls.Add(this.webBrowser1);
@@ -377,6 +413,7 @@ namespace DirectorySolutions
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picInfoFreshDir)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -393,7 +430,6 @@ namespace DirectorySolutions
         private System.Windows.Forms.ToolStripMenuItem fileOperationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchAndReplaceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem findAllExtensionsToolStripMenuItem;
         private System.Windows.Forms.Label instructionLbl;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sortDisplayByToolStripMenuItem;
@@ -418,5 +454,9 @@ namespace DirectorySolutions
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.RadioButton freshDir;
         private System.Windows.Forms.RadioButton saveDir;
+        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.ToolStripMenuItem movieManagementToolStripMenuItem;
+        private System.Windows.Forms.PictureBox picInfoFreshDir;
+        private System.Windows.Forms.ToolTip tooltipFreshDir;
     }
 }

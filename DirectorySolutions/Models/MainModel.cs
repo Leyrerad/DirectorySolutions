@@ -11,27 +11,47 @@ namespace DirectorySolutions.Models
 {
     public class MainModel : IMainModel
     {
+        #region Event Handling
+
         public delegate void PathEventHandler(object sender, PathEventArgs args);
         public delegate void FilesEventEventHandler(object sender, FilesEventArgs args);
         public delegate void ControlEventHandler(object sender, ControlEventArgs args);
         public delegate void SortOptionEventHandler(object sender, SortOptionEventArgs args);
         public delegate void StateChangeEventHandler(object sender, StateChangeEventArgs args);
+        public delegate void MovieListChangedEventHandler(object sender, MoviesEventArgs args);
+        public delegate void SearchStringChangedEventHandler(object sender, SearchStringEventArgs args);
+        public delegate void GridViewOptionChangedEventHandler(object sender, GridViewEventArgs args);
+        public event GridViewOptionChangedEventHandler gridViewOptionChanged;
+        public event SearchStringChangedEventHandler searchStringChanged;
+        public event MovieListChangedEventHandler movieListChanged;
         public event StateChangeEventHandler appStateChanged;
         public event PathEventHandler filePathChanged;
         public event FilesEventEventHandler fileListChanged;
         public event ControlEventHandler activeControlChanged;
-        public event SortOptionEventHandler sortOptionChanged;        
+        public event SortOptionEventHandler sortOptionChanged;
 
+        #endregion
+
+        #region member variables
+
+        private List<string> userControlsForFileOperations = new List<string>() { "FindAndReplaceControls", "RenameFileForPath" };
+        private List<string> userControlsForMovieOperations = new List<string>() { "MovieManagement" };
+        private List<string> userControlsForDirectoryOperations = new List<string>();
         private string activeFilePath;
+        private string searchString;
         private List<string> allFilePaths;
         private string genericErrorMessage;
         private List<FileInfo> files;
         private List<DirectoryInfo> directories;
+        private List<Movie> movies;
         private UserControl activeControl;
         private DisplaySortOptionEnum filesSortedBy;
         private DisplaySortOptionEnum dirsSortedBy;
         private ApplicationStateEnum appState;
-        
+        private GridViewOptionEnum gridViewOption;
+
+        #endregion
+
         public MainModel()
         {
             activeFilePath = "";
@@ -42,6 +62,41 @@ namespace DirectorySolutions.Models
             dirsSortedBy = DisplaySortOptionEnum.None;
             appState = ApplicationStateEnum.Ready;
         }
+
+        #region Display
+
+        public void SetGridViewOption(GridViewOptionEnum gridViewOption)
+        {
+            this.gridViewOption = gridViewOption;
+            RaiseGridViewChangedEvent(gridViewOption, movies, files, directories);
+        }
+
+        public GridViewOptionEnum GetGridViewOption()
+        {
+            return gridViewOption;
+        }
+
+        public class GridViewEventArgs : EventArgs
+        {
+            public GridViewOptionEnum Option;
+            public List<Movie> Movies { get; set; }
+            public List<FileInfo> Files { get; set; }
+            public List<DirectoryInfo> Directories { get; set; }
+            public GridViewEventArgs(GridViewOptionEnum option, List<Movie> movies, List<FileInfo> files, List<DirectoryInfo> directories)
+            {
+                Option = option;
+                Movies = movies;
+                Files = files;
+                Directories = directories;
+            }
+        }
+
+        public void RaiseGridViewChangedEvent(GridViewOptionEnum option, List<Movie> movies, List<FileInfo> files, List<DirectoryInfo> directories)
+        {
+            gridViewOptionChanged(this, new GridViewEventArgs(option, movies, files, directories));
+        }
+
+        #endregion
 
         #region filePath
 
@@ -94,6 +149,35 @@ namespace DirectorySolutions.Models
         public void RaiseAddFilePathEvent(List<string> allFilePaths)
         {
 
+        }
+
+        #endregion
+
+        #region Search String
+
+        public void SetSearchString(string search)
+        {
+            searchString = search;
+            RaiseSearchStringChangedEvent(search);
+        }
+
+        public string GetSearchString()
+        {
+            return searchString;
+        }
+
+        public class SearchStringEventArgs : EventArgs
+        {
+            public string Data { get; set; }
+            public SearchStringEventArgs(string data)
+            {
+                Data = data;
+            }
+        }
+
+        public void RaiseSearchStringChangedEvent(string search)
+        {
+            searchStringChanged(this, new SearchStringEventArgs(search));
         }
 
         #endregion
@@ -152,6 +236,46 @@ namespace DirectorySolutions.Models
         public void RaiseFileListChangedEvent(List<FileInfo> fileList)
         {
             fileListChanged(this, new FilesEventArgs(fileList));
+        }
+
+        #endregion
+
+        #region Movie List
+
+        public void SetMovieList(List<Movie> movies)
+        {
+            this.movies = movies;
+            RaiseMovieListChangedEvent(movies);
+        }
+
+        public List<Movie> GetMovieList()
+        {
+            return movies;
+        }
+
+        public void AddMovieToList(Movie movie)
+        {
+            movies.Add(movie);
+            RaiseMovieListChangedEvent(movies);
+        }
+
+        public void ClearMovieList()
+        {
+            movies.Clear();
+        }
+
+        public class MoviesEventArgs : EventArgs
+        {
+            public List<Movie> Data { get; set; }
+            public MoviesEventArgs(List<Movie> data)
+            {
+                Data = data;
+            }
+        }
+
+        public void RaiseMovieListChangedEvent(List<Movie> movies)
+        {
+            movieListChanged(this, new MoviesEventArgs(movies));
         }
 
         #endregion
@@ -230,11 +354,19 @@ namespace DirectorySolutions.Models
             return genericErrorMessage;
         }
 
-        public string GetSumFileLengths()
+        public string GetSumFileLengths(GridViewOptionEnum option)
         {
             try
             {
-                return SizeSuffix(files.Sum(x => x.Length));
+                switch (option)
+                {
+                    case GridViewOptionEnum.Files:
+                        return SizeSuffix(files.Sum(x => x.Length));
+                    case GridViewOptionEnum.Movies:
+                        return SizeSuffix(movies.Sum(x => x.FileSize));
+                    default:
+                        return "N/A";
+                }               
             }
             catch(Exception e)
             {
@@ -244,9 +376,9 @@ namespace DirectorySolutions.Models
            
         }
 
-        static readonly string[] SizeSuffixes =
+        public static readonly string[] SizeSuffixes =
                    { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-        static string SizeSuffix(Int64 value, int decimalPlaces = 2)
+        public static string SizeSuffix(Int64 value, int decimalPlaces = 2)
         {
             if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
             if (value < 0) { return "-" + SizeSuffix(-value); }
@@ -272,12 +404,19 @@ namespace DirectorySolutions.Models
                 SizeSuffixes[mag]);
         }
 
-        public double GetFileCount()
+        public double GetFileCount(GridViewOptionEnum option)
         {
-            return files.Count();
+            switch (option)
+            {
+                case GridViewOptionEnum.Files:
+                    return files.Count();
+                case GridViewOptionEnum.Movies:
+                    return movies.Count();
+                default:
+                    return 0;
+            }
+            
         }
-
-        #endregion
 
         public Tuple<string, string> GetFileNameByPathSeperatorTuple(NameByPathSeperatorEnum seperator)
         {
@@ -297,6 +436,28 @@ namespace DirectorySolutions.Models
                     return Tuple.Create("_", "_");
             }
         }
+
+        public GridViewOptionEnum DetermineGridViewOption(UserControl control)
+        {
+            if (userControlsForMovieOperations.Contains(control.Name))
+            {
+                return GridViewOptionEnum.Movies;
+            }
+
+            if (userControlsForDirectoryOperations.Contains(control.Name))
+            {
+                return GridViewOptionEnum.Directories;
+            }
+
+            if (userControlsForFileOperations.Contains(control.Name))
+            {
+                return GridViewOptionEnum.Files;
+            }
+
+            return GridViewOptionEnum.Files;
+        }
+
+        #endregion
 
     }
 
@@ -340,6 +501,13 @@ namespace DirectorySolutions.Models
         Parentheses
     }   
 
+    public enum GridViewOptionEnum
+    {
+        Files,
+        Directories,
+        Movies
+    }
+
     public interface IMainModel
     {
         void SetActiveFilePath(string value, bool saveDir);
@@ -368,7 +536,27 @@ namespace DirectorySolutions.Models
 
         void RaiseFileListChangedEvent(List<FileInfo> fileList);
 
+        void RaiseFilePathChangedEvent(string filePath, List<string> allFilePaths);
+
         Tuple<string, string> GetFileNameByPathSeperatorTuple(NameByPathSeperatorEnum seperator);
+
+        void SetMovieList(List<Movie> movies);
+
+        List<Movie> GetMovieList();
+
+        void AddMovieToList(Movie movie);
+
+        void ClearMovieList();
+
+        void SetSearchString(string search);
+
+        string GetSearchString();
+
+        void SetGridViewOption(GridViewOptionEnum gridViewOption);
+
+        GridViewOptionEnum GetGridViewOption();
+
+        GridViewOptionEnum DetermineGridViewOption(UserControl control);
 
     }
 

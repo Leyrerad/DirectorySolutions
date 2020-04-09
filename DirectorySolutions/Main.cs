@@ -41,6 +41,7 @@ namespace DirectorySolutions
             mainFormStartingHeight = Height;
             freshDir.Checked = true;
             SubscribeToModelEvents();
+            SetToolTips();
         }
 
         private void SubscribeToModelEvents()
@@ -49,35 +50,79 @@ namespace DirectorySolutions
             m_Model.fileListChanged += M_Model_fileListChanged;
             m_Model.appStateChanged += M_Model_appStateChanged;
             m_Model.activeControlChanged += M_Model_activeControlChanged;
+            m_Model.movieListChanged += M_Model_movieListChanged;
+            m_Model.gridViewOptionChanged += M_Model_gridViewOptionChanged;
         }
-
 
         #region DisplayUpdates
 
-        private void UpdateStatusDisplay()
+        private void SetToolTips()
         {
-            countLbl.Text = m_Model.GetFileCount().ToString() + " Files";
-            sizeLbl.Text = m_Model.GetSumFileLengths();
+            tooltipFreshDir.SetToolTip(picInfoFreshDir, "By clicking 'Save Directory' the previously compiled file list " +
+                "will be appended to that of the next path that is opened.");
+        }
+
+        private void UpdateStatusDisplay(GridViewOptionEnum displayOption)
+        {
+            countLbl.Text = m_Model.GetFileCount(displayOption).ToString() + " Files";
+            sizeLbl.Text = m_Model.GetSumFileLengths(displayOption);
             sortedByLbl.Text = m_Model.GetSortedBy(false).GetDescription();
             instructionLbl.Text = presenter.DetermineInstructions();
         }
 
-        #endregion
-
-        #region DirectorySelection
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+        }
 
         private void M_Model_appStateChanged(object sender, MainModel.StateChangeEventArgs args)
         {
             statusLabel.Text = m_Model.GetApplicationState().GetDescription();
         }
 
+        private void M_Model_gridViewOptionChanged(object sender, MainModel.GridViewEventArgs args)
+        {
+            string error;
+            switch (args.Option)
+            {
+                case GridViewOptionEnum.Files:
+                    m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+                    break;
+                case GridViewOptionEnum.Movies:                    
+                    if (!presenter.ParseMovieInfoFilesInPath(out error))
+                    {
+                        MessageBox.Show(error);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region DirectorySelection
+
         private void M_Model_fileListChanged(object sender, MainModel.FilesEventArgs args)
         {
             try
             {
                 displayGrid.DataSource = null;
-                displayGrid.DataSource = m_Model.GetFiles();
-                UpdateStatusDisplay();
+                var option = m_Model.GetGridViewOption();
+                switch (option)
+                {
+                    case GridViewOptionEnum.Files:
+                        displayGrid.DataSource = m_Model.GetFiles();
+                        break;
+                    case GridViewOptionEnum.Movies:
+                        displayGrid.DataSource = m_Model.GetMovieList();
+                        break;
+                    default:
+                        displayGrid.DataSource = m_Model.GetFiles();
+                        break;
+                }
+                
+                UpdateStatusDisplay(m_Model.GetGridViewOption());
                 filePathErrorProv.Clear();
             }
             catch(Exception e)
@@ -88,20 +133,16 @@ namespace DirectorySolutions
 
         private void M_Model_filePathChanged1(object sender, MainModel.PathEventArgs args)
         {
-            displayGrid.DataSource = null;
-            if (Directory.Exists(args.Data))
+            string error;               
+            if(!presenter.RefreshModelLists(out error))
             {
-                string error;
-               
-                if(!presenter.FindAllFilesInTheDirectory(args.AllPaths, out error, m_Model.GetSortedBy(false)))
-                {
-                    filePathErrorProv.SetError(filePath, error);
-                }
-                else
-                {
-                    filePathErrorProv.Clear();
-                }                
+                filePathErrorProv.SetError(filePath, error);
             }
+            else
+            {
+                filePathErrorProv.Clear();
+            }
+            
         }
       
         private void btnOpenDir_Click(object sender, EventArgs e)
@@ -157,42 +198,42 @@ namespace DirectorySolutions
         {
             if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.SizeAsc)
             {
-                presenter.SortMainFileList(DisplaySortOptionEnum.SizeDesc);
+                presenter.SortMainDisplay(DisplaySortOptionEnum.SizeDesc);
             }
             else
             {
-                presenter.SortMainFileList(DisplaySortOptionEnum.SizeAsc);
+                presenter.SortMainDisplay(DisplaySortOptionEnum.SizeAsc);
             }
 
-            UpdateStatusDisplay();
+            UpdateStatusDisplay(m_Model.GetGridViewOption());
         }
         
         private void dateModifiedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.DateAsc)
             {
-                presenter.SortMainFileList(DisplaySortOptionEnum.DateDesc);
+                presenter.SortMainDisplay(DisplaySortOptionEnum.DateDesc);
             }
             else
             {
-                presenter.SortMainFileList(DisplaySortOptionEnum.DateAsc);
+                presenter.SortMainDisplay(DisplaySortOptionEnum.DateAsc);
             }
 
-            UpdateStatusDisplay();
+            UpdateStatusDisplay(m_Model.GetGridViewOption());
         }
 
         private void nameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(m_Model.GetSortedBy(false) == DisplaySortOptionEnum.NameAsc)
             {
-                presenter.SortMainFileList(DisplaySortOptionEnum.NameDesc);
+                presenter.SortMainDisplay(DisplaySortOptionEnum.NameDesc);
             }
             else
             {
-                presenter.SortMainFileList(DisplaySortOptionEnum.NameAsc);
+                presenter.SortMainDisplay(DisplaySortOptionEnum.NameAsc);
             }
 
-            UpdateStatusDisplay();
+            UpdateStatusDisplay(m_Model.GetGridViewOption());
         }
 
         #endregion
@@ -217,6 +258,35 @@ namespace DirectorySolutions
             {
                 RenameFileForPath renameFileForPath = new RenameFileForPath(m_Model, presenter);
                 ShiftUserControlDisplay(renameFileForPath);           
+            }
+        }
+
+        private void movieManagementToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("MovieManagement", true);
+            if (controls.Length < 1)
+            {
+                MovieManagement movieManagement = new MovieManagement(m_Model, presenter);
+                ShiftUserControlDisplay(movieManagement);
+            }
+        }
+
+        #endregion
+
+        #region MovieOperations
+
+        private void M_Model_movieListChanged(object sender, MainModel.MoviesEventArgs args)
+        {
+            try
+            {
+                displayGrid.DataSource = null;
+                displayGrid.DataSource = m_Model.GetMovieList();
+                UpdateStatusDisplay(m_Model.GetGridViewOption());
+                filePathErrorProv.Clear();
+            }
+            catch (Exception e)
+            {
+                filePathErrorProv.SetError(filePath, e.Message);
             }
         }
 
@@ -246,6 +316,7 @@ namespace DirectorySolutions
         {
             RemoveUnactiveUserControl();
             m_Model.SetActiveControl(control);
+            m_Model.SetGridViewOption(m_Model.DetermineGridViewOption(control));
             Height = mainFormStartingHeight + control.Height + 10;
             Controls.Add(control);
             control.Location =
@@ -253,5 +324,6 @@ namespace DirectorySolutions
         }
 
         #endregion
+
     }
 }
