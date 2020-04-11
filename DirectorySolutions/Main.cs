@@ -40,7 +40,9 @@ namespace DirectorySolutions
             presenter = new MainPresenter(this, m_Model);
             mainFormStartingHeight = Height;
             freshDir.Checked = true;
+            freshListRad.Checked = true;
             SubscribeToModelEvents();
+            CreateDragAndDropEvents();
             SetToolTips();
         }
 
@@ -102,6 +104,32 @@ namespace DirectorySolutions
         #endregion
 
         #region DirectorySelection
+
+        private void CreateDragAndDropEvents()
+        {
+            fileOpenList.DragEnter += FileOpenList_DragEnter;
+            fileOpenList.DragDrop += FileOpenList_DragDrop;
+        }
+
+        private void FileOpenList_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (files != null && files.Any())
+            {
+                foreach(var file in files)
+                {
+                    fileOpenList.Items.Add(file);
+                }
+            }               
+        }
+
+        private void FileOpenList_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
+        }
 
         private void M_Model_fileListChanged(object sender, MainModel.FilesEventArgs args)
         {
@@ -271,6 +299,34 @@ namespace DirectorySolutions
             }
         }
 
+        private void btnOpenFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Multiselect = true;
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    foreach(var file in dialog.FileNames)
+                    {
+                        fileOpenList.Items.Add(file);
+                    }                    
+                }
+            }
+        }
+
+        private void btnAddFiles_Click(object sender, EventArgs e)
+        {
+            string error;
+            if(!presenter.AddFilesFromFileList(fileOpenList.Items, out error, freshListRad.Checked))
+            {
+                
+            }
+            else
+            {
+
+            }
+        }
+
         #endregion
 
         #region MovieOperations
@@ -336,6 +392,11 @@ namespace DirectorySolutions
             {
                 filePathErrorProv.Clear();
             }           
+        }
+
+        private void btnClearFileList_Click(object sender, EventArgs e)
+        {
+            fileOpenList.Items.Clear();
         }
     }
 }

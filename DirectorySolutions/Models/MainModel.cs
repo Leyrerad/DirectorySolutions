@@ -227,6 +227,15 @@ namespace DirectorySolutions.Models
             return files;
         }
 
+        public void AddFilesToFileList(List<FileInfo> fileList, bool raiseEvent)
+        {
+            files.AddRange(fileList);
+            if (raiseEvent)
+            {
+                RaiseFileListChangedEvent(files);
+            }
+        }
+
         public class FilesEventArgs : EventArgs
         {
             public List<FileInfo> Data { get; set; }
@@ -583,6 +592,8 @@ namespace DirectorySolutions.Models
         GridViewOptionEnum GetGridViewOption();
 
         GridViewOptionEnum DetermineGridViewOption(UserControl control);
+
+        void AddFilesToFileList(List<FileInfo> fileList, bool raiseEvent);
 
     }
 

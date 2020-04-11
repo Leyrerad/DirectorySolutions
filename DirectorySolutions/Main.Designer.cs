@@ -69,6 +69,14 @@ namespace DirectorySolutions
             this.freshDir = new System.Windows.Forms.RadioButton();
             this.tooltipFreshDir = new System.Windows.Forms.ToolTip(this.components);
             this.picInfoFreshDir = new System.Windows.Forms.PictureBox();
+            this.btnOpenFile = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.freshListRad = new System.Windows.Forms.RadioButton();
+            this.appendListRad = new System.Windows.Forms.RadioButton();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnAddFiles = new System.Windows.Forms.Button();
+            this.fileOpenList = new System.Windows.Forms.ListBox();
+            this.btnClearFileList = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).BeginInit();
@@ -153,7 +161,7 @@ namespace DirectorySolutions
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // directoryOperationsToolStripMenuItem
@@ -324,10 +332,10 @@ namespace DirectorySolutions
             this.displayGrid.AllowUserToDeleteRows = false;
             this.displayGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.displayGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.displayGrid.Location = new System.Drawing.Point(0, 276);
+            this.displayGrid.Location = new System.Drawing.Point(0, 302);
             this.displayGrid.Name = "displayGrid";
             this.displayGrid.ReadOnly = true;
-            this.displayGrid.Size = new System.Drawing.Size(1245, 379);
+            this.displayGrid.Size = new System.Drawing.Size(1245, 353);
             this.displayGrid.TabIndex = 7;
             // 
             // errorProvider1
@@ -385,11 +393,99 @@ namespace DirectorySolutions
             this.picInfoFreshDir.TabIndex = 17;
             this.picInfoFreshDir.TabStop = false;
             // 
+            // btnOpenFile
+            // 
+            this.btnOpenFile.Location = new System.Drawing.Point(600, 251);
+            this.btnOpenFile.Name = "btnOpenFile";
+            this.btnOpenFile.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenFile.TabIndex = 19;
+            this.btnOpenFile.Text = "Open";
+            this.btnOpenFile.UseVisualStyleBackColor = true;
+            this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(12, 253);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(68, 15);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Add File(s):";
+            // 
+            // freshListRad
+            // 
+            this.freshListRad.AutoSize = true;
+            this.freshListRad.Location = new System.Drawing.Point(1160, 254);
+            this.freshListRad.Name = "freshListRad";
+            this.freshListRad.Size = new System.Drawing.Size(70, 17);
+            this.freshListRad.TabIndex = 22;
+            this.freshListRad.TabStop = true;
+            this.freshListRad.Text = "Fresh List";
+            this.freshListRad.UseVisualStyleBackColor = true;
+            // 
+            // appendListRad
+            // 
+            this.appendListRad.AutoSize = true;
+            this.appendListRad.Location = new System.Drawing.Point(1048, 254);
+            this.appendListRad.Name = "appendListRad";
+            this.appendListRad.Size = new System.Drawing.Size(97, 17);
+            this.appendListRad.TabIndex = 21;
+            this.appendListRad.TabStop = true;
+            this.appendListRad.Text = "Append To List";
+            this.appendListRad.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(874, 256);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(149, 13);
+            this.label3.TabIndex = 23;
+            this.label3.Text = " NOTE: Drag and drop enable";
+            // 
+            // btnAddFiles
+            // 
+            this.btnAddFiles.Location = new System.Drawing.Point(681, 251);
+            this.btnAddFiles.Name = "btnAddFiles";
+            this.btnAddFiles.Size = new System.Drawing.Size(75, 23);
+            this.btnAddFiles.TabIndex = 24;
+            this.btnAddFiles.Text = "Add";
+            this.btnAddFiles.UseVisualStyleBackColor = true;
+            this.btnAddFiles.Click += new System.EventHandler(this.btnAddFiles_Click);
+            // 
+            // fileOpenList
+            // 
+            this.fileOpenList.AllowDrop = true;
+            this.fileOpenList.FormattingEnabled = true;
+            this.fileOpenList.Location = new System.Drawing.Point(86, 251);
+            this.fileOpenList.Name = "fileOpenList";
+            this.fileOpenList.Size = new System.Drawing.Size(491, 30);
+            this.fileOpenList.TabIndex = 25;
+            // 
+            // btnClearFileList
+            // 
+            this.btnClearFileList.Location = new System.Drawing.Point(762, 251);
+            this.btnClearFileList.Name = "btnClearFileList";
+            this.btnClearFileList.Size = new System.Drawing.Size(75, 23);
+            this.btnClearFileList.TabIndex = 26;
+            this.btnClearFileList.Text = "Clear";
+            this.btnClearFileList.UseVisualStyleBackColor = true;
+            this.btnClearFileList.Click += new System.EventHandler(this.btnClearFileList_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1245, 677);
+            this.Controls.Add(this.btnClearFileList);
+            this.Controls.Add(this.fileOpenList);
+            this.Controls.Add(this.btnAddFiles);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.freshListRad);
+            this.Controls.Add(this.appendListRad);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.btnOpenFile);
             this.Controls.Add(this.picInfoFreshDir);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.freshDir);
@@ -459,5 +555,13 @@ namespace DirectorySolutions
         private System.Windows.Forms.ToolStripMenuItem movieManagementToolStripMenuItem;
         private System.Windows.Forms.PictureBox picInfoFreshDir;
         private System.Windows.Forms.ToolTip tooltipFreshDir;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnOpenFile;
+        private System.Windows.Forms.RadioButton freshListRad;
+        private System.Windows.Forms.RadioButton appendListRad;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnAddFiles;
+        private System.Windows.Forms.ListBox fileOpenList;
+        private System.Windows.Forms.Button btnClearFileList;
     }
 }

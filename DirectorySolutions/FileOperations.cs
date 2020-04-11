@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DirectorySolutions
 {
@@ -229,6 +230,31 @@ namespace DirectorySolutions
                 logger.Fatal(e);
                 return null;
             }
+        }
+
+        public static List<FileInfo> AddFilesFromFileList(ListBox.ObjectCollection fileNames, out string error)
+        {
+            error = null;
+            var files = new List<FileInfo>();
+            try
+            {
+                foreach(var file in fileNames)
+                {
+                    if (File.Exists(file.ToString()))
+                    {
+                        files.Add(new FileInfo(file.ToString()));
+                    }
+                }
+
+                return files;
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+                logger.Fatal(e);
+                return null;
+            }
+
         }
     }
    

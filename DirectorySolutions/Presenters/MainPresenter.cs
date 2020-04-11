@@ -230,6 +230,28 @@ namespace DirectorySolutions.Presenters
             m_Model.SetApplicationState(ApplicationStateEnum.Ready);
             return true;
         }
+
+        public bool AddFilesFromFileList(ListBox.ObjectCollection files, out string error, bool freshDir, bool raiseEvent = true)
+        {
+            m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
+            var fileList = FileOperations.AddFilesFromFileList(files, out error);
+            if (fileList == null)
+            {
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                logger.Debug(error);
+                return false;
+            }
+            if (freshDir)
+            {
+                m_Model.SetFileList(fileList, raiseEvent);
+            }
+            else
+            {
+                m_Model.AddFilesToFileList(fileList, raiseEvent);
+            }
+            m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+            return true;
+        }
       
       
         #endregion
