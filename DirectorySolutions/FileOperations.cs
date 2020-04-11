@@ -28,13 +28,13 @@ namespace DirectorySolutions
 
                 return fileList;
             }
-            catch(UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException e)
             {
                 logger.Fatal(e);
                 errorMsg = "An attempt was made to open an unathorized directory or file.";
                 return null;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Fatal(e);
                 errorMsg = e.Message;
@@ -47,12 +47,12 @@ namespace DirectorySolutions
             try
             {
                 error = "";
-                foreach(var file in files)
+                foreach (var file in files)
                 {
-                    if(file != null && !string.IsNullOrEmpty(file.Name) && file.Name.Contains(inString))
+                    if (file != null && !string.IsNullOrEmpty(file.Name) && file.Name.Contains(inString))
                     {
                         var newName = Path.GetFileNameWithoutExtension(file.Name).Replace(inString, outString).Trim() + file.Extension;
-                        if(!string.Equals(file.FullName, Path.Combine(file.DirectoryName, newName)))
+                        if (!string.Equals(file.FullName, Path.Combine(file.DirectoryName, newName)))
                         {
                             File.Move(file.FullName, Path.Combine(file.DirectoryName, newName));
                         }
@@ -61,7 +61,7 @@ namespace DirectorySolutions
 
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Fatal(ex);
                 error = ex.Message;
@@ -108,7 +108,7 @@ namespace DirectorySolutions
                     seperatorTuple = Tuple.Create(" " + seperatorTuple.Item1 + " ", " " + seperatorTuple.Item2 + " ");
                 }
 
-                if(sortBy != DisplaySortOptionEnum.None)
+                if (sortBy != DisplaySortOptionEnum.None)
                 {
                     files = SortFileList(files, sortBy);
                 }
@@ -129,9 +129,9 @@ namespace DirectorySolutions
 
                     var filePathCombined = string.Join("", dirNames);
                     var completedFileName = incrementNames ?
-                        filePathCombined +  name + seperatorTuple.Item1 + count.ToString() 
-                        + seperatorTuple.Item2:
-                        filePathCombined +  name;
+                        filePathCombined + name + seperatorTuple.Item1 + count.ToString()
+                        + seperatorTuple.Item2 :
+                        filePathCombined + name;
                     completedFileName = completedFileName.Trim() + file.Extension;
 
                     File.Move(file.FullName, Path.Combine(file.DirectoryName, completedFileName));
@@ -169,7 +169,67 @@ namespace DirectorySolutions
             }
         }
 
-    }
+        public static bool MoveFiles(List<FileInfo> files, string sDir, out string error)
+        {
+            error = "";
+            try
+            {
+                foreach(var file in files)
+                {
+                    File.Move(file.FullName, Path.Combine(sDir, file.Name));
+                }
 
+                return false;
+            }
+            catch (Exception e)
+            {
+                logger.Fatal(e);
+                error = e.Message;
+                return false;
+            }
+        }
+
+        public static List<FileInfo> FilterFileListBySearchOptions(List<FileInfo> files, FileSearch fileSearchOptions, out string error)
+        {
+            error = null;
+            var filteredFiles = new List<FileInfo>();
+            try
+            {
+                foreach (var file in files)
+                {
+                    var fFileName = Path.GetFileNameWithoutExtension(file.Name.ToLower().Trim());
+                    var sFileName = fileSearchOptions.FileName.ToLower().Trim();
+                    var extensions = fileSearchOptions.Extensions.ToLower().Trim().Split(',').ToList();                                       
+
+                    if (!ApiManager.SearchStringFound(sFileName, fFileName)) { continue; }
+
+                    var extFound = false;
+                    foreach (var ext in extensions)
+                    {
+                        if (ApiManager.SearchStringFound(ext.Trim(), Path.GetExtension(file.Name).ToLower().Trim())) { extFound = true; break; }
+                    }
+                    if (!extFound) { continue; }
+
+                    if(file.LastWriteTime < fileSearchOptions.DateModifiedStart || file.LastWriteTime > fileSearchOptions.DateModifiedEnd ||
+                        file.Length < fileSearchOptions.FileSizeStart || file.Length > fileSearchOptions.FileSizeEnd)
+                    {
+                        continue;
+                    }
+
+                    if(!ApiManager.SearchStringFound(fileSearchOptions.Path, file.DirectoryName)) { continue; }
+
+                    filteredFiles.Add(file);
+                }
+
+                return filteredFiles;
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+                logger.Fatal(e);
+                return null;
+            }
+        }
+    }
    
 }

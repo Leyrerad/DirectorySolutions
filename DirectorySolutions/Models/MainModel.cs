@@ -213,10 +213,13 @@ namespace DirectorySolutions.Models
 
         #region fileList
 
-        public void SetFileList(List<FileInfo> fileList)
+        public void SetFileList(List<FileInfo> fileList, bool raiseEvent)
         {
             files = fileList;
-            RaiseFileListChangedEvent(fileList);
+            if (raiseEvent)
+            {
+                RaiseFileListChangedEvent(fileList);
+            }
         }
 
         public List<FileInfo> GetFiles()
@@ -242,10 +245,13 @@ namespace DirectorySolutions.Models
 
         #region Movie List
 
-        public void SetMovieList(List<Movie> movies)
+        public void SetMovieList(List<Movie> movies, bool raiseEvent)
         {
             this.movies = movies;
-            RaiseMovieListChangedEvent(movies);
+            if (raiseEvent)
+            {
+                RaiseMovieListChangedEvent(movies);
+            }         
         }
 
         public List<Movie> GetMovieList()
@@ -461,6 +467,8 @@ namespace DirectorySolutions.Models
 
     }
 
+    #region enums
+
     public enum DisplaySortOptionEnum
     {
         [Description("Not Sorted")]
@@ -508,6 +516,24 @@ namespace DirectorySolutions.Models
         Movies
     }
 
+    #endregion
+
+    #region Helper classes
+
+    public class FileSearch
+    {
+        public string FileName { get; set; }
+        public DateTime DateModifiedStart { get; set; }
+        public DateTime DateModifiedEnd { get; set; }
+        public string Extensions { get; set; }
+        public double FileSizeStart { get; set; }
+        public double FileSizeEnd { get; set; }
+        public string Path { get; set; }
+        public bool FreshSearch { get; set; }
+    }
+
+    #endregion
+
     public interface IMainModel
     {
         void SetActiveFilePath(string value, bool saveDir);
@@ -518,7 +544,7 @@ namespace DirectorySolutions.Models
 
         List<string> GetAllFilePaths();
 
-        void SetFileList(List<FileInfo> fileList);
+        void SetFileList(List<FileInfo> fileList, bool raiseEvent);
 
         List<FileInfo> GetFiles();
 
@@ -540,7 +566,7 @@ namespace DirectorySolutions.Models
 
         Tuple<string, string> GetFileNameByPathSeperatorTuple(NameByPathSeperatorEnum seperator);
 
-        void SetMovieList(List<Movie> movies);
+        void SetMovieList(List<Movie> movies, bool raiseEvent);
 
         List<Movie> GetMovieList();
 

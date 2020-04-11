@@ -53,6 +53,7 @@
             this.freshSearchCheck = new System.Windows.Forms.CheckBox();
             this.btnClearAll = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.requireGenresCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnCreateInfoFiles
@@ -75,7 +76,7 @@
             // 
             this.titleLbl.AutoSize = true;
             this.titleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLbl.Location = new System.Drawing.Point(319, 26);
+            this.titleLbl.Location = new System.Drawing.Point(247, 26);
             this.titleLbl.Name = "titleLbl";
             this.titleLbl.Size = new System.Drawing.Size(33, 15);
             this.titleLbl.TabIndex = 2;
@@ -83,7 +84,7 @@
             // 
             // titleSearchTxt
             // 
-            this.titleSearchTxt.Location = new System.Drawing.Point(374, 24);
+            this.titleSearchTxt.Location = new System.Drawing.Point(302, 24);
             this.titleSearchTxt.Name = "titleSearchTxt";
             this.titleSearchTxt.Size = new System.Drawing.Size(307, 20);
             this.titleSearchTxt.TabIndex = 3;
@@ -170,7 +171,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(704, 26);
+            this.label4.Location = new System.Drawing.Point(632, 26);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 15);
             this.label4.TabIndex = 16;
@@ -178,7 +179,7 @@
             // 
             // genreTxt
             // 
-            this.genreTxt.Location = new System.Drawing.Point(760, 26);
+            this.genreTxt.Location = new System.Drawing.Point(688, 26);
             this.genreTxt.Name = "genreTxt";
             this.genreTxt.Size = new System.Drawing.Size(301, 20);
             this.genreTxt.TabIndex = 17;
@@ -259,11 +260,22 @@
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
             // 
+            // requireGenresCheck
+            // 
+            this.requireGenresCheck.AutoSize = true;
+            this.requireGenresCheck.Location = new System.Drawing.Point(1012, 28);
+            this.requireGenresCheck.Name = "requireGenresCheck";
+            this.requireGenresCheck.Size = new System.Drawing.Size(114, 17);
+            this.requireGenresCheck.TabIndex = 31;
+            this.requireGenresCheck.Text = "Require All Genres";
+            this.requireGenresCheck.UseVisualStyleBackColor = true;
+            // 
             // MovieManagement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.requireGenresCheck);
             this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.freshSearchCheck);
             this.Controls.Add(this.runtimeEndTxt);
@@ -319,5 +331,6 @@
         private System.Windows.Forms.CheckBox freshSearchCheck;
         private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.CheckBox requireGenresCheck;
     }
 }

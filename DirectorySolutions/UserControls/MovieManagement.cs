@@ -37,11 +37,6 @@ namespace DirectorySolutions.UserControls
             var filesGenerated = await presenter.GenerateInformationFilesForMovies();
         }
 
-        private void btnDisplayMovies_Click(object sender, EventArgs e)
-        {
-          
-        }
-
         private void btnSearch_Click(object sender, EventArgs e)
         {
             string error;
@@ -50,7 +45,7 @@ namespace DirectorySolutions.UserControls
             {
                 if (movieSearchOptions.FreshSearch)
                 {
-                    if(!presenter.ParseMovieInfoFilesInPath(out error))
+                    if(!presenter.ParseMovieInfoFilesInPath(out error, mainModel.GetSortedBy(false), raiseEvent: false))
                     {
                         MessageBox.Show(error);
                     }
@@ -159,7 +154,8 @@ namespace DirectorySolutions.UserControls
                     RuntimeStart = runtimeStart,
                     RuntimeEnd = runtimeEnd,
                     TopBilled = topBilled,
-                    FreshSearch = freshSearchCheck.Checked                    
+                    FreshSearch = freshSearchCheck.Checked,
+                    RequireAllGenres = requireGenresCheck.Checked
                 };
 
                 return true;

@@ -115,10 +115,30 @@ namespace DirectorySolutions
                         if (!SearchStringFound(sActor.Trim(), mActors)) { continue; }
                     }
 
-                    foreach (var sGenre in sGenres)
+                    bool genresFound;
+                    if (movieSearchOptions.RequireAllGenres)
                     {
-                        if (!SearchStringFound(sGenre.Trim(), mGenres)) { continue; }
+                        genresFound = true;
+                        foreach (var sGenre in sGenres)
+                        {
+                            if (!SearchStringFound(sGenre.Trim(), mGenres)) { genresFound = false; break; }
+                        }
+
                     }
+                    else
+                    {
+                        genresFound = false;
+                        foreach (var sGenre in sGenres)
+                        {
+                            if (SearchStringFound(sGenre.Trim(), mGenres)) { genresFound = true; break; }
+                        }
+                    }
+
+                    if (!genresFound)
+                    {
+                        continue;
+                    }
+
 
                     if (mYear < movieSearchOptions.YearStart || mYear > movieSearchOptions.YearEnd ||
                         mRuntime < movieSearchOptions.RuntimeStart || mRuntime > movieSearchOptions.RuntimeEnd ||
@@ -140,17 +160,38 @@ namespace DirectorySolutions
             }
         }
 
-        public static bool SearchStringFound(string searchString, string movieString)
+        public static bool SearchStringFound(string searchString, string fileString)
         {
             if (!string.IsNullOrEmpty(searchString))
             {
-                if (!string.Equals(movieString, searchString) && !movieString.Contains(searchString) && !movieString.StartsWith(searchString) && 
-                    !movieString.EndsWith(searchString))
+                if (!string.Equals(fileString, searchString) && !fileString.Contains(searchString) && !fileString.StartsWith(searchString) && 
+                    !fileString.EndsWith(searchString))
                 {
                     return false;
                 }
             }
             return true;
+        }
+
+        public static List<Movie> SortMovieList(List<Movie> files, DisplaySortOptionEnum sortBy = DisplaySortOptionEnum.None)
+        {
+            switch (sortBy)
+            {
+                case (DisplaySortOptionEnum.DateAsc):
+                    return files.OrderBy(x => Convert.ToInt32(x.Year)).ToList();
+                case (DisplaySortOptionEnum.DateDesc):
+                    return files.OrderByDescending(x => Convert.ToInt32(x.Year)).ToList();
+                case (DisplaySortOptionEnum.SizeAsc):
+                    return files.OrderBy(x => x.FileSize).ToList();
+                case (DisplaySortOptionEnum.SizeDesc):
+                    return files.OrderByDescending(x => x.FileSize).ToList();
+                case (DisplaySortOptionEnum.NameAsc):
+                    return files.OrderBy(x => x.Title).ToList();
+                case (DisplaySortOptionEnum.NameDesc):
+                    return files.OrderByDescending(x => x.Title).ToList();
+                default:
+                    return files;
+            }
         }
     }
 }

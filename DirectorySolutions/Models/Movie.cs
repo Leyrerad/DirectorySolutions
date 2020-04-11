@@ -54,5 +54,6 @@ namespace DirectorySolutions.Models
         public int RuntimeEnd { get; set; }
         public string TopBilled { get; set; }
         public bool FreshSearch { get; set; }
+        public bool RequireAllGenres { get; set; }
     }
 }

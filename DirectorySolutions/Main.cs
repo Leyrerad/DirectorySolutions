@@ -89,7 +89,7 @@ namespace DirectorySolutions
                     m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
                     break;
                 case GridViewOptionEnum.Movies:                    
-                    if (!presenter.ParseMovieInfoFilesInPath(out error))
+                    if (!presenter.ParseMovieInfoFilesInPath(out error, m_Model.GetSortedBy(false)))
                     {
                         MessageBox.Show(error);
                     }
@@ -317,13 +317,25 @@ namespace DirectorySolutions
             RemoveUnactiveUserControl();
             m_Model.SetActiveControl(control);
             m_Model.SetGridViewOption(m_Model.DetermineGridViewOption(control));
-            Height = mainFormStartingHeight + control.Height + 10;
+            Height = mainFormStartingHeight + control.Height;
             Controls.Add(control);
             control.Location =
-                new Point(Width / 2 - (control.Width / 2), webBrowser1.Top + webBrowser1.Height + 10);
+                new Point(Width / 2 - (control.Width / 2), webBrowser1.Top + webBrowser1.Height + 15);
         }
 
         #endregion
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string error;
+            if(!presenter.SaveToExcel(displayGrid, out error))
+            {
+                filePathErrorProv.SetError(filePath, error);
+            }
+            else
+            {
+                filePathErrorProv.Clear();
+            }           
+        }
     }
 }

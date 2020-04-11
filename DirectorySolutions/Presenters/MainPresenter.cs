@@ -26,7 +26,7 @@ namespace DirectorySolutions.Presenters
         
         #region FileOperations
 
-        public bool FindAllFilesInTheDirectory(List<string> sDir, out string error, DisplaySortOptionEnum sortedBy = DisplaySortOptionEnum.None)
+        public bool FindAllFilesInTheDirectory(List<string> sDir, out string error, DisplaySortOptionEnum sortedBy = DisplaySortOptionEnum.None, bool raiseEvent = true)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace DirectorySolutions.Presenters
                     }
 
                     m_Model.SetSortedByEnum(sortedBy, false);
-                    m_Model.SetFileList(allFiles);
+                    m_Model.SetFileList(allFiles, raiseEvent);
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace DirectorySolutions.Presenters
             }          
         }
 
-        public void SortMainDisplay(DisplaySortOptionEnum sortBy = DisplaySortOptionEnum.None)
+        public void SortMainDisplay(DisplaySortOptionEnum sortBy = DisplaySortOptionEnum.None, bool raiseEvent = true)
         {
             var displayOption = m_Model.GetGridViewOption();
             m_Model.SetApplicationState(ApplicationStateEnum.SortingFiles);
@@ -111,11 +111,11 @@ namespace DirectorySolutions.Presenters
             m_Model.SetSortedByEnum(sortBy, false);
             if (displayOption == GridViewOptionEnum.Files)
             {
-                m_Model.SetFileList(files);
+                m_Model.SetFileList(files, raiseEvent);
             }
             else if (displayOption == GridViewOptionEnum.Movies)
             {
-                m_Model.SetMovieList(movies);
+                m_Model.SetMovieList(movies, raiseEvent);
             }
             m_Model.SetApplicationState(ApplicationStateEnum.Ready);
         }
@@ -169,6 +169,68 @@ namespace DirectorySolutions.Presenters
             m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
             return true;
         }
+
+        public bool SaveToExcel(DataGridView displayGrid, out string error)
+        {
+            error = "";
+            try
+            {
+                Microsoft.Office.Interop.Excel._Application app = new Microsoft.Office.Interop.Excel.Application();
+                Microsoft.Office.Interop.Excel._Workbook workbook = app.Workbooks.Add(Type.Missing);
+                Microsoft.Office.Interop.Excel._Worksheet worksheet = null;
+                app.Visible = true;
+                worksheet = workbook.Sheets["Sheet1"];
+                worksheet = workbook.ActiveSheet;
+                worksheet.Name = "Files in Path(s)";
+                for (int i = 1; i < displayGrid.Columns.Count + 1; i++)
+                {
+                    worksheet.Cells[1, i] = displayGrid.Columns[i - 1].HeaderText;
+                }
+                for (int i = 0; i < displayGrid.Rows.Count - 1; i++)
+                {
+                    for (int j = 0; j < displayGrid.Columns.Count; j++)
+                    {
+                        worksheet.Cells[i + 2, j + 1] = displayGrid.Rows[i].Cells[j].Value.ToString();
+                    }
+                }
+                worksheet.Columns.AutoFit();
+                return true;
+            }
+            catch(Exception e)
+            {
+                error = e.Message;
+                return false;
+            }           
+        }
+
+        public bool MoveFiles(out string error, string sDir)
+        {
+            m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
+            if (!FileOperations.MoveFiles(m_Model.GetFiles(), sDir, out error))
+            {
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                logger.Debug(error);
+                return false;
+            }
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+            return true;
+        }
+
+        public bool FilterFileListBySearchOptions(FileSearch fileSearchOptions, out string error, bool raiseEvent = true)
+        {
+            m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
+            var fileList = FileOperations.FilterFileListBySearchOptions(m_Model.GetFiles(), fileSearchOptions, out error);
+            if (fileList == null)
+            {
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                logger.Debug(error);
+                return false;
+            }
+            m_Model.SetFileList(fileList, raiseEvent);
+            m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+            return true;
+        }
+      
       
         #endregion
 
@@ -216,7 +278,11 @@ namespace DirectorySolutions.Presenters
                     }
                     break;
                 case GridViewOptionEnum.Movies:
-                    if (!ParseMovieInfoFilesInPath(out error))
+                    if (!FindAllFilesInTheDirectory(m_Model.GetAllFilePaths(), out error, DisplaySortOptionEnum.None))
+                    {
+                        return false;
+                    }
+                    if (!ParseMovieInfoFilesInPath(out error, m_Model.GetSortedBy(false)))
                     {
                         return false;
                     }
@@ -263,7 +329,7 @@ namespace DirectorySolutions.Presenters
             return filesCreated ? true : false;
         }
 
-        public bool ParseMovieInfoFilesInPath(out string error)
+        public bool ParseMovieInfoFilesInPath(out string error, DisplaySortOptionEnum sortedBy, bool raiseEvent = true)
         {
             m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
             var movieList = ApiManager.ParseMovieInfoFiles(m_Model.GetFiles(), out error);
@@ -273,12 +339,18 @@ namespace DirectorySolutions.Presenters
                 logger.Debug(error);
                 return false;
             }
-            m_Model.SetMovieList(movieList);
+
+            if(sortedBy != DisplaySortOptionEnum.None)
+            {
+                movieList = ApiManager.SortMovieList(movieList, sortedBy);
+            }
+
+            m_Model.SetMovieList(movieList, raiseEvent);
             m_Model.SetApplicationState(ApplicationStateEnum.Ready);
             return true;
         }
 
-        public bool FilterMovieListBySearchOptions(MovieSearch movieSearchOptions, out string error)
+        public bool FilterMovieListBySearchOptions(MovieSearch movieSearchOptions, out string error, bool raiseEvent = true)
         {
             m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
             var movieList = ApiManager.FilterMovieListBySearchOptions(m_Model.GetMovieList(), movieSearchOptions, out error);
@@ -288,7 +360,7 @@ namespace DirectorySolutions.Presenters
                 logger.Debug(error);
                 return false;
             }
-            m_Model.SetMovieList(movieList);
+            m_Model.SetMovieList(movieList, raiseEvent);
             m_Model.SetApplicationState(ApplicationStateEnum.Ready);
             return true;
         }
