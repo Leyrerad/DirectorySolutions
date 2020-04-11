@@ -373,10 +373,10 @@ namespace DirectorySolutions
             RemoveUnactiveUserControl();
             m_Model.SetActiveControl(control);
             m_Model.SetGridViewOption(m_Model.DetermineGridViewOption(control));
-            Height = mainFormStartingHeight + control.Height;
+            Height = mainFormStartingHeight + control.Height + 20;
             Controls.Add(control);
             control.Location =
-                new Point(Width / 2 - (control.Width / 2), webBrowser1.Top + webBrowser1.Height + 15);
+                new Point(Width / 2 - (control.Width / 2), webBrowser1.Top + webBrowser1.Height + 70);
         }
 
         #endregion

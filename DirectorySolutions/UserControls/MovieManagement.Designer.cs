@@ -274,7 +274,6 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.requireGenresCheck);
             this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.freshSearchCheck);
@@ -299,7 +298,7 @@
             this.Controls.Add(this.titleLbl);
             this.Controls.Add(this.btnCreateInfoFiles);
             this.Name = "MovieManagement";
-            this.Size = new System.Drawing.Size(1151, 155);
+            this.Size = new System.Drawing.Size(1153, 130);
             this.ResumeLayout(false);
             this.PerformLayout();
 

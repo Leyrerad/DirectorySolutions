@@ -25,6 +25,7 @@ namespace DirectorySolutions
             this.presenter = presenter;
             freshSearchCheck.Checked = true;
             sizeOptionCombo.SelectedIndex = 1;
+            operationOptionCombo.SelectedIndex = 0;
             modifiedStartTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             modifiedEndTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             SetToolTips();
@@ -292,6 +293,6 @@ namespace DirectorySolutions
             modifiedStartTime.Value = new DateTime(1970, 1, 1, 0, 0, 0);
             modifiedEndTime.Value = DateTime.Now;
         }
-               
+
     }
 }

@@ -120,4 +120,12 @@
   <metadata name="renameByPathErrorProv.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="label6.Text" xml:space="preserve">
+    <value>These controls allow you to change
+ the file names in your file list to 
+reflect the directories in which they 
+are found. By changing some of the
+ options you can see how an example
+ file may look.</value>
+  </data>
 </root>

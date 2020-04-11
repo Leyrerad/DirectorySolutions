@@ -82,27 +82,27 @@ namespace DirectorySolutions.Presenters
                 {
                     case (DisplaySortOptionEnum.DateAsc):
                         files = files.OrderBy(x => x.LastWriteTime).ToList();
-                        movies = movies.OrderBy(x => Convert.ToInt32(x.Year)).ToList();
+                        movies = movies == null ? null : movies.OrderBy(x => Convert.ToInt32(x.Year)).ToList();
                         break;
                     case (DisplaySortOptionEnum.DateDesc):
                         files = files.OrderByDescending(x => x.LastWriteTime).ToList();
-                        movies = movies.OrderByDescending(x => Convert.ToInt32(x.Year)).ToList();
+                        movies = movies == null ? null : movies.OrderByDescending(x => Convert.ToInt32(x.Year)).ToList();
                         break;
                     case (DisplaySortOptionEnum.SizeAsc):
                         files = files.OrderBy(x => x.Length).ToList();
-                        movies = movies.OrderBy(x => x.FileSize).ToList();
+                        movies = movies == null ? null : movies.OrderBy(x => x.FileSize).ToList();
                         break;
                     case (DisplaySortOptionEnum.SizeDesc):
                         files = files.OrderByDescending(x => x.Length).ToList();
-                        movies = movies.OrderByDescending(x => x.FileSize).ToList();
+                        movies = movies == null ? null : movies.OrderByDescending(x => x.FileSize).ToList();
                         break;
                     case (DisplaySortOptionEnum.NameAsc):
                         files = files.OrderBy(x => x.Name).ToList();
-                        movies = movies.OrderBy(x => x.Title).ToList();
+                        movies = movies == null ? null : movies.OrderBy(x => x.Title).ToList();
                         break;
                     case (DisplaySortOptionEnum.NameDesc):
                         files = files.OrderByDescending(x => x.Name).ToList();
-                        movies = movies.OrderByDescending(x => x.Title).ToList();
+                        movies = movies == null ? null : movies.OrderByDescending(x => x.Title).ToList();
                         break;
                     default:
                         break;
@@ -128,20 +128,19 @@ namespace DirectorySolutions.Presenters
             return files;
         }
         
-        public bool RenameFilesByDirectory(int numberOfDirs, NameByPathSeperatorEnum seperator, DisplaySortOptionEnum sortBy, out string error,
-            bool incrementNames = false, int containsIncrements = 0, bool spaceBuffer = false)
+        public bool RenameFilesByDirectory(int numberOfDirs, NameByPathSeperatorEnum seperator, DisplaySortOptionEnum sortBy, out string error, out string displayFileName,
+            bool incrementNames = false, int containsIncrements = 0, bool spaceBuffer = false, bool forDisplay = false)
         {
             m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
             if (!FileOperations.RenameFilesByDirectory(m_Model.GetFiles(), numberOfDirs, m_Model.GetFileNameByPathSeperatorTuple(seperator), 
-                sortBy, out error, incrementNames, containsIncrements, spaceBuffer))
+                sortBy, out error, out displayFileName, incrementNames, containsIncrements, spaceBuffer, forDisplay))
             {
                 m_Model.SetApplicationState(ApplicationStateEnum.Ready);
                 logger.Debug(error);
                 return false;
             }
             m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
-            return true;
-          
+            return true;          
         }
 
         public bool FindAndReplace(string inText, string outText, out string error)
@@ -262,7 +261,7 @@ namespace DirectorySolutions.Presenters
         {
             if (string.IsNullOrEmpty(m_Model.GetActiveFilePath()))
             {
-                return "Please select a directory to get started.";
+                return "Please select a directory or file(s) to get started.";
             }
 
             var control = m_Model.GetActiveUserControl();       

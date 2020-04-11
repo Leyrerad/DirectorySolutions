@@ -96,12 +96,13 @@ namespace DirectorySolutions
             }
         }
 
-        public static bool RenameFilesByDirectory(List<FileInfo> files, int numberOfDirs, Tuple<string, string> seperatorTuple, DisplaySortOptionEnum sortBy, out string error,
-            bool incrementNames = false, int containsIncrements = 0, bool spaceBuffer = false)
+        public static bool RenameFilesByDirectory(List<FileInfo> files, int numberOfDirs, Tuple<string, string> seperatorTuple, DisplaySortOptionEnum sortBy, out string error, 
+            out string displayFileName, bool incrementNames = false, int containsIncrements = 0, bool spaceBuffer = false, bool forDisplay = false)
         {
             try
             {
                 error = "";
+                displayFileName = "";
                 int count = 0;
 
                 if (spaceBuffer)
@@ -135,7 +136,16 @@ namespace DirectorySolutions
                         filePathCombined + name;
                     completedFileName = completedFileName.Trim() + file.Extension;
 
-                    File.Move(file.FullName, Path.Combine(file.DirectoryName, completedFileName));
+                    if (!forDisplay)
+                    {
+                        File.Move(file.FullName, Path.Combine(file.DirectoryName, completedFileName));
+                    }
+                    else
+                    {
+                        displayFileName = completedFileName;
+                        break;
+                    }
+                  
                     count += 1;
                 }
 
@@ -145,6 +155,7 @@ namespace DirectorySolutions
             {
                 logger.Fatal(ex);
                 error = ex.Message;
+                displayFileName = "";
                 return false;
             }
         }

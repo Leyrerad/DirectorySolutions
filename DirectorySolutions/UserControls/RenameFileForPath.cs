@@ -36,8 +36,9 @@ namespace DirectorySolutions.UserControls
         private void renameAll_Click(object sender, EventArgs e)
         {
             string error;
+            string displayFileName;
             if(!presenter.RenameFilesByDirectory(Convert.ToInt32(numDirsToInclude.SelectedItem), (NameByPathSeperatorEnum)dirSeperatorChar.SelectedIndex, 
-                (DisplaySortOptionEnum)(orderBy.SelectedIndex + 1), out error, IsNumberFiles.Checked, incFilesExist.SelectedIndex, spaceBuffer.Checked))
+                (DisplaySortOptionEnum)(orderBy.SelectedIndex + 1), out error, out displayFileName, IsNumberFiles.Checked, incFilesExist.SelectedIndex, spaceBuffer.Checked))
             {
                 renameByPathErrorProv.SetError(btnRenameAll, error);
             }
@@ -46,5 +47,55 @@ namespace DirectorySolutions.UserControls
                 renameByPathErrorProv.Clear();
             }
         }
+
+        #region update example file name
+
+        private void numDirsToInclude_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateExampleFileName();
+        }
+
+        private void UpdateExampleFileName()
+        {
+            string error;
+            string displayFileName;
+            if (!presenter.RenameFilesByDirectory(Convert.ToInt32(numDirsToInclude.SelectedItem), (NameByPathSeperatorEnum)dirSeperatorChar.SelectedIndex,
+                (DisplaySortOptionEnum)(orderBy.SelectedIndex + 1), out error, out displayFileName, IsNumberFiles.Checked, 
+                incFilesExist.SelectedIndex, spaceBuffer.Checked, true))
+            {
+                MessageBox.Show(error);
+            }
+            else
+            {
+                exampleFileNameLbl.Text = displayFileName;
+            }
+        }
+
+        private void IsNumberFiles_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateExampleFileName();
+        }
+
+        private void orderBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateExampleFileName();
+        }
+
+        private void dirSeperatorChar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateExampleFileName();
+        }
+
+        private void incFilesExist_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateExampleFileName();
+        }
+
+        private void spaceBuffer_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateExampleFileName();
+        }
+
+        #endregion
     }
 }

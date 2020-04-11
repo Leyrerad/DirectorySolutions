@@ -72,6 +72,8 @@
             this.freshSearchCheck = new System.Windows.Forms.CheckBox();
             this.btnClearFields = new System.Windows.Forms.Button();
             this.sizeOptionCombo = new System.Windows.Forms.ComboBox();
+            this.operationOptionCombo = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.prependErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).BeginInit();
@@ -103,14 +105,14 @@
             // 
             this.inTxt.Location = new System.Drawing.Point(87, 176);
             this.inTxt.Name = "inTxt";
-            this.inTxt.Size = new System.Drawing.Size(282, 20);
+            this.inTxt.Size = new System.Drawing.Size(258, 20);
             this.inTxt.TabIndex = 19;
             // 
             // txtOutLbl
             // 
             this.txtOutLbl.AutoSize = true;
             this.txtOutLbl.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.txtOutLbl.Location = new System.Drawing.Point(402, 179);
+            this.txtOutLbl.Location = new System.Drawing.Point(358, 179);
             this.txtOutLbl.Name = "txtOutLbl";
             this.txtOutLbl.Size = new System.Drawing.Size(51, 13);
             this.txtOutLbl.TabIndex = 21;
@@ -118,14 +120,14 @@
             // 
             // outTxt
             // 
-            this.outTxt.Location = new System.Drawing.Point(459, 176);
+            this.outTxt.Location = new System.Drawing.Point(415, 176);
             this.outTxt.Name = "outTxt";
-            this.outTxt.Size = new System.Drawing.Size(282, 20);
+            this.outTxt.Size = new System.Drawing.Size(258, 20);
             this.outTxt.TabIndex = 22;
             // 
             // btnFindReplace
             // 
-            this.btnFindReplace.Location = new System.Drawing.Point(830, 176);
+            this.btnFindReplace.Location = new System.Drawing.Point(690, 176);
             this.btnFindReplace.Name = "btnFindReplace";
             this.btnFindReplace.Size = new System.Drawing.Size(115, 23);
             this.btnFindReplace.TabIndex = 23;
@@ -145,14 +147,14 @@
             // 
             this.prependTxt.Location = new System.Drawing.Point(87, 214);
             this.prependTxt.Name = "prependTxt";
-            this.prependTxt.Size = new System.Drawing.Size(282, 20);
+            this.prependTxt.Size = new System.Drawing.Size(258, 20);
             this.prependTxt.TabIndex = 24;
             // 
             // appendTxt
             // 
-            this.appendTxt.Location = new System.Drawing.Point(459, 214);
+            this.appendTxt.Location = new System.Drawing.Point(415, 214);
             this.appendTxt.Name = "appendTxt";
-            this.appendTxt.Size = new System.Drawing.Size(282, 20);
+            this.appendTxt.Size = new System.Drawing.Size(258, 20);
             this.appendTxt.TabIndex = 25;
             // 
             // prependLbl
@@ -168,7 +170,7 @@
             // 
             this.appendLbl.AutoSize = true;
             this.appendLbl.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.appendLbl.Location = new System.Drawing.Point(402, 217);
+            this.appendLbl.Location = new System.Drawing.Point(358, 217);
             this.appendLbl.Name = "appendLbl";
             this.appendLbl.Size = new System.Drawing.Size(47, 13);
             this.appendLbl.TabIndex = 27;
@@ -176,7 +178,7 @@
             // 
             // btnPreAppend
             // 
-            this.btnPreAppend.Location = new System.Drawing.Point(830, 211);
+            this.btnPreAppend.Location = new System.Drawing.Point(690, 211);
             this.btnPreAppend.Name = "btnPreAppend";
             this.btnPreAppend.Size = new System.Drawing.Size(115, 23);
             this.btnPreAppend.TabIndex = 28;
@@ -416,11 +418,34 @@
             this.sizeOptionCombo.Size = new System.Drawing.Size(70, 21);
             this.sizeOptionCombo.TabIndex = 52;
             // 
+            // operationOptionCombo
+            // 
+            this.operationOptionCombo.FormattingEnabled = true;
+            this.operationOptionCombo.Items.AddRange(new object[] {
+            "Files",
+            "Parent Directory",
+            "Full Path"});
+            this.operationOptionCombo.Location = new System.Drawing.Point(830, 211);
+            this.operationOptionCombo.Name = "operationOptionCombo";
+            this.operationOptionCombo.Size = new System.Drawing.Size(109, 21);
+            this.operationOptionCombo.TabIndex = 53;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(827, 186);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(109, 15);
+            this.label7.TabIndex = 54;
+            this.label7.Text = "Run Operation On:";
+            // 
             // FindAndReplaceControls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.operationOptionCombo);
             this.Controls.Add(this.sizeOptionCombo);
             this.Controls.Add(this.btnClearFields);
             this.Controls.Add(this.freshSearchCheck);
@@ -454,7 +479,7 @@
             this.Controls.Add(this.inTxt);
             this.Controls.Add(this.textInLbl);
             this.Name = "FindAndReplaceControls";
-            this.Size = new System.Drawing.Size(974, 265);
+            this.Size = new System.Drawing.Size(978, 250);
             ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.prependErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).EndInit();
@@ -515,6 +540,8 @@
         private System.Windows.Forms.ErrorProvider genericErrorProv;
         private System.Windows.Forms.CheckBox freshSearchCheck;
         private System.Windows.Forms.Button btnClearFields;
+        private System.Windows.Forms.ComboBox operationOptionCombo;
         private System.Windows.Forms.ComboBox sizeOptionCombo;
+        private System.Windows.Forms.Label label7;
     }
 }
