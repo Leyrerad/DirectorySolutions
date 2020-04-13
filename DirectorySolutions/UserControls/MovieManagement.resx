@@ -123,4 +123,15 @@
   <metadata name="notifyIcon1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>185, 17</value>
   </metadata>
+  <data name="label8.Text" xml:space="preserve">
+    <value>These controls are to manage digitized
+film files. The "Create Info Files" button
+ will use the OMDB.com api to create 
+searchable info files. Loading these 
+controls will automatically look for these
+files and display the movies it can find.
+You can then filter the movie list to find 
+specific films. "Refresh List" will re-
+populate the list from the directory(s).</value>
+  </data>
 </root>

@@ -7,13 +7,13 @@
     <ProjectGuid>{7B1EBAF3-5B6E-4D16-9853-CB581C88BAE4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DirectorySolutions</RootNamespace>
-    <AssemblyName>DirectorySolutions</AssemblyName>
+    <AssemblyName>File Manager</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>D:\DirectorySolutions\</PublishUrl>
+    <PublishUrl>D:\FileManager\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -23,7 +23,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -60,6 +60,12 @@
   <PropertyGroup>
     <SignManifests>true</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logomakr_9vp3o7_fWC_icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -92,6 +98,13 @@
   <ItemGroup>
     <Compile Include="ApiManager.cs" />
     <Compile Include="Models\Movie.cs" />
+    <Compile Include="Models\OptionsModel.cs" />
+    <Compile Include="Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\DirectorySelection.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -141,7 +154,11 @@
       <DependentUpon>RenameFileForPath.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.cs" />
-    <None Include="DirectorySolutions_TemporaryKey.pfx" />
+    <Content Include="logomakr_9vp3o7_fWC_icon.ico" />
+    <Content Include="Resources\LogoMakr_9Vp3o7.png" />
+    <Content Include="Resources\logomakr_9vp3o723_K8l_icon.ico" />
+    <Content Include="Resources\logomakr_9vp3o72_Q5d_icon.ico" />
+    <Content Include="Resources\logomakr_9vp3o7_fWC_icon.ico" />
     <None Include="Resources\StatusHelpOutline_16x.png" />
     <None Include="Resources\StatusHelp_grey_disabled_16x.png" />
     <None Include="Resources\StatusHelp_grey_16x.png" />
@@ -160,6 +177,9 @@
     <None Include="Resources\Question_16x.png" />
     <None Include="Resources\blue_question_mark_icon_svg_JHW_icon.ico" />
     <None Include="Resources\Blue_question_mark_icon.svg.png" />
+    <EmbeddedResource Include="Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\DirectorySelection.resx">
       <DependentUpon>DirectorySelection.cs</DependentUpon>
     </EmbeddedResource>
@@ -191,7 +211,6 @@
     <EmbeddedResource Include="UserControls\RenameFileForPath.resx">
       <DependentUpon>RenameFileForPath.cs</DependentUpon>
     </EmbeddedResource>
-    <Content Include="Info.ico" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

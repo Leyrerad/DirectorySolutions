@@ -120,6 +120,17 @@ namespace DirectorySolutions.Models
             allFilePaths.Clear();
         }
 
+        public void ReplaceFilePaths(List<string> filePaths, string activeFilePath, bool raiseEvent)
+        {
+            ClearFilePaths();
+            allFilePaths = filePaths;
+            this.activeFilePath = activeFilePath;
+            if (raiseEvent)
+            {
+                RaiseFilePathChangedEvent(activeFilePath, filePaths);
+            }
+        }
+
         public string GetActiveFilePath()
         {
             return activeFilePath;
@@ -144,12 +155,7 @@ namespace DirectorySolutions.Models
         public void RaiseFilePathChangedEvent(string filePath, List<string> allFilePaths)
         {
             filePathChanged(this, new PathEventArgs(filePath, allFilePaths));
-        }
-
-        public void RaiseAddFilePathEvent(List<string> allFilePaths)
-        {
-
-        }
+        }               
 
         #endregion
 
@@ -594,6 +600,8 @@ namespace DirectorySolutions.Models
         GridViewOptionEnum DetermineGridViewOption(UserControl control);
 
         void AddFilesToFileList(List<FileInfo> fileList, bool raiseEvent);
+
+        void ReplaceFilePaths(List<string> filePaths, string activeFilePath, bool raiseEvent);
 
     }
 

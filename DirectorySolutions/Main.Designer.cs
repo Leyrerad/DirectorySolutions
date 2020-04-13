@@ -35,6 +35,7 @@ namespace DirectorySolutions
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.countLbl = new System.Windows.Forms.ToolStripStatusLabel();
@@ -71,7 +72,6 @@ namespace DirectorySolutions
             this.saveDir = new System.Windows.Forms.RadioButton();
             this.freshDir = new System.Windows.Forms.RadioButton();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.picInfoFreshDir = new System.Windows.Forms.PictureBox();
             this.btnOpenFile = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.appendListRad = new System.Windows.Forms.RadioButton();
@@ -81,13 +81,15 @@ namespace DirectorySolutions
             this.fileOpenList = new System.Windows.Forms.ListBox();
             this.btnClearFileList = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.picInfoFreshDir = new System.Windows.Forms.PictureBox();
+            this.editDefaultsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picInfoFreshDir)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picInfoFreshDir)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -202,6 +204,8 @@ namespace DirectorySolutions
             // 
             // optionsToolStripMenuItem
             // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editDefaultsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -413,18 +417,6 @@ namespace DirectorySolutions
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // picInfoFreshDir
-            // 
-            this.picInfoFreshDir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picInfoFreshDir.Image = global::DirectorySolutions.Properties.Resources.StatusHelp_16x;
-            this.picInfoFreshDir.InitialImage = global::DirectorySolutions.Properties.Resources.Question_16x;
-            this.picInfoFreshDir.Location = new System.Drawing.Point(1173, 61);
-            this.picInfoFreshDir.Name = "picInfoFreshDir";
-            this.picInfoFreshDir.Size = new System.Drawing.Size(21, 17);
-            this.picInfoFreshDir.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picInfoFreshDir.TabIndex = 17;
-            this.picInfoFreshDir.TabStop = false;
-            // 
             // btnOpenFile
             // 
             this.btnOpenFile.Location = new System.Drawing.Point(600, 251);
@@ -521,6 +513,26 @@ namespace DirectorySolutions
             this.panel1.Size = new System.Drawing.Size(1245, 269);
             this.panel1.TabIndex = 27;
             // 
+            // picInfoFreshDir
+            // 
+            this.picInfoFreshDir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.picInfoFreshDir.Image = global::DirectorySolutions.Properties.Resources.StatusHelp_16x;
+            this.picInfoFreshDir.InitialImage = global::DirectorySolutions.Properties.Resources.Question_16x;
+            this.picInfoFreshDir.Location = new System.Drawing.Point(1173, 61);
+            this.picInfoFreshDir.Name = "picInfoFreshDir";
+            this.picInfoFreshDir.Size = new System.Drawing.Size(21, 17);
+            this.picInfoFreshDir.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picInfoFreshDir.TabIndex = 17;
+            this.picInfoFreshDir.TabStop = false;
+            this.picInfoFreshDir.Click += new System.EventHandler(this.picInfoFreshDir_Click);
+            // 
+            // editDefaultsToolStripMenuItem
+            // 
+            this.editDefaultsToolStripMenuItem.Name = "editDefaultsToolStripMenuItem";
+            this.editDefaultsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editDefaultsToolStripMenuItem.Text = "Edit Defaults";
+            this.editDefaultsToolStripMenuItem.Click += new System.EventHandler(this.editDefaultsToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -548,9 +560,10 @@ namespace DirectorySolutions
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "DirectorySolutions";
+            this.Text = "File Manager";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -558,8 +571,8 @@ namespace DirectorySolutions
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.displayGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picInfoFreshDir)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picInfoFreshDir)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -612,5 +625,6 @@ namespace DirectorySolutions
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Label instructionLbl;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ToolStripMenuItem editDefaultsToolStripMenuItem;
     }
 }

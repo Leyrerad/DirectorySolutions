@@ -143,14 +143,48 @@ namespace DirectorySolutions.Presenters
             return true;          
         }
 
-        public bool FindAndReplace(string inText, string outText, out string error)
+        public bool FindAndReplace(string inText, string outText, out string error, int targetOptionIndex)
         {
             m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
-            if (!FileOperations.FindAndReplace(m_Model.GetFiles(), inText, outText, out error))
+            List<string> newSearchDirectories;
+            switch (targetOptionIndex)
             {
-                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
-                logger.Debug(error);
-                return false;
+                case 0:
+                    if (!FileOperations.FindAndReplaceOnFiles(m_Model.GetFiles(), inText, outText, out error))
+                    {
+                        m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                        logger.Debug(error);
+                        return false;
+                    }
+                    break;
+                case 1:
+                    if (!FileOperations.FindAndReplaceOnParentDirectories(m_Model.GetFiles(), inText, outText, out error))
+                    {
+                        m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                        logger.Debug(error);
+                        return false;
+                    }
+                    break;
+                case 2:                   
+                    if (!FileOperations.FindAndReplaceOnFullPath(m_Model.GetFiles(), inText, outText, out error, out newSearchDirectories))
+                    {
+                        m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                        logger.Debug(error);
+                        return false;
+                    }
+                    if(newSearchDirectories != null && newSearchDirectories.Count > 0)
+                    {
+                        m_Model.ReplaceFilePaths(newSearchDirectories, newSearchDirectories.First(), false);
+                    }
+                    break;
+                default:
+                    if (!FileOperations.FindAndReplaceOnFiles(m_Model.GetFiles(), inText, outText, out error))
+                    {
+                        m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                        logger.Debug(error);
+                        return false;
+                    }
+                    break;
             }
             m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
             return true;           
@@ -316,25 +350,6 @@ namespace DirectorySolutions.Presenters
                     break;
             }
             
-            return true;
-        }
-
-        public bool RefreshGridViewDisplay()
-        {
-            var displayOption = m_Model.GetGridViewOption();
-            switch (displayOption)
-            {
-                case GridViewOptionEnum.Files:
-                
-                    break;
-                case GridViewOptionEnum.Movies:
-                   
-                    break;
-                default:
-                   
-                    break;
-            }
-
             return true;
         }
 

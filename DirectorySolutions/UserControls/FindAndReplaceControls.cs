@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
 using DirectorySolutions.Models;
 using DirectorySolutions.Presenters;
 
@@ -29,8 +22,15 @@ namespace DirectorySolutions
             modifiedStartTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             modifiedEndTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             SetToolTips();
+            this.Paint += FindAndReplaceControls_Paint;
         }
-        
+
+        private void FindAndReplaceControls_Paint(object sender, PaintEventArgs e)
+        {
+            Pen pen = new Pen(Color.FromKnownColor(KnownColor.ControlDarkDark));
+            e.Graphics.DrawLine(pen, 235, 105, 1225, 105);
+        }
+
         private bool ValidateFindAndReplaceInputs()
         {
             var inText = inTxt.Text;
@@ -100,14 +100,15 @@ namespace DirectorySolutions
 
         private void btnFindReplace_Click(object sender, EventArgs e)
         {
-            var confirmResult = MessageBox.Show("Are you sure to replace all file names in this root directory?","Confirm Replacement", MessageBoxButtons.YesNo);
+            var confirmResult = MessageBox.Show("Are you sure to replace '" + inTxt.Text + "' with '" + outTxt.Text + "' for all " 
+                + operationOptionCombo.SelectedItem.ToString() +  " names in this root directory?", "Confirm Replacement", MessageBoxButtons.YesNo);
 
             if (confirmResult == DialogResult.Yes)
             {
                 if (ValidateFindAndReplaceInputs())
                 {
                     string error;
-                    if (!presenter.FindAndReplace(inTxt.Text, outTxt.Text, out error))
+                    if (!presenter.FindAndReplace(inTxt.Text, outTxt.Text, out error, operationOptionCombo.SelectedIndex))
                     {
                         replaceAllErrorProv.SetError(btnFindReplace, error);
                     }
@@ -116,13 +117,14 @@ namespace DirectorySolutions
                         replaceAllErrorProv.Clear();
                     }
                 }
-            }
-              
+            }              
         }
 
         private void btnPreAppend_Click(object sender, EventArgs e)
         {
-            var confirmResult = MessageBox.Show("Are you sure to replace all file names in this root directory?", "Confirm Replacement", MessageBoxButtons.YesNo);
+            var confirmResult = MessageBox.Show("Are you sure to prepend '" + prependTxt.Text + "' and append '" 
+                + appendTxt.Text + "' for all " + operationOptionCombo.SelectedItem.ToString() + " names in this root directory?", 
+                "Confirm Replacement", MessageBoxButtons.YesNo);
 
             if (confirmResult == DialogResult.Yes)
             {
@@ -293,6 +295,5 @@ namespace DirectorySolutions
             modifiedStartTime.Value = new DateTime(1970, 1, 1, 0, 0, 0);
             modifiedEndTime.Value = DateTime.Now;
         }
-
     }
 }

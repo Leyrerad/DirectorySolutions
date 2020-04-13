@@ -126,6 +126,24 @@
   <metadata name="inTxtErrorProv.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>553, 17</value>
   </metadata>
+  <data name="label9.Text" xml:space="preserve">
+    <value>These controls help you to move files to
+a new path or change file names. You
+can also change the "Run Operation
+On" item in order to change directory 
+names instead of file names. For the 
+"Replace All" option, only the part of the
+filename that matches "Text In" will be
+replaced with the text in "Text Out".</value>
+  </data>
+  <data name="label8.Text" xml:space="preserve">
+    <value>These controls allow you to filter 
+the files in your current file list. 
+If "Refresh List" is checked, a fresh 
+file list will be created from your 
+selected directories before filtering is 
+applied.</value>
+  </data>
   <metadata name="prependErrorProv.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>820, 17</value>
   </metadata>

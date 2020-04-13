@@ -3,14 +3,8 @@ using DirectorySolutions.Presenters;
 using DirectorySolutions.UserControls;
 using DirectorySolutions.Views;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DirectorySolutions
@@ -43,7 +37,8 @@ namespace DirectorySolutions
             freshListRad.Checked = true;
             SubscribeToModelEvents();
             CreateDragAndDropEvents();
-            SetToolTips();
+            SetToolTips();            
+            LoadDefaults();
         }
 
         private void SubscribeToModelEvents()
@@ -58,10 +53,15 @@ namespace DirectorySolutions
 
         #region DisplayUpdates
 
+        private void LoadDefaults()
+        {
+            filePath.Text = Properties.Settings.Default["Path"].ToString();
+        }
+
         private void SetToolTips()
         {
             tooltipFreshDir.SetToolTip(picInfoFreshDir, "By clicking 'Save Directory' the previously compiled file list " +
-                "will be appended to that of the next path that is opened.");
+                "will be appended to that of the next path that is opened. Click this icon to view all saved file paths.");
         }
 
         private void UpdateStatusDisplay(GridViewOptionEnum displayOption)
@@ -319,12 +319,8 @@ namespace DirectorySolutions
             string error;
             if(!presenter.AddFilesFromFileList(fileOpenList.Items, out error, freshListRad.Checked))
             {
-                
-            }
-            else
-            {
-
-            }
+                MessageBox.Show(error, "Error");
+            }           
         }
 
         #endregion
@@ -397,6 +393,22 @@ namespace DirectorySolutions
         private void btnClearFileList_Click(object sender, EventArgs e)
         {
             fileOpenList.Items.Clear();
+        }
+
+        private void picInfoFreshDir_Click(object sender, EventArgs e)
+        {
+            var dirs = m_Model.GetAllFilePaths();
+            MessageBox.Show(string.Join("\n", dirs), "All File Paths for the File List");
+        }
+
+        private void editDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var frm = new Options();
+            frm.Location = this.Location;
+            frm.StartPosition = FormStartPosition.Manual;
+            frm.FormClosing += delegate { this.Show(); };
+            frm.Show();
+            this.Hide();
         }
     }
 }

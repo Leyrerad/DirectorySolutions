@@ -43,7 +43,7 @@ namespace DirectorySolutions
             }
         }
 
-        public static bool FindAndReplace(List<FileInfo> files, string inString, string outString, out string error)
+        public static bool FindAndReplaceOnFiles(List<FileInfo> files, string inString, string outString, out string error)
         {
             try
             {
@@ -68,6 +68,124 @@ namespace DirectorySolutions
                 error = ex.Message;
                 return false;
             }
+        }
+
+        public static bool FindAndReplaceOnParentDirectories(List<FileInfo> files, string inString, string outString, out string error)
+        {
+            try
+            {
+                error = "";
+                List<string> directories = new List<string>();
+                var drives = GetDriveInformation().Select(x => x.Name).Select(x => x.ToLower()).ToList();
+                foreach (var file in files)
+                {
+
+                    if (!directories.Contains(file.Directory.FullName))
+                    {
+                        directories.Add(file.Directory.FullName);
+                    }                            
+                }
+
+                foreach(var directory in directories)
+                {
+                    var dir = new DirectoryInfo(directory);
+
+                    if(dir != null && !string.IsNullOrEmpty(dir.Name) && !string.IsNullOrEmpty(dir.FullName) && !drives.Select(x => x.Contains(inString.ToLower())).Any())
+                    {
+                        var newDirectoryName = dir.Name.Replace(inString, outString).Trim();
+                        var dirs = dir.FullName.Split(Path.DirectorySeparatorChar).ToList();
+                        if(dirs.Count > 1)
+                        {
+                            dirs.RemoveAt(dirs.Count - 1);
+                        }
+                        newDirectoryName = Path.Combine(string.Join(Path.DirectorySeparatorChar.ToString(), dirs), newDirectoryName);
+
+                        if (!string.Equals(dir.FullName, newDirectoryName))
+                        {
+                            Directory.Move(dir.FullName, newDirectoryName);
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal(ex);
+                error = ex.Message;
+                return false;
+            }
+        }
+
+        public static bool FindAndReplaceOnFullPath(List<FileInfo> files, string inString, string outString, out string error, out List<string> newSearchDirectories)
+        {
+            try
+            {
+                error = "";
+                List<string> directories = new List<string>();
+                newSearchDirectories = new List<string>();
+                var drives = GetDriveInformation().Select(x => x.Name).Select(x => x.ToLower()).ToList();             
+                
+                foreach (var file in files)
+                {
+
+                    if (!directories.Contains(file.Directory.FullName))
+                    {
+                        directories.Add(file.Directory.FullName);
+                    }
+                }
+
+                foreach (var directory in directories)
+                {
+                    List<string> preChangePathparts = new List<string>();
+                    List<string> postChangePathparts = new List<string>();
+                    var dir = new DirectoryInfo(directory);
+
+                    if (dir != null && !string.IsNullOrEmpty(dir.Name) && !string.IsNullOrEmpty(dir.FullName))
+                    {                        
+                        var dirs = dir.FullName.Split(Path.DirectorySeparatorChar).ToList();
+
+                        for(int i = 0; i < dirs.Count; i++)
+                        {
+                            if(ApiManager.SearchStringFound(inString, dirs[i]) && !drives.Select(x => x.Contains(inString.ToLower())).Any())
+                            {
+                                
+                                preChangePathparts.Add(dirs[i]);
+                                dirs[i] = dirs[i].Replace(inString, outString).Trim();
+                                postChangePathparts.Add(dirs[i]);
+                                var prePath = string.Join(Path.DirectorySeparatorChar.ToString(), preChangePathparts);
+                                var postPath = string.Join(Path.DirectorySeparatorChar.ToString(), postChangePathparts);
+                                if (!Directory.Exists(postPath))
+                                {
+                                    Directory.Move(prePath, postPath);
+                                }
+                                preChangePathparts[i] = dirs[i];
+                            }
+                            else
+                            {
+                                preChangePathparts.Add(dirs[i]);
+                                postChangePathparts.Add(dirs[i]);
+                            }                           
+                        }
+
+                        newSearchDirectories.Add(string.Join(Path.DirectorySeparatorChar.ToString(), postChangePathparts));
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                logger.Fatal(ex);
+                error = ex.Message;
+                newSearchDirectories = null;
+                return false;
+            }
+        }
+
+        public static List<DriveInfo> GetDriveInformation()
+        {
+            return DriveInfo.GetDrives().ToList();
         }
 
         public static bool PreAndAppendFileNames(List<FileInfo> files, string prepend, string append, out string error)
