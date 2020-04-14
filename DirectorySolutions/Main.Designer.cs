@@ -121,7 +121,7 @@ namespace DirectorySolutions
             this.sizeLbl,
             this.sortedBy,
             this.sortedByLbl});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 762);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 769);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1245, 22);
             this.statusStrip1.TabIndex = 1;
@@ -471,9 +471,9 @@ namespace DirectorySolutions
             this.label3.Location = new System.Drawing.Point(848, 0);
             this.label3.Name = "label3";
             this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label3.Size = new System.Drawing.Size(149, 18);
+            this.label3.Size = new System.Drawing.Size(169, 31);
             this.label3.TabIndex = 23;
-            this.label3.Text = " NOTE: Drag and drop enable";
+            this.label3.Text = " NOTE: Drag and drop enabled in   the \"Add File(s)\" text box.";
             // 
             // btnAddFiles
             // 
@@ -525,7 +525,7 @@ namespace DirectorySolutions
             this.flowLayoutPanel1.Controls.Add(this.label6);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 486);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 493);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.flowLayoutPanel1.Size = new System.Drawing.Size(1245, 276);
@@ -672,7 +672,7 @@ namespace DirectorySolutions
             this.middlePanel.Location = new System.Drawing.Point(0, 282);
             this.middlePanel.Name = "middlePanel";
             this.middlePanel.Padding = new System.Windows.Forms.Padding(3);
-            this.middlePanel.Size = new System.Drawing.Size(1245, 184);
+            this.middlePanel.Size = new System.Drawing.Size(1245, 198);
             this.middlePanel.TabIndex = 35;
             // 
             // fileToolsPanel
@@ -680,7 +680,7 @@ namespace DirectorySolutions
             this.fileToolsPanel.AutoScroll = true;
             this.fileToolsPanel.Location = new System.Drawing.Point(229, 6);
             this.fileToolsPanel.Name = "fileToolsPanel";
-            this.fileToolsPanel.Size = new System.Drawing.Size(1010, 162);
+            this.fileToolsPanel.Size = new System.Drawing.Size(1010, 184);
             this.fileToolsPanel.TabIndex = 1;
             // 
             // fileToolSetsLayout
@@ -776,7 +776,7 @@ namespace DirectorySolutions
             this.panel1.Location = new System.Drawing.Point(2, 6);
             this.panel1.Name = "panel1";
             this.panel1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.panel1.Size = new System.Drawing.Size(221, 170);
+            this.panel1.Size = new System.Drawing.Size(221, 184);
             this.panel1.TabIndex = 2;
             // 
             // label9
@@ -794,7 +794,7 @@ namespace DirectorySolutions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1245, 784);
+            this.ClientSize = new System.Drawing.Size(1245, 791);
             this.Controls.Add(this.middlePanel);
             this.Controls.Add(this.webBrowser1);
             this.Controls.Add(this.flowLayoutPanel1);
