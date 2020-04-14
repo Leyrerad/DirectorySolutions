@@ -97,6 +97,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiManager.cs" />
+    <Compile Include="FileDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileDetails.Designer.cs">
+      <DependentUpon>FileDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\OptionsModel.cs" />
     <Compile Include="Options.cs">
@@ -105,31 +111,19 @@
     <Compile Include="Options.Designer.cs">
       <DependentUpon>Options.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\DirectorySelection.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\DirectorySelection.Designer.cs">
-      <DependentUpon>DirectorySelection.cs</DependentUpon>
-    </Compile>
     <Compile Include="Extensions.cs" />
     <Compile Include="FileOperations.cs" />
-    <Compile Include="UserControls\FileSelection.cs">
+    <Compile Include="UserControls\FilterFiles.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\FileSelection.Designer.cs">
-      <DependentUpon>FileSelection.cs</DependentUpon>
+    <Compile Include="UserControls\FilterFiles.Designer.cs">
+      <DependentUpon>FilterFiles.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\FindAndReplaceControls.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\FindAndReplaceControls.Designer.cs">
       <DependentUpon>FindAndReplaceControls.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\FindExtension.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\FindExtension.Designer.cs">
-      <DependentUpon>FindExtension.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
@@ -177,20 +171,17 @@
     <None Include="Resources\Question_16x.png" />
     <None Include="Resources\blue_question_mark_icon_svg_JHW_icon.ico" />
     <None Include="Resources\Blue_question_mark_icon.svg.png" />
+    <EmbeddedResource Include="FileDetails.resx">
+      <DependentUpon>FileDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\DirectorySelection.resx">
-      <DependentUpon>DirectorySelection.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\FileSelection.resx">
-      <DependentUpon>FileSelection.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\FilterFiles.resx">
+      <DependentUpon>FilterFiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\FindAndReplaceControls.resx">
       <DependentUpon>FindAndReplaceControls.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\FindExtension.resx">
-      <DependentUpon>FindExtension.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

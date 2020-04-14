@@ -148,8 +148,7 @@ namespace DirectorySolutions
                         for(int i = 0; i < dirs.Count; i++)
                         {
                             if(ApiManager.SearchStringFound(inString, dirs[i]) && !drives.Select(x => x.Contains(inString.ToLower())).Any())
-                            {
-                                
+                            {                                
                                 preChangePathparts.Add(dirs[i]);
                                 dirs[i] = dirs[i].Replace(inString, outString).Trim();
                                 postChangePathparts.Add(dirs[i]);
@@ -385,6 +384,25 @@ namespace DirectorySolutions
             }
 
         }
+
+        public static bool GetFileNamesAsList(List<FileInfo> files, out string error, out string fileNameList)
+        {
+            error = null;
+            fileNameList = "";
+            try
+            {
+                fileNameList = string.Join("\n", files.Select(x => x.FullName).ToList());
+               
+                return true;
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+                logger.Fatal(e);                
+                return false;
+            }
+        }
+       
     }
    
 }

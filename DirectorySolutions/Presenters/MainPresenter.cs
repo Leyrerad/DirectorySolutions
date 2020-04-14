@@ -285,29 +285,93 @@ namespace DirectorySolutions.Presenters
             m_Model.SetApplicationState(ApplicationStateEnum.Ready);
             return true;
         }
-      
-      
+
+        public bool GetFileNamesAsList(out string error, out string files)
+        {
+            m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
+            if (!FileOperations.GetFileNamesAsList(m_Model.GetFiles(), out error, out files))
+            {
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                logger.Debug(error);
+                return false;
+            }           
+            m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+            return true;
+        }
+
+        public bool OpenFilesFromList(List<FileInfo> files, out string error, bool replaceList = true)
+        {
+            m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
+            error = null;
+            try
+            {
+                if (replaceList)
+                {
+                    m_Model.SetFileList(files, true);
+                }                
+
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                return true;
+            }
+            catch (Exception e)
+            {
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                error = e.Message;
+                logger.Fatal(e);
+                return false;
+            }
+          
+        }
+
+        public bool EditFileName(string oldName, string newName, string directoryName, out string error)
+        {
+
+            m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
+            error = null;
+            try
+            {
+                if(!string.Equals(Path.GetExtension(newName), Path.GetExtension(oldName)))
+                {
+                    error = "The extension for the new file name does not match the old file name.";
+                    return false;
+                }
+
+                File.Move(Path.Combine(directoryName, oldName), Path.Combine(directoryName, newName));
+
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                return true;
+            }
+            catch (Exception e)
+            {
+                m_Model.SetApplicationState(ApplicationStateEnum.Ready);
+                error = e.Message;
+                logger.Fatal(e);
+                return false;
+            }
+        }
+
+
         #endregion
 
         #region DisplayMethods
 
-        public string DetermineInstructions()
-        {
-            if (string.IsNullOrEmpty(m_Model.GetActiveFilePath()))
-            {
-                return "Please select a directory or file(s) to get started.";
-            }
+        //public string DetermineInstructions()
+        //{
+        //    if (string.IsNullOrEmpty(m_Model.GetActiveFilePath()))
+        //    {
+        //        return "Please select a directory or file(s) to get started.";
+        //    }
 
-            var control = m_Model.GetActiveUserControl();       
-            if(control != null)
-            {
-                return "Please follow the instructions on the inner controls to proceed.";
-            }
-            else
-            {
-               return "Please select an operation to get started.";                
-            }
-        }
+        //    var control = m_Model.GetActiveUserControl();       
+        //    if(control != null)
+        //    {
+        //        return "Please follow the instructions on the inner controls to proceed.";
+        //    }
+        //    else
+        //    {
+        //       return "Please select an operation to get started.";                
+        //    }
+        //}
 
         public void ClearAllTextFields(ControlCollection controls)
         {

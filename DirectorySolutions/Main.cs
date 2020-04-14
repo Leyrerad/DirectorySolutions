@@ -3,7 +3,9 @@ using DirectorySolutions.Presenters;
 using DirectorySolutions.UserControls;
 using DirectorySolutions.Views;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -14,6 +16,7 @@ namespace DirectorySolutions
         private MainPresenter presenter = null;
         private readonly MainModel m_Model;
         private int mainFormStartingHeight;
+        private Color buttonColor;
 
         public string path
         {
@@ -35,10 +38,28 @@ namespace DirectorySolutions
             mainFormStartingHeight = Height;
             freshDir.Checked = true;
             freshListRad.Checked = true;
+            displayGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             SubscribeToModelEvents();
             CreateDragAndDropEvents();
             SetToolTips();            
             LoadDefaults();
+            buttonColor = btnFilterFiles.BackColor;
+            displayGrid.CellDoubleClick += DisplayGrid_CellDoubleClick;
+        }
+
+        private void DisplayGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string error;
+            var frm = new FileDetails(m_Model.GetFiles().ElementAt(e.RowIndex), m_Model, presenter);
+            frm.Location = this.Location;
+            frm.StartPosition = FormStartPosition.Manual;
+            frm.FormClosing += delegate { 
+                this.Show(); 
+                presenter.RefreshModelLists(out error); 
+            };
+            frm.Show();
+            this.Hide();
+
         }
 
         private void SubscribeToModelEvents()
@@ -46,16 +67,27 @@ namespace DirectorySolutions
             m_Model.filePathChanged += M_Model_filePathChanged1;
             m_Model.fileListChanged += M_Model_fileListChanged;
             m_Model.appStateChanged += M_Model_appStateChanged;
-            m_Model.activeControlChanged += M_Model_activeControlChanged;
             m_Model.movieListChanged += M_Model_movieListChanged;
             m_Model.gridViewOptionChanged += M_Model_gridViewOptionChanged;
+            m_Model.activeControlChanged += M_Model_activeControlChanged;
         }
 
-        #region DisplayUpdates
+      
+
+        #region Display
 
         private void LoadDefaults()
         {
-            filePath.Text = Properties.Settings.Default["Path"].ToString();
+            try
+            {
+                path = Properties.Settings.Default["Path"].ToString();
+                webBrowser1.Url = new Uri(path);
+                filePath.Text = path;
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message, "Error");
+            }
         }
 
         private void SetToolTips()
@@ -69,7 +101,6 @@ namespace DirectorySolutions
             countLbl.Text = m_Model.GetFileCount(displayOption).ToString() + " Files";
             sizeLbl.Text = m_Model.GetSumFileLengths(displayOption);
             sortedByLbl.Text = m_Model.GetSortedBy(false).GetDescription();
-            instructionLbl.Text = presenter.DetermineInstructions();
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -99,6 +130,35 @@ namespace DirectorySolutions
                 default:
                     break;
             }
+        }
+
+        private void picInfoFreshDir_Click(object sender, EventArgs e)
+        {
+            var dirs = m_Model.GetAllFilePaths();
+            MessageBox.Show(string.Join("\n", dirs), "All File Paths for the File List");
+        }
+
+        private void M_Model_activeControlChanged(object sender, MainModel.ControlEventArgs args)
+        {
+            UpdateFileToolSetButtonDisplay();
+        }
+
+        private void UpdateFileToolSetButtonDisplay()
+        {
+            
+            List <Control> controls = new List<Control>() { btnFilterFiles, btnFindandReplace, btnFindDuplicates, btnMovieManagement, btnNameFilesForPath };
+            foreach(var cntrl in controls)
+            {
+                if (cntrl.Focused)
+                {
+                    cntrl.BackColor = Color.FromKnownColor(KnownColor.ActiveCaption);
+                }
+                else
+                {
+                    cntrl.BackColor = buttonColor;
+                }
+            }
+            
         }
 
         #endregion
@@ -267,29 +327,8 @@ namespace DirectorySolutions
         #endregion
 
         #region FileOperations
-
-        private void searchAndReplaceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Control[] controls = Controls.Find("FindAndReplaceControls", true);
-            if (controls.Length < 1)
-            {
-                FindAndReplaceControls findAndReplaceControls = new FindAndReplaceControls(m_Model, presenter);
-                ShiftUserControlDisplay(findAndReplaceControls);
-            }            
-        }
-
-        private void nameFilesAfterPathToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-            Control[] controls = Controls.Find("RenameFileForPath", true);
-            if (controls.Length < 1)
-            {
-                RenameFileForPath renameFileForPath = new RenameFileForPath(m_Model, presenter);
-                ShiftUserControlDisplay(renameFileForPath);           
-            }
-        }
-
-        private void movieManagementToolStripMenuItem_Click(object sender, EventArgs e)
+             
+        private void btnMovieManagement_Click(object sender, EventArgs e)
         {
             Control[] controls = Controls.Find("MovieManagement", true);
             if (controls.Length < 1)
@@ -323,6 +362,105 @@ namespace DirectorySolutions
             }           
         }
 
+        private void saveFileListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string files;
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                dialog.FilterIndex = 1;
+                dialog.RestoreDirectory = true;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Can use dialog.FileName
+                    using (Stream stream = dialog.OpenFile())
+                    {
+                        string error;
+                        if (!presenter.GetFileNamesAsList(out error, out files))
+                        {
+                            MessageBox.Show(error, "Error");
+                        }
+
+                        using (var sw = new StreamWriter(stream))
+                        {
+                            sw.WriteLine(files);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void openFileListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var files = new List<FileInfo>();
+            string error;
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    //Get the path of specified file
+                    var filePath = openFileDialog.FileName;
+
+                    //Read the contents of the file into a stream
+                    var fileStream = openFileDialog.OpenFile();
+
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        string line;
+                        while ((line = reader.ReadLine()) != null)
+                        {
+                            if (File.Exists(line))
+                            {
+                                files.Add(new FileInfo(line));
+                            }
+                        }
+                    }
+
+                    if (!presenter.OpenFilesFromList(files, out error))
+                    {
+                        MessageBox.Show(error, "Error");
+                    }
+                }
+            }
+        }
+
+        private void btnFilterFiles_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("FilterFiles", true);
+            if (controls.Length < 1)
+            {
+                FilterFiles filterFiles = new FilterFiles(m_Model, presenter);
+                ShiftUserControlDisplay(filterFiles);
+            }
+        }
+
+        private void btnNameFilesForPath_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("RenameFileForPath", true);
+            if (controls.Length < 1)
+            {
+                RenameFileForPath renameFileForPath = new RenameFileForPath(m_Model, presenter);
+                ShiftUserControlDisplay(renameFileForPath);
+            }
+        }
+
+        private void btnFindandReplace_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("FindAndReplaceControls", true);
+            if (controls.Length < 1)
+            {
+                FindAndReplaceControls findAndReplaceControls = new FindAndReplaceControls(m_Model, presenter);
+                ShiftUserControlDisplay(findAndReplaceControls);
+            }
+        }
+
         #endregion
 
         #region MovieOperations
@@ -346,20 +484,15 @@ namespace DirectorySolutions
 
         #region UserControl
 
-        private void M_Model_activeControlChanged(object sender, MainModel.ControlEventArgs args)
-        {
-            instructionLbl.Text = presenter.DetermineInstructions();
-        }
-
         private void RemoveUnactiveUserControl()
         {
             var activeControl = m_Model.GetActiveUserControl();
-            if(activeControl != null)
+            if (activeControl != null)
             {
-                var controls = Controls.Find(activeControl.Name, true);
-                if(controls.Length > 0)
+                var controls = fileToolsPanel.Controls.Find(activeControl.Name, true);
+                if (controls.Length > 0)
                 {
-                    Controls.Remove(controls[0]);
+                    fileToolsPanel.Controls.Remove(controls[0]);
                 }
             }
         }
@@ -369,10 +502,9 @@ namespace DirectorySolutions
             RemoveUnactiveUserControl();
             m_Model.SetActiveControl(control);
             m_Model.SetGridViewOption(m_Model.DetermineGridViewOption(control));
-            Height = mainFormStartingHeight + control.Height + 20;
-            Controls.Add(control);
+            fileToolsPanel.Controls.Add(control);
             control.Location =
-                new Point(Width / 2 - (control.Width / 2), webBrowser1.Top + webBrowser1.Height + 70);
+                new Point(3,5);
         }
 
         #endregion
@@ -395,13 +527,14 @@ namespace DirectorySolutions
             fileOpenList.Items.Clear();
         }
 
-        private void picInfoFreshDir_Click(object sender, EventArgs e)
-        {
-            var dirs = m_Model.GetAllFilePaths();
-            MessageBox.Show(string.Join("\n", dirs), "All File Paths for the File List");
-        }
+        #region General ops
 
-        private void editDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }       
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var frm = new Options();
             frm.Location = this.Location;
@@ -410,5 +543,21 @@ namespace DirectorySolutions
             frm.Show();
             this.Hide();
         }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        #endregion
+
+        private void btnFindDuplicates_Click(object sender, EventArgs e)
+        {
+
+        }
+
+      
     }
 }

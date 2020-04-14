@@ -34,7 +34,7 @@ namespace DirectorySolutions.Models
 
         #region member variables
 
-        private List<string> userControlsForFileOperations = new List<string>() { "FindAndReplaceControls", "RenameFileForPath" };
+        private List<string> userControlsForFileOperations = new List<string>() { "FindAndReplaceControls", "RenameFileForPath", "FilterFiles" };
         private List<string> userControlsForMovieOperations = new List<string>() { "MovieManagement" };
         private List<string> userControlsForDirectoryOperations = new List<string>();
         private string activeFilePath;
@@ -231,6 +231,15 @@ namespace DirectorySolutions.Models
         public List<FileInfo> GetFiles()
         {
             return files;
+        }               
+
+        public void ReplaceFile(FileInfo file, bool raiseEvent)
+        {
+            files[files.FindIndex(x => x.FullName == file.FullName)] = file;
+            if (raiseEvent)
+            {
+                RaiseFileListChangedEvent(files);
+            }
         }
 
         public void AddFilesToFileList(List<FileInfo> fileList, bool raiseEvent)
@@ -399,7 +408,7 @@ namespace DirectorySolutions.Models
 
         public static readonly string[] SizeSuffixes =
                    { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-        public static string SizeSuffix(Int64 value, int decimalPlaces = 2)
+        public string SizeSuffix(Int64 value, int decimalPlaces = 2)
         {
             if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
             if (value < 0) { return "-" + SizeSuffix(-value); }
@@ -602,6 +611,8 @@ namespace DirectorySolutions.Models
         void AddFilesToFileList(List<FileInfo> fileList, bool raiseEvent);
 
         void ReplaceFilePaths(List<string> filePaths, string activeFilePath, bool raiseEvent);
+
+        string SizeSuffix(Int64 value, int decimalPlaces = 2);
 
     }
 
