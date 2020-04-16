@@ -214,7 +214,7 @@ namespace DirectorySolutions
         }
 
         public static bool RenameFilesByDirectory(List<FileInfo> files, int numberOfDirs, Tuple<string, string> seperatorTuple, DisplaySortOptionEnum sortBy, out string error, 
-            out string displayFileName, bool incrementNames = false, int containsIncrements = 0, bool spaceBuffer = false, bool forDisplay = false)
+            out string displayFileName, bool incrementNames = false, bool spaceBuffer = false, bool forDisplay = false)
         {
             try
             {
@@ -350,7 +350,14 @@ namespace DirectorySolutions
                     filteredFiles.Add(file);
                 }
 
-                return filteredFiles;
+                if (!fileSearchOptions.InverseResults)
+                {
+                    return filteredFiles;
+                }
+                else
+                {
+                    return files.Except(filteredFiles).ToList();
+                }                
             }
             catch (Exception e)
             {

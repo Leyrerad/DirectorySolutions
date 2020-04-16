@@ -17,6 +17,7 @@ namespace DirectorySolutions.Presenters
         private readonly IMainView m_View;
         private IMainModel m_Model;
         private static Logger logger = LogManager.GetCurrentClassLogger();
+      
 
         public MainPresenter(IMainView view, IMainModel model)
         {
@@ -129,11 +130,11 @@ namespace DirectorySolutions.Presenters
         }
         
         public bool RenameFilesByDirectory(int numberOfDirs, NameByPathSeperatorEnum seperator, DisplaySortOptionEnum sortBy, out string error, out string displayFileName,
-            bool incrementNames = false, int containsIncrements = 0, bool spaceBuffer = false, bool forDisplay = false)
+            bool incrementNames = false, bool spaceBuffer = false, bool forDisplay = false)
         {
             m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
             if (!FileOperations.RenameFilesByDirectory(m_Model.GetFiles(), numberOfDirs, m_Model.GetFileNameByPathSeperatorTuple(seperator), 
-                sortBy, out error, out displayFileName, incrementNames, containsIncrements, spaceBuffer, forDisplay))
+                sortBy, out error, out displayFileName, incrementNames, spaceBuffer, forDisplay))
             {
                 m_Model.SetApplicationState(ApplicationStateEnum.Ready);
                 logger.Debug(error);
@@ -280,7 +281,12 @@ namespace DirectorySolutions.Presenters
             }
             else
             {
-                m_Model.AddFilesToFileList(fileList, raiseEvent);
+                fileList.AddRange(m_Model.GetFiles());
+                if(m_Model.GetSortedBy(false) != DisplaySortOptionEnum.None)
+                {
+                    fileList = SortFileList(fileList, m_Model.GetSortedBy(false));                      
+                }
+                m_Model.SetFileList(fileList, raiseEvent);
             }
             m_Model.SetApplicationState(ApplicationStateEnum.Ready);
             return true;
@@ -355,24 +361,6 @@ namespace DirectorySolutions.Presenters
 
         #region DisplayMethods
 
-        //public string DetermineInstructions()
-        //{
-        //    if (string.IsNullOrEmpty(m_Model.GetActiveFilePath()))
-        //    {
-        //        return "Please select a directory or file(s) to get started.";
-        //    }
-
-        //    var control = m_Model.GetActiveUserControl();       
-        //    if(control != null)
-        //    {
-        //        return "Please follow the instructions on the inner controls to proceed.";
-        //    }
-        //    else
-        //    {
-        //       return "Please select an operation to get started.";                
-        //    }
-        //}
-
         public void ClearAllTextFields(ControlCollection controls)
         {
             foreach (var control in controls)
@@ -415,6 +403,64 @@ namespace DirectorySolutions.Presenters
             }
             
             return true;
+        }
+
+        public bool PopulateFastPathContextMenu(ContextMenuStrip fastPathMenuStrip, out string error, ref List<string> fastPaths)
+        {
+            error = "";            
+            try
+            {
+                fastPathMenuStrip.Items.Clear();
+                if (fastPaths != null && fastPaths.Count > 0)
+                {
+                    ToolStripMenuItem[] items = new ToolStripMenuItem[fastPaths.Count];
+                    for (int i = 0; i < items.Length; i++)
+                    {
+                        var item = new ToolStripMenuItem();
+                        item.Name = fastPaths[i];
+                        item.Text = fastPaths[i];
+                        item.Click += new EventHandler(MenuItemClickHandler);
+
+                        fastPathMenuStrip.Items.Add(item);
+                    }
+                }
+                else
+                {
+                    fastPaths = new List<string>();
+                }
+
+                return true;
+            }
+            catch(Exception e)
+            {
+                error = e.Message;
+                return false;
+            }
+        }
+
+        private void MenuItemClickHandler(object sender, EventArgs e)
+        {
+            ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
+            ToolStripItem menuItem = sender as ToolStripItem;
+            if (menuItem != null)
+            {
+                ContextMenuStrip owner = menuItem.Owner as ContextMenuStrip;
+                if (owner != null)
+                {
+                    var buttonsToKeys = m_Model.GetButtonToTextKeyPair();
+                    Control control = owner.SourceControl;
+                    if (buttonsToKeys.ContainsKey(control.Name))
+                    {
+                        var textBoxName = buttonsToKeys[control.Name];
+                        var controls = control.Parent.Controls.Find(textBoxName, true);
+                        if(controls.Length > 0)
+                        {
+                            controls[0].Text = menuItem.Name;
+                        }
+                    }
+                    
+                }
+            }
         }
 
         #endregion
@@ -467,4 +513,6 @@ namespace DirectorySolutions.Presenters
 
         #endregion
     }
+
+    
 }

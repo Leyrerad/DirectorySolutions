@@ -35,6 +35,11 @@ namespace DirectorySolutions.UserControls
         private async void btnCreateInfoFiles_Click(object sender, EventArgs e)
         {
             var filesGenerated = await presenter.GenerateInformationFilesForMovies();
+            if (!filesGenerated)
+            {
+                MessageBox.Show("Unable to create the information files for the movies in this folder. Please make sure you have input a correct API key for http://www.omdbapi.com/.", "Error");
+            }
+
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -172,6 +177,5 @@ namespace DirectorySolutions.UserControls
         {
             presenter.ClearAllTextFields(this.Controls);
         }
-
     }
 }

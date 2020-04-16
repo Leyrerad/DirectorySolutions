@@ -30,7 +30,6 @@
         {
             this.sizeOptionCombo = new System.Windows.Forms.ComboBox();
             this.btnClearFields = new System.Windows.Forms.Button();
-            this.freshSearchCheck = new System.Windows.Forms.CheckBox();
             this.modifiedEndTime = new System.Windows.Forms.DateTimePicker();
             this.modifiedStartTime = new System.Windows.Forms.DateTimePicker();
             this.btnSearch = new System.Windows.Forms.Button();
@@ -48,6 +47,7 @@
             this.LblFileName = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.inverseCheck = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // sizeOptionCombo
@@ -65,23 +65,13 @@
             // 
             // btnClearFields
             // 
-            this.btnClearFields.Location = new System.Drawing.Point(835, 104);
+            this.btnClearFields.Location = new System.Drawing.Point(725, 99);
             this.btnClearFields.Name = "btnClearFields";
             this.btnClearFields.Size = new System.Drawing.Size(86, 23);
             this.btnClearFields.TabIndex = 69;
             this.btnClearFields.Text = "Clear All";
             this.btnClearFields.UseVisualStyleBackColor = true;
             this.btnClearFields.Click += new System.EventHandler(this.btnClearFields_Click);
-            // 
-            // freshSearchCheck
-            // 
-            this.freshSearchCheck.AutoSize = true;
-            this.freshSearchCheck.Location = new System.Drawing.Point(747, 108);
-            this.freshSearchCheck.Name = "freshSearchCheck";
-            this.freshSearchCheck.Size = new System.Drawing.Size(82, 17);
-            this.freshSearchCheck.TabIndex = 68;
-            this.freshSearchCheck.Text = "Refresh List";
-            this.freshSearchCheck.UseVisualStyleBackColor = true;
             // 
             // modifiedEndTime
             // 
@@ -104,7 +94,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(633, 103);
+            this.btnSearch.Location = new System.Drawing.Point(629, 99);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(90, 23);
             this.btnSearch.TabIndex = 65;
@@ -238,18 +228,28 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(941, 26);
             this.label8.TabIndex = 71;
-            this.label8.Text = "File Filtering Tools";
+            this.label8.Text = "Filter Your Files";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // inverseCheck
+            // 
+            this.inverseCheck.AutoSize = true;
+            this.inverseCheck.Location = new System.Drawing.Point(818, 102);
+            this.inverseCheck.Name = "inverseCheck";
+            this.inverseCheck.Size = new System.Drawing.Size(99, 17);
+            this.inverseCheck.TabIndex = 73;
+            this.inverseCheck.Text = "Inverse Results";
+            this.inverseCheck.UseVisualStyleBackColor = true;
             // 
             // FilterFiles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.inverseCheck);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.sizeOptionCombo);
             this.Controls.Add(this.btnClearFields);
-            this.Controls.Add(this.freshSearchCheck);
             this.Controls.Add(this.modifiedEndTime);
             this.Controls.Add(this.modifiedStartTime);
             this.Controls.Add(this.btnSearch);
@@ -276,7 +276,6 @@
 
         private System.Windows.Forms.ComboBox sizeOptionCombo;
         private System.Windows.Forms.Button btnClearFields;
-        private System.Windows.Forms.CheckBox freshSearchCheck;
         private System.Windows.Forms.DateTimePicker modifiedEndTime;
         private System.Windows.Forms.DateTimePicker modifiedStartTime;
         private System.Windows.Forms.Button btnSearch;
@@ -294,5 +293,6 @@
         private System.Windows.Forms.Label LblFileName;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox inverseCheck;
     }
 }

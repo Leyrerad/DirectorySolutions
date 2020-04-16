@@ -46,5 +46,53 @@ namespace DirectorySolutions.Properties {
                 this["SaveLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FileColumns {
+            get {
+                return ((string)(this["FileColumns"]));
+            }
+            set {
+                this["FileColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MovieColumns {
+            get {
+                return ((string)(this["MovieColumns"]));
+            }
+            set {
+                this["MovieColumns"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FastPaths {
+            get {
+                return ((string)(this["FastPaths"]));
+            }
+            set {
+                this["FastPaths"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OMDBKEY {
+            get {
+                return ((string)(this["OMDBKEY"]));
+            }
+            set {
+                this["OMDBKEY"] = value;
+            }
+        }
     }
 }

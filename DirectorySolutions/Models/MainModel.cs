@@ -34,8 +34,23 @@ namespace DirectorySolutions.Models
 
         #region member variables
 
-        private List<string> userControlsForFileOperations = new List<string>() { "FindAndReplaceControls", "RenameFileForPath", "FilterFiles" };
+        private List<string> userControlsForFileOperations = new List<string>() { "FindAndReplaceControls", "RenameFileForPath", "FilterFiles", "MoveOrDelete" };
         private List<string> userControlsForMovieOperations = new List<string>() { "MovieManagement" };
+        private Dictionary<string, string> buttonToTextKeyPair = new Dictionary<string, string>()
+        {
+            { "btnOpenDir", "defaultPathTxt" },
+            { "btnOpenFastPathDir", "fastPathTxt" },
+            { "btnOpenDirMain", "filePath" },
+            { "btnOpenPathMove", "movePathTxt" }
+
+        };
+        private List<string> tips = new List<string>()
+        {
+            "Tip: You can select the 'Save Directory(s)' option when opening a new directory to keep the files from the previous directory in your file list.",
+            "Tip: You can double click on files in the File List Display to view the file details more easily and even change the file name or open the file contents.",
+            "Tip: You can add 'Fast Paths' to your application settings from the options menu. These allow you to right click on any button that opens the directory explorer to quickly add a directory path instead.",
+            "Tip: Select the 'Inverse Results' checkbox when filtering files to return all files containing the opposite of your filter requirements, such as all filenames NOT containing a certain keyword."
+        };
         private List<string> userControlsForDirectoryOperations = new List<string>();
         private string activeFilePath;
         private string searchString;
@@ -61,6 +76,7 @@ namespace DirectorySolutions.Models
             filesSortedBy = DisplaySortOptionEnum.None;
             dirsSortedBy = DisplaySortOptionEnum.None;
             appState = ApplicationStateEnum.Ready;
+            gridViewOption = GridViewOptionEnum.Files;
         }
 
         #region Display
@@ -489,6 +505,30 @@ namespace DirectorySolutions.Models
 
         #endregion
 
+        #region fast paths
+
+        public Dictionary<string, string> GetButtonToTextKeyPair()
+        {
+            return buttonToTextKeyPair;
+        }
+
+        #endregion
+
+        #region tips
+
+        public List<string> GetTips()
+        {
+            return tips;
+        }
+
+        public string GetRandomTip()
+        {
+            Random rnd = new Random();
+            return tips.ElementAt(rnd.Next(1, tips.Count));
+        }
+
+        #endregion
+
     }
 
     #region enums
@@ -553,13 +593,14 @@ namespace DirectorySolutions.Models
         public double FileSizeStart { get; set; }
         public double FileSizeEnd { get; set; }
         public string Path { get; set; }
-        public bool FreshSearch { get; set; }
+        public bool InverseResults { get; set; }
     }
 
     #endregion
 
     public interface IMainModel
     {
+        string GetRandomTip();
         void SetActiveFilePath(string value, bool saveDir);
         
         void ClearFilePaths();
@@ -614,8 +655,8 @@ namespace DirectorySolutions.Models
 
         string SizeSuffix(Int64 value, int decimalPlaces = 2);
 
+        Dictionary<string, string> GetButtonToTextKeyPair();
+
     }
-
-
         
 }

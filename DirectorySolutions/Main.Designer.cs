@@ -64,7 +64,8 @@ namespace DirectorySolutions
             this.btnBack = new System.Windows.Forms.Button();
             this.btnForward = new System.Windows.Forms.Button();
             this.filePath = new System.Windows.Forms.TextBox();
-            this.btnOpenDir = new System.Windows.Forms.Button();
+            this.btnOpenDirMain = new System.Windows.Forms.Button();
+            this.fastPathMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.saveDir = new System.Windows.Forms.RadioButton();
@@ -89,15 +90,23 @@ namespace DirectorySolutions
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.middlePanel = new System.Windows.Forms.Panel();
-            this.fileToolsPanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.fileToolSetsLayout = new System.Windows.Forms.TableLayoutPanel();
+            this.btnMoveCopyDelete = new System.Windows.Forms.Button();
             this.btnMovieManagement = new System.Windows.Forms.Button();
             this.btnFindandReplace = new System.Windows.Forms.Button();
             this.btnFindDuplicates = new System.Windows.Forms.Button();
             this.btnNameFilesForPath = new System.Windows.Forms.Button();
             this.btnFilterFiles = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.label9 = new System.Windows.Forms.Label();
+            this.fileToolsPanel = new System.Windows.Forms.Panel();
+            this.tipsPanel = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnMoreTips = new System.Windows.Forms.Button();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.mainTipLbl = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).BeginInit();
@@ -109,8 +118,13 @@ namespace DirectorySolutions
             this.tableLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.middlePanel.SuspendLayout();
-            this.fileToolSetsLayout.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.fileToolSetsLayout.SuspendLayout();
+            this.fileToolsPanel.SuspendLayout();
+            this.tipsPanel.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -326,9 +340,9 @@ namespace DirectorySolutions
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(120, 3);
+            this.btnBack.Location = new System.Drawing.Point(117, 3);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(52, 23);
+            this.btnBack.Size = new System.Drawing.Size(51, 23);
             this.btnBack.TabIndex = 8;
             this.btnBack.Text = "<<";
             this.btnBack.UseVisualStyleBackColor = true;
@@ -336,7 +350,7 @@ namespace DirectorySolutions
             // 
             // btnForward
             // 
-            this.btnForward.Location = new System.Drawing.Point(178, 3);
+            this.btnForward.Location = new System.Drawing.Point(174, 3);
             this.btnForward.Name = "btnForward";
             this.btnForward.Size = new System.Drawing.Size(56, 23);
             this.btnForward.TabIndex = 9;
@@ -346,28 +360,34 @@ namespace DirectorySolutions
             // 
             // filePath
             // 
-            this.filePath.Location = new System.Drawing.Point(303, 3);
+            this.filePath.Location = new System.Drawing.Point(299, 3);
             this.filePath.Name = "filePath";
             this.filePath.Size = new System.Drawing.Size(475, 20);
             this.filePath.TabIndex = 10;
             this.filePath.TextChanged += new System.EventHandler(this.filePath_TextChanged);
             // 
-            // btnOpenDir
+            // btnOpenDirMain
             // 
-            this.btnOpenDir.AccessibleName = "btnOpenDir";
-            this.btnOpenDir.Location = new System.Drawing.Point(802, 3);
-            this.btnOpenDir.Name = "btnOpenDir";
-            this.btnOpenDir.Size = new System.Drawing.Size(142, 23);
-            this.btnOpenDir.TabIndex = 11;
-            this.btnOpenDir.Text = "Open Directory";
-            this.btnOpenDir.UseVisualStyleBackColor = true;
-            this.btnOpenDir.Click += new System.EventHandler(this.btnOpenDir_Click);
+            this.btnOpenDirMain.AccessibleName = "btnOpenDir";
+            this.btnOpenDirMain.ContextMenuStrip = this.fastPathMenuStrip;
+            this.btnOpenDirMain.Location = new System.Drawing.Point(798, 3);
+            this.btnOpenDirMain.Name = "btnOpenDirMain";
+            this.btnOpenDirMain.Size = new System.Drawing.Size(142, 23);
+            this.btnOpenDirMain.TabIndex = 11;
+            this.btnOpenDirMain.Text = "Open Directory";
+            this.btnOpenDirMain.UseVisualStyleBackColor = true;
+            this.btnOpenDirMain.Click += new System.EventHandler(this.btnOpenDir_Click);
+            // 
+            // fastPathMenuStrip
+            // 
+            this.fastPathMenuStrip.Name = "fastPathMenuStrip";
+            this.fastPathMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.label1.Location = new System.Drawing.Point(260, 0);
+            this.label1.Location = new System.Drawing.Point(256, 0);
             this.label1.Name = "label1";
             this.label1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.label1.Size = new System.Drawing.Size(32, 18);
@@ -388,7 +408,7 @@ namespace DirectorySolutions
             // 
             this.saveDir.AutoSize = true;
             this.saveDir.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.saveDir.Location = new System.Drawing.Point(954, 3);
+            this.saveDir.Location = new System.Drawing.Point(950, 3);
             this.saveDir.Name = "saveDir";
             this.saveDir.Size = new System.Drawing.Size(106, 17);
             this.saveDir.TabIndex = 14;
@@ -400,7 +420,7 @@ namespace DirectorySolutions
             // 
             this.freshDir.AutoSize = true;
             this.freshDir.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.freshDir.Location = new System.Drawing.Point(1074, 3);
+            this.freshDir.Location = new System.Drawing.Point(1070, 3);
             this.freshDir.Name = "freshDir";
             this.freshDir.Size = new System.Drawing.Size(96, 17);
             this.freshDir.TabIndex = 15;
@@ -420,7 +440,7 @@ namespace DirectorySolutions
             // 
             // btnOpenFile
             // 
-            this.btnOpenFile.Location = new System.Drawing.Point(574, 3);
+            this.btnOpenFile.Location = new System.Drawing.Point(570, 3);
             this.btnOpenFile.Name = "btnOpenFile";
             this.btnOpenFile.Size = new System.Drawing.Size(75, 23);
             this.btnOpenFile.TabIndex = 19;
@@ -444,7 +464,7 @@ namespace DirectorySolutions
             // 
             this.appendListRad.AutoSize = true;
             this.appendListRad.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.appendListRad.Location = new System.Drawing.Point(1023, 3);
+            this.appendListRad.Location = new System.Drawing.Point(1019, 3);
             this.appendListRad.Name = "appendListRad";
             this.appendListRad.Size = new System.Drawing.Size(97, 17);
             this.appendListRad.TabIndex = 21;
@@ -456,7 +476,7 @@ namespace DirectorySolutions
             // 
             this.freshListRad.AutoSize = true;
             this.freshListRad.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.freshListRad.Location = new System.Drawing.Point(1143, 3);
+            this.freshListRad.Location = new System.Drawing.Point(1139, 3);
             this.freshListRad.Name = "freshListRad";
             this.freshListRad.Size = new System.Drawing.Size(70, 17);
             this.freshListRad.TabIndex = 22;
@@ -468,7 +488,7 @@ namespace DirectorySolutions
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.label3.Location = new System.Drawing.Point(848, 0);
+            this.label3.Location = new System.Drawing.Point(844, 0);
             this.label3.Name = "label3";
             this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.label3.Size = new System.Drawing.Size(169, 31);
@@ -477,7 +497,7 @@ namespace DirectorySolutions
             // 
             // btnAddFiles
             // 
-            this.btnAddFiles.Location = new System.Drawing.Point(659, 3);
+            this.btnAddFiles.Location = new System.Drawing.Point(655, 3);
             this.btnAddFiles.Name = "btnAddFiles";
             this.btnAddFiles.Size = new System.Drawing.Size(75, 23);
             this.btnAddFiles.TabIndex = 24;
@@ -489,14 +509,14 @@ namespace DirectorySolutions
             // 
             this.fileOpenList.AllowDrop = true;
             this.fileOpenList.FormattingEnabled = true;
-            this.fileOpenList.Location = new System.Drawing.Point(85, 3);
+            this.fileOpenList.Location = new System.Drawing.Point(84, 3);
             this.fileOpenList.Name = "fileOpenList";
             this.fileOpenList.Size = new System.Drawing.Size(474, 30);
             this.fileOpenList.TabIndex = 25;
             // 
             // btnClearFileList
             // 
-            this.btnClearFileList.Location = new System.Drawing.Point(744, 3);
+            this.btnClearFileList.Location = new System.Drawing.Point(740, 3);
             this.btnClearFileList.Name = "btnClearFileList";
             this.btnClearFileList.Size = new System.Drawing.Size(75, 23);
             this.btnClearFileList.TabIndex = 26;
@@ -564,11 +584,11 @@ namespace DirectorySolutions
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 152F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 109F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
             this.tableLayoutPanel1.Controls.Add(this.picInfoFreshDir, 8, 0);
             this.tableLayoutPanel1.Controls.Add(this.freshDir, 7, 0);
             this.tableLayoutPanel1.Controls.Add(this.saveDir, 6, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnOpenDir, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnOpenDirMain, 5, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnForward, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnRefresh, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnBack, 1, 0);
@@ -587,7 +607,7 @@ namespace DirectorySolutions
             this.picInfoFreshDir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.picInfoFreshDir.Image = global::DirectorySolutions.Properties.Resources.StatusHelp_16x;
             this.picInfoFreshDir.InitialImage = global::DirectorySolutions.Properties.Resources.Question_16x;
-            this.picInfoFreshDir.Location = new System.Drawing.Point(1183, 3);
+            this.picInfoFreshDir.Location = new System.Drawing.Point(1179, 3);
             this.picInfoFreshDir.Name = "picInfoFreshDir";
             this.picInfoFreshDir.Size = new System.Drawing.Size(21, 17);
             this.picInfoFreshDir.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -606,7 +626,7 @@ namespace DirectorySolutions
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 175F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 108F));
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.fileOpenList, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnOpenFile, 2, 0);
@@ -675,100 +695,6 @@ namespace DirectorySolutions
             this.middlePanel.Size = new System.Drawing.Size(1245, 198);
             this.middlePanel.TabIndex = 35;
             // 
-            // fileToolsPanel
-            // 
-            this.fileToolsPanel.AutoScroll = true;
-            this.fileToolsPanel.Location = new System.Drawing.Point(229, 6);
-            this.fileToolsPanel.Name = "fileToolsPanel";
-            this.fileToolsPanel.Size = new System.Drawing.Size(1010, 184);
-            this.fileToolsPanel.TabIndex = 1;
-            // 
-            // fileToolSetsLayout
-            // 
-            this.fileToolSetsLayout.AutoScroll = true;
-            this.fileToolSetsLayout.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.fileToolSetsLayout.ColumnCount = 1;
-            this.fileToolSetsLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.fileToolSetsLayout.Controls.Add(this.btnMovieManagement, 0, 5);
-            this.fileToolSetsLayout.Controls.Add(this.btnFindandReplace, 0, 4);
-            this.fileToolSetsLayout.Controls.Add(this.btnFindDuplicates, 0, 3);
-            this.fileToolSetsLayout.Controls.Add(this.btnNameFilesForPath, 0, 2);
-            this.fileToolSetsLayout.Controls.Add(this.btnFilterFiles, 0, 1);
-            this.fileToolSetsLayout.Controls.Add(this.label9, 0, 0);
-            this.fileToolSetsLayout.Location = new System.Drawing.Point(6, 4);
-            this.fileToolSetsLayout.Name = "fileToolSetsLayout";
-            this.fileToolSetsLayout.RowCount = 8;
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.0566F));
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.9434F));
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.fileToolSetsLayout.Size = new System.Drawing.Size(197, 210);
-            this.fileToolSetsLayout.TabIndex = 0;
-            // 
-            // btnMovieManagement
-            // 
-            this.btnMovieManagement.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.btnMovieManagement.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnMovieManagement.Location = new System.Drawing.Point(3, 142);
-            this.btnMovieManagement.Name = "btnMovieManagement";
-            this.btnMovieManagement.Size = new System.Drawing.Size(191, 24);
-            this.btnMovieManagement.TabIndex = 5;
-            this.btnMovieManagement.Text = "Movie Management";
-            this.btnMovieManagement.UseVisualStyleBackColor = false;
-            this.btnMovieManagement.Click += new System.EventHandler(this.btnMovieManagement_Click);
-            // 
-            // btnFindandReplace
-            // 
-            this.btnFindandReplace.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.btnFindandReplace.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnFindandReplace.Location = new System.Drawing.Point(3, 116);
-            this.btnFindandReplace.Name = "btnFindandReplace";
-            this.btnFindandReplace.Size = new System.Drawing.Size(191, 20);
-            this.btnFindandReplace.TabIndex = 4;
-            this.btnFindandReplace.Text = "Find and Replace";
-            this.btnFindandReplace.UseVisualStyleBackColor = false;
-            this.btnFindandReplace.Click += new System.EventHandler(this.btnFindandReplace_Click);
-            // 
-            // btnFindDuplicates
-            // 
-            this.btnFindDuplicates.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.btnFindDuplicates.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnFindDuplicates.Location = new System.Drawing.Point(3, 89);
-            this.btnFindDuplicates.Name = "btnFindDuplicates";
-            this.btnFindDuplicates.Size = new System.Drawing.Size(191, 21);
-            this.btnFindDuplicates.TabIndex = 3;
-            this.btnFindDuplicates.Text = "Find Duplicate Files";
-            this.btnFindDuplicates.UseVisualStyleBackColor = false;
-            this.btnFindDuplicates.Click += new System.EventHandler(this.btnFindDuplicates_Click);
-            // 
-            // btnNameFilesForPath
-            // 
-            this.btnNameFilesForPath.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.btnNameFilesForPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnNameFilesForPath.Location = new System.Drawing.Point(3, 56);
-            this.btnNameFilesForPath.Name = "btnNameFilesForPath";
-            this.btnNameFilesForPath.Size = new System.Drawing.Size(191, 27);
-            this.btnNameFilesForPath.TabIndex = 2;
-            this.btnNameFilesForPath.Text = "Name Files For Path";
-            this.btnNameFilesForPath.UseVisualStyleBackColor = false;
-            this.btnNameFilesForPath.Click += new System.EventHandler(this.btnNameFilesForPath_Click);
-            // 
-            // btnFilterFiles
-            // 
-            this.btnFilterFiles.BackColor = System.Drawing.SystemColors.InactiveBorder;
-            this.btnFilterFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnFilterFiles.Location = new System.Drawing.Point(3, 29);
-            this.btnFilterFiles.Name = "btnFilterFiles";
-            this.btnFilterFiles.Size = new System.Drawing.Size(191, 21);
-            this.btnFilterFiles.TabIndex = 1;
-            this.btnFilterFiles.Text = "File List Filtering";
-            this.btnFilterFiles.UseVisualStyleBackColor = false;
-            this.btnFilterFiles.Click += new System.EventHandler(this.btnFilterFiles_Click);
-            // 
             // panel1
             // 
             this.panel1.AutoScroll = true;
@@ -779,16 +705,191 @@ namespace DirectorySolutions
             this.panel1.Size = new System.Drawing.Size(221, 184);
             this.panel1.TabIndex = 2;
             // 
+            // fileToolSetsLayout
+            // 
+            this.fileToolSetsLayout.AutoScroll = true;
+            this.fileToolSetsLayout.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.fileToolSetsLayout.ColumnCount = 1;
+            this.fileToolSetsLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.fileToolSetsLayout.Controls.Add(this.btnMoveCopyDelete, 0, 6);
+            this.fileToolSetsLayout.Controls.Add(this.btnMovieManagement, 0, 5);
+            this.fileToolSetsLayout.Controls.Add(this.btnFindandReplace, 0, 4);
+            this.fileToolSetsLayout.Controls.Add(this.btnFindDuplicates, 0, 3);
+            this.fileToolSetsLayout.Controls.Add(this.btnNameFilesForPath, 0, 2);
+            this.fileToolSetsLayout.Controls.Add(this.btnFilterFiles, 0, 1);
+            this.fileToolSetsLayout.Controls.Add(this.label9, 0, 0);
+            this.fileToolSetsLayout.Location = new System.Drawing.Point(4, 3);
+            this.fileToolSetsLayout.Name = "fileToolSetsLayout";
+            this.fileToolSetsLayout.RowCount = 7;
+            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15.15152F));
+            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.14141F));
+            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.14141F));
+            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.14141F));
+            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.14141F));
+            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.14141F));
+            this.fileToolSetsLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.14141F));
+            this.fileToolSetsLayout.Size = new System.Drawing.Size(197, 207);
+            this.fileToolSetsLayout.TabIndex = 0;
+            // 
+            // btnMoveCopyDelete
+            // 
+            this.btnMoveCopyDelete.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnMoveCopyDelete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMoveCopyDelete.Location = new System.Drawing.Point(3, 179);
+            this.btnMoveCopyDelete.Name = "btnMoveCopyDelete";
+            this.btnMoveCopyDelete.Size = new System.Drawing.Size(191, 25);
+            this.btnMoveCopyDelete.TabIndex = 7;
+            this.btnMoveCopyDelete.Text = "Move, Copy, Delete";
+            this.btnMoveCopyDelete.UseVisualStyleBackColor = false;
+            this.btnMoveCopyDelete.Click += new System.EventHandler(this.btnMoveCopyDelete_Click);
+            // 
+            // btnMovieManagement
+            // 
+            this.btnMovieManagement.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnMovieManagement.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnMovieManagement.Location = new System.Drawing.Point(3, 150);
+            this.btnMovieManagement.Name = "btnMovieManagement";
+            this.btnMovieManagement.Size = new System.Drawing.Size(191, 23);
+            this.btnMovieManagement.TabIndex = 5;
+            this.btnMovieManagement.Text = "Movie Management";
+            this.btnMovieManagement.UseVisualStyleBackColor = false;
+            this.btnMovieManagement.Click += new System.EventHandler(this.btnMovieManagement_Click);
+            // 
+            // btnFindandReplace
+            // 
+            this.btnFindandReplace.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnFindandReplace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFindandReplace.Location = new System.Drawing.Point(3, 121);
+            this.btnFindandReplace.Name = "btnFindandReplace";
+            this.btnFindandReplace.Size = new System.Drawing.Size(191, 23);
+            this.btnFindandReplace.TabIndex = 4;
+            this.btnFindandReplace.Text = "Find and Replace";
+            this.btnFindandReplace.UseVisualStyleBackColor = false;
+            this.btnFindandReplace.Click += new System.EventHandler(this.btnFindandReplace_Click);
+            // 
+            // btnFindDuplicates
+            // 
+            this.btnFindDuplicates.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnFindDuplicates.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFindDuplicates.Location = new System.Drawing.Point(3, 92);
+            this.btnFindDuplicates.Name = "btnFindDuplicates";
+            this.btnFindDuplicates.Size = new System.Drawing.Size(191, 23);
+            this.btnFindDuplicates.TabIndex = 3;
+            this.btnFindDuplicates.Text = "Find Duplicate Files";
+            this.btnFindDuplicates.UseVisualStyleBackColor = false;
+            this.btnFindDuplicates.Click += new System.EventHandler(this.btnFindDuplicates_Click);
+            // 
+            // btnNameFilesForPath
+            // 
+            this.btnNameFilesForPath.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnNameFilesForPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnNameFilesForPath.Location = new System.Drawing.Point(3, 63);
+            this.btnNameFilesForPath.Name = "btnNameFilesForPath";
+            this.btnNameFilesForPath.Size = new System.Drawing.Size(191, 23);
+            this.btnNameFilesForPath.TabIndex = 2;
+            this.btnNameFilesForPath.Text = "Name Files For Path";
+            this.btnNameFilesForPath.UseVisualStyleBackColor = false;
+            this.btnNameFilesForPath.Click += new System.EventHandler(this.btnNameFilesForPath_Click);
+            // 
+            // btnFilterFiles
+            // 
+            this.btnFilterFiles.BackColor = System.Drawing.SystemColors.InactiveBorder;
+            this.btnFilterFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnFilterFiles.Location = new System.Drawing.Point(3, 34);
+            this.btnFilterFiles.Name = "btnFilterFiles";
+            this.btnFilterFiles.Size = new System.Drawing.Size(191, 23);
+            this.btnFilterFiles.TabIndex = 1;
+            this.btnFilterFiles.Text = "File List Filtering";
+            this.btnFilterFiles.UseVisualStyleBackColor = false;
+            this.btnFilterFiles.Click += new System.EventHandler(this.btnFilterFiles_Click);
+            // 
             // label9
             // 
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(3, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(191, 26);
+            this.label9.Size = new System.Drawing.Size(191, 31);
             this.label9.TabIndex = 6;
             this.label9.Text = "File Tool Sets";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // fileToolsPanel
+            // 
+            this.fileToolsPanel.AutoScroll = true;
+            this.fileToolsPanel.Controls.Add(this.tipsPanel);
+            this.fileToolsPanel.Location = new System.Drawing.Point(234, 6);
+            this.fileToolsPanel.Name = "fileToolsPanel";
+            this.fileToolsPanel.Size = new System.Drawing.Size(1010, 184);
+            this.fileToolsPanel.TabIndex = 1;
+            // 
+            // tipsPanel
+            // 
+            this.tipsPanel.Controls.Add(this.panel3);
+            this.tipsPanel.Controls.Add(this.btnMoreTips);
+            this.tipsPanel.Controls.Add(this.pictureBox1);
+            this.tipsPanel.Controls.Add(this.panel2);
+            this.tipsPanel.Location = new System.Drawing.Point(3, 3);
+            this.tipsPanel.Name = "tipsPanel";
+            this.tipsPanel.Size = new System.Drawing.Size(1004, 178);
+            this.tipsPanel.TabIndex = 4;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.label10);
+            this.panel2.Location = new System.Drawing.Point(84, 6);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(162, 167);
+            this.panel2.TabIndex = 3;
+            // 
+            // label10
+            // 
+            this.label10.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label10.Location = new System.Drawing.Point(0, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(162, 167);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "Please select a tool set from the buttons on the left to get started. These tool " +
+    "sets contain controls that allow you to manipulate file and directory names and " +
+    "contents on your file system.";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(755, 38);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 119);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
+            // 
+            // btnMoreTips
+            // 
+            this.btnMoreTips.Location = new System.Drawing.Point(439, 150);
+            this.btnMoreTips.Name = "btnMoreTips";
+            this.btnMoreTips.Size = new System.Drawing.Size(75, 23);
+            this.btnMoreTips.TabIndex = 5;
+            this.btnMoreTips.Text = "More Tips";
+            this.btnMoreTips.UseVisualStyleBackColor = true;
+            this.btnMoreTips.Click += new System.EventHandler(this.btnMoreTips_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.mainTipLbl);
+            this.panel3.Location = new System.Drawing.Point(394, 22);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(162, 122);
+            this.panel3.TabIndex = 6;
+            // 
+            // mainTipLbl
+            // 
+            this.mainTipLbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainTipLbl.Location = new System.Drawing.Point(0, 0);
+            this.mainTipLbl.Name = "mainTipLbl";
+            this.mainTipLbl.Size = new System.Drawing.Size(162, 122);
+            this.mainTipLbl.TabIndex = 0;
+            this.mainTipLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -822,8 +923,13 @@ namespace DirectorySolutions
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.middlePanel.ResumeLayout(false);
-            this.fileToolSetsLayout.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.fileToolSetsLayout.ResumeLayout(false);
+            this.fileToolsPanel.ResumeLayout(false);
+            this.tipsPanel.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -865,7 +971,7 @@ namespace DirectorySolutions
         private System.Windows.Forms.RadioButton saveDir;
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnOpenDir;
+        private System.Windows.Forms.Button btnOpenDirMain;
         private System.Windows.Forms.TextBox filePath;
         private System.Windows.Forms.Button btnForward;
         private System.Windows.Forms.Button btnBack;
@@ -883,14 +989,23 @@ namespace DirectorySolutions
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.PictureBox picInfoFreshDir;
         private System.Windows.Forms.Panel middlePanel;
+        private System.Windows.Forms.Panel fileToolsPanel;
+        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel fileToolSetsLayout;
         private System.Windows.Forms.Button btnMovieManagement;
         private System.Windows.Forms.Button btnFindandReplace;
         private System.Windows.Forms.Button btnFindDuplicates;
         private System.Windows.Forms.Button btnNameFilesForPath;
         private System.Windows.Forms.Button btnFilterFiles;
-        private System.Windows.Forms.Panel fileToolsPanel;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button btnMoveCopyDelete;
+        private System.Windows.Forms.ContextMenuStrip fastPathMenuStrip;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Panel tipsPanel;
+        private System.Windows.Forms.Button btnMoreTips;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label mainTipLbl;
     }
 }

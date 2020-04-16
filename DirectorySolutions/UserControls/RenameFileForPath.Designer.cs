@@ -37,8 +37,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.dirSeperatorChar = new System.Windows.Forms.ComboBox();
             this.btnRenameAll = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.incFilesExist = new System.Windows.Forms.ComboBox();
             this.renameByPathErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             this.spaceBuffer = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -53,7 +51,7 @@
             // 
             this.dirsToIncludLbl.AutoSize = true;
             this.dirsToIncludLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dirsToIncludLbl.Location = new System.Drawing.Point(10, 147);
+            this.dirsToIncludLbl.Location = new System.Drawing.Point(21, 152);
             this.dirsToIncludLbl.Name = "dirsToIncludLbl";
             this.dirsToIncludLbl.Size = new System.Drawing.Size(190, 15);
             this.dirsToIncludLbl.TabIndex = 0;
@@ -68,7 +66,7 @@
             "3",
             "4",
             "5"});
-            this.numDirsToInclude.Location = new System.Drawing.Point(206, 146);
+            this.numDirsToInclude.Location = new System.Drawing.Point(217, 151);
             this.numDirsToInclude.Name = "numDirsToInclude";
             this.numDirsToInclude.Size = new System.Drawing.Size(79, 21);
             this.numDirsToInclude.TabIndex = 1;
@@ -78,7 +76,7 @@
             // 
             this.IsNumberFiles.AutoSize = true;
             this.IsNumberFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.IsNumberFiles.Location = new System.Drawing.Point(31, 103);
+            this.IsNumberFiles.Location = new System.Drawing.Point(190, 107);
             this.IsNumberFiles.Name = "IsNumberFiles";
             this.IsNumberFiles.Size = new System.Drawing.Size(211, 19);
             this.IsNumberFiles.TabIndex = 2;
@@ -90,7 +88,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(248, 105);
+            this.label1.Location = new System.Drawing.Point(407, 109);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(86, 15);
             this.label1.TabIndex = 3;
@@ -107,7 +105,7 @@
             "Date Modified Ascending",
             "Date Modified Descending",
             ""});
-            this.orderBy.Location = new System.Drawing.Point(340, 102);
+            this.orderBy.Location = new System.Drawing.Point(499, 106);
             this.orderBy.Name = "orderBy";
             this.orderBy.Size = new System.Drawing.Size(194, 21);
             this.orderBy.TabIndex = 4;
@@ -117,7 +115,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(552, 105);
+            this.label3.Location = new System.Drawing.Point(313, 152);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(149, 15);
             this.label3.TabIndex = 6;
@@ -132,7 +130,7 @@
             " space",
             "[] brackets",
             "() parantheses"});
-            this.dirSeperatorChar.Location = new System.Drawing.Point(707, 103);
+            this.dirSeperatorChar.Location = new System.Drawing.Point(468, 150);
             this.dirSeperatorChar.Name = "dirSeperatorChar";
             this.dirSeperatorChar.Size = new System.Drawing.Size(99, 21);
             this.dirSeperatorChar.TabIndex = 7;
@@ -140,36 +138,13 @@
             // 
             // btnRenameAll
             // 
-            this.btnRenameAll.Location = new System.Drawing.Point(792, 144);
+            this.btnRenameAll.Location = new System.Drawing.Point(778, 152);
             this.btnRenameAll.Name = "btnRenameAll";
             this.btnRenameAll.Size = new System.Drawing.Size(120, 23);
             this.btnRenameAll.TabIndex = 8;
             this.btnRenameAll.Text = "Rename All";
             this.btnRenameAll.UseVisualStyleBackColor = true;
             this.btnRenameAll.Click += new System.EventHandler(this.renameAll_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(298, 147);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(159, 15);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Contains Incremented Files:";
-            // 
-            // incFilesExist
-            // 
-            this.incFilesExist.FormattingEnabled = true;
-            this.incFilesExist.Items.AddRange(new object[] {
-            "No",
-            "Prepended",
-            "Appended"});
-            this.incFilesExist.Location = new System.Drawing.Point(464, 147);
-            this.incFilesExist.Name = "incFilesExist";
-            this.incFilesExist.Size = new System.Drawing.Size(121, 21);
-            this.incFilesExist.TabIndex = 10;
-            this.incFilesExist.SelectedIndexChanged += new System.EventHandler(this.incFilesExist_SelectedIndexChanged);
             // 
             // renameByPathErrorProv
             // 
@@ -179,7 +154,7 @@
             // 
             this.spaceBuffer.AutoSize = true;
             this.spaceBuffer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.spaceBuffer.Location = new System.Drawing.Point(614, 147);
+            this.spaceBuffer.Location = new System.Drawing.Point(590, 152);
             this.spaceBuffer.Name = "spaceBuffer";
             this.spaceBuffer.Size = new System.Drawing.Size(158, 19);
             this.spaceBuffer.TabIndex = 11;
@@ -225,7 +200,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(918, 18);
             this.label9.TabIndex = 35;
-            this.label9.Text = "These controls allow you to remane your files based on their directory chains.";
+            this.label9.Text = "These controls allow you to remane your files based on their directory path.";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label8
@@ -250,8 +225,6 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.spaceBuffer);
-            this.Controls.Add(this.incFilesExist);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnRenameAll);
             this.Controls.Add(this.dirSeperatorChar);
             this.Controls.Add(this.label3);
@@ -278,8 +251,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox dirSeperatorChar;
         private System.Windows.Forms.Button btnRenameAll;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox incFilesExist;
         private System.Windows.Forms.ErrorProvider renameByPathErrorProv;
         private System.Windows.Forms.CheckBox spaceBuffer;
         private System.Windows.Forms.Label exampleFileNameLbl;

@@ -14,7 +14,8 @@ namespace DirectorySolutions
 {
     static class ApiManager
     {
-        private const string OMDBKey = "&apikey=1635e42e";
+        private static string key = Properties.Settings.Default.OMDBKEY.ToString();
+        private static string OMDBKey = "&apikey=" + key;
         private const string OMDBUrl = "http://www.omdbapi.com/?t=";
         private static HttpClient client = new HttpClient();
         private static Logger logger = LogManager.GetCurrentClassLogger();
@@ -52,7 +53,11 @@ namespace DirectorySolutions
                                 sw.WriteLine(file.FullName);
                             }
                         }
-                    }       
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 return true;
             }

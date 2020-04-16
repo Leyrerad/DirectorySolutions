@@ -30,7 +30,6 @@ namespace DirectorySolutions.UserControls
             numDirsToInclude.SelectedIndex = 0;
             dirSeperatorChar.SelectedIndex = 0;
             orderBy.SelectedIndex = 0;
-            incFilesExist.SelectedIndex = 0;
         }
 
         private void renameAll_Click(object sender, EventArgs e)
@@ -38,7 +37,7 @@ namespace DirectorySolutions.UserControls
             string error;
             string displayFileName;
             if(!presenter.RenameFilesByDirectory(Convert.ToInt32(numDirsToInclude.SelectedItem), (NameByPathSeperatorEnum)dirSeperatorChar.SelectedIndex, 
-                (DisplaySortOptionEnum)(orderBy.SelectedIndex + 1), out error, out displayFileName, IsNumberFiles.Checked, incFilesExist.SelectedIndex, spaceBuffer.Checked))
+                (DisplaySortOptionEnum)(orderBy.SelectedIndex + 1), out error, out displayFileName, IsNumberFiles.Checked, spaceBuffer.Checked))
             {
                 renameByPathErrorProv.SetError(btnRenameAll, error);
             }
@@ -60,8 +59,7 @@ namespace DirectorySolutions.UserControls
             string error;
             string displayFileName;
             if (!presenter.RenameFilesByDirectory(Convert.ToInt32(numDirsToInclude.SelectedItem), (NameByPathSeperatorEnum)dirSeperatorChar.SelectedIndex,
-                (DisplaySortOptionEnum)(orderBy.SelectedIndex + 1), out error, out displayFileName, IsNumberFiles.Checked, 
-                incFilesExist.SelectedIndex, spaceBuffer.Checked, true))
+                (DisplaySortOptionEnum)(orderBy.SelectedIndex + 1), out error, out displayFileName, IsNumberFiles.Checked, spaceBuffer.Checked, true))
             {
                 MessageBox.Show(error);
             }

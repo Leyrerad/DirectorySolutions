@@ -131,30 +131,27 @@ namespace DirectorySolutions
                 }
             }
         }
-
-        private void btnOpenPath_Click(object sender, EventArgs e)
+       
+        private void operationOptionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (FolderBrowserDialog fbd = new FolderBrowserDialog() { Description = "Select your directory path." })
+            if(operationOptionCombo.SelectedIndex == 3 && Controls.Find("warningLable", true).Length < 1)
             {
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    movePathTxt.Text = fbd.SelectedPath;
-                }
-            }
-        }
-
-        private void btnMoveFiles_Click(object sender, EventArgs e)
-        {
-            string error;
-            if(!presenter.MoveFiles(out error, movePathTxt.Text))
-            {
-                movePathTxtErrorProv.SetError(movePathTxt, error);
+                var warningLabel = new Label() { Text = "NOTE: File content operations can currently only be completed " +
+                    "on text type docutments such as .txt or .doc.", ForeColor = Color.FromKnownColor(KnownColor.Red), Name = "warningLabel"};
+                warningLabel.AutoSize = true;
+                Controls.Add(warningLabel);
+                warningLabel.Location = new Point(prependTxt.Location.X, 
+                    prependTxt.Location.Y + prependTxt.Height + 5);
             }
             else
             {
-                movePathTxtErrorProv.Clear();
+                var controls = Controls.Find("warningLabel", true);
+                if(controls.Length > 0)
+                {
+                    var warningLabel = Controls.Find("warningLabel", true)[0];
+                    Controls.Remove(warningLabel);
+                }
             }
         }
-
     }
 }

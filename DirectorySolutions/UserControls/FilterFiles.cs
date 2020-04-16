@@ -22,7 +22,6 @@ namespace DirectorySolutions.UserControls
             InitializeComponent();
             mainModel = model;
             sizeOptionCombo.SelectedIndex = 1;
-            freshSearchCheck.Checked = true;
             this.presenter = presenter;
             modifiedStartTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
             modifiedEndTime.CustomFormat = "MM/dd/yyyy hh:mm:ss";
@@ -34,25 +33,10 @@ namespace DirectorySolutions.UserControls
             FileSearch fileSearchOptions;
             if (ValidateFileSearchInputs(out fileSearchOptions, out error))
             {
-                if (fileSearchOptions.FreshSearch)
+                if (!presenter.FilterFileListBySearchOptions(fileSearchOptions, out error))
                 {
-                    if (!presenter.FindAllFilesInTheDirectory(mainModel.GetAllFilePaths(), out error, mainModel.GetSortedBy(false), raiseEvent: false))
-                    {
-                        MessageBox.Show(error);
-                    }
-                    if (!presenter.FilterFileListBySearchOptions(fileSearchOptions, out error))
-                    {
-                        MessageBox.Show(error);
-                    }
-
-                }
-                else
-                {
-                    if (!presenter.FilterFileListBySearchOptions(fileSearchOptions, out error))
-                    {
-                        MessageBox.Show(error);
-                    }
-                }
+                    MessageBox.Show(error);
+                }                
             }
         }
 
@@ -120,7 +104,7 @@ namespace DirectorySolutions.UserControls
                     FileSizeStart = Math.Floor(ConvertFileSizeUnitToBytes(sizeStart)),
                     FileSizeEnd = Math.Ceiling(ConvertFileSizeUnitToBytes(sizeEnd)),
                     Path = path,
-                    FreshSearch = freshSearchCheck.Checked
+                    InverseResults = inverseCheck.Checked
                 };
 
                 return true;

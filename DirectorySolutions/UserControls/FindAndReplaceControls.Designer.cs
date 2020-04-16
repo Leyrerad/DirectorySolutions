@@ -48,11 +48,6 @@
             this.appendErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             this.replaceAllErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             this.PreAppendErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
-            this.label6 = new System.Windows.Forms.Label();
-            this.movePathTxt = new System.Windows.Forms.TextBox();
-            this.btnOpenPath = new System.Windows.Forms.Button();
-            this.btnMoveFiles = new System.Windows.Forms.Button();
-            this.movePathTxtErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             this.genericErrorProv = new System.Windows.Forms.ErrorProvider(this.components);
             this.operationOptionCombo = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -64,7 +59,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.appendErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.replaceAllErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreAppendErrorProv)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.movePathTxtErrorProv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.genericErrorProv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -79,7 +73,7 @@
             // textInLbl
             // 
             this.textInLbl.AutoSize = true;
-            this.textInLbl.Location = new System.Drawing.Point(12, 102);
+            this.textInLbl.Location = new System.Drawing.Point(9, 64);
             this.textInLbl.Name = "textInLbl";
             this.textInLbl.Size = new System.Drawing.Size(43, 13);
             this.textInLbl.TabIndex = 18;
@@ -87,7 +81,7 @@
             // 
             // inTxt
             // 
-            this.inTxt.Location = new System.Drawing.Point(61, 99);
+            this.inTxt.Location = new System.Drawing.Point(58, 61);
             this.inTxt.Name = "inTxt";
             this.inTxt.Size = new System.Drawing.Size(258, 20);
             this.inTxt.TabIndex = 19;
@@ -96,7 +90,7 @@
             // 
             this.txtOutLbl.AutoSize = true;
             this.txtOutLbl.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.txtOutLbl.Location = new System.Drawing.Point(332, 102);
+            this.txtOutLbl.Location = new System.Drawing.Point(329, 64);
             this.txtOutLbl.Name = "txtOutLbl";
             this.txtOutLbl.Size = new System.Drawing.Size(51, 13);
             this.txtOutLbl.TabIndex = 21;
@@ -104,14 +98,14 @@
             // 
             // outTxt
             // 
-            this.outTxt.Location = new System.Drawing.Point(389, 99);
+            this.outTxt.Location = new System.Drawing.Point(386, 61);
             this.outTxt.Name = "outTxt";
             this.outTxt.Size = new System.Drawing.Size(258, 20);
             this.outTxt.TabIndex = 22;
             // 
             // btnFindReplace
             // 
-            this.btnFindReplace.Location = new System.Drawing.Point(664, 99);
+            this.btnFindReplace.Location = new System.Drawing.Point(661, 61);
             this.btnFindReplace.Name = "btnFindReplace";
             this.btnFindReplace.Size = new System.Drawing.Size(115, 23);
             this.btnFindReplace.TabIndex = 23;
@@ -129,14 +123,14 @@
             // 
             // prependTxt
             // 
-            this.prependTxt.Location = new System.Drawing.Point(61, 137);
+            this.prependTxt.Location = new System.Drawing.Point(58, 99);
             this.prependTxt.Name = "prependTxt";
             this.prependTxt.Size = new System.Drawing.Size(258, 20);
             this.prependTxt.TabIndex = 24;
             // 
             // appendTxt
             // 
-            this.appendTxt.Location = new System.Drawing.Point(389, 137);
+            this.appendTxt.Location = new System.Drawing.Point(386, 99);
             this.appendTxt.Name = "appendTxt";
             this.appendTxt.Size = new System.Drawing.Size(258, 20);
             this.appendTxt.TabIndex = 25;
@@ -144,7 +138,7 @@
             // prependLbl
             // 
             this.prependLbl.AutoSize = true;
-            this.prependLbl.Location = new System.Drawing.Point(6, 140);
+            this.prependLbl.Location = new System.Drawing.Point(3, 102);
             this.prependLbl.Name = "prependLbl";
             this.prependLbl.Size = new System.Drawing.Size(50, 13);
             this.prependLbl.TabIndex = 26;
@@ -154,7 +148,7 @@
             // 
             this.appendLbl.AutoSize = true;
             this.appendLbl.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.appendLbl.Location = new System.Drawing.Point(332, 140);
+            this.appendLbl.Location = new System.Drawing.Point(329, 102);
             this.appendLbl.Name = "appendLbl";
             this.appendLbl.Size = new System.Drawing.Size(47, 13);
             this.appendLbl.TabIndex = 27;
@@ -162,7 +156,7 @@
             // 
             // btnPreAppend
             // 
-            this.btnPreAppend.Location = new System.Drawing.Point(664, 134);
+            this.btnPreAppend.Location = new System.Drawing.Point(661, 96);
             this.btnPreAppend.Name = "btnPreAppend";
             this.btnPreAppend.Size = new System.Drawing.Size(115, 23);
             this.btnPreAppend.TabIndex = 28;
@@ -190,47 +184,6 @@
             // 
             this.PreAppendErrorProv.ContainerControl = this;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(86, 63);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(110, 15);
-            this.label6.TabIndex = 44;
-            this.label6.Text = "Move Files to Path:";
-            // 
-            // movePathTxt
-            // 
-            this.movePathTxt.Location = new System.Drawing.Point(202, 62);
-            this.movePathTxt.Name = "movePathTxt";
-            this.movePathTxt.Size = new System.Drawing.Size(347, 20);
-            this.movePathTxt.TabIndex = 45;
-            // 
-            // btnOpenPath
-            // 
-            this.btnOpenPath.Location = new System.Drawing.Point(576, 60);
-            this.btnOpenPath.Name = "btnOpenPath";
-            this.btnOpenPath.Size = new System.Drawing.Size(109, 23);
-            this.btnOpenPath.TabIndex = 46;
-            this.btnOpenPath.Text = "Open";
-            this.btnOpenPath.UseVisualStyleBackColor = true;
-            this.btnOpenPath.Click += new System.EventHandler(this.btnOpenPath_Click);
-            // 
-            // btnMoveFiles
-            // 
-            this.btnMoveFiles.Location = new System.Drawing.Point(693, 60);
-            this.btnMoveFiles.Name = "btnMoveFiles";
-            this.btnMoveFiles.Size = new System.Drawing.Size(109, 23);
-            this.btnMoveFiles.TabIndex = 47;
-            this.btnMoveFiles.Text = "Move";
-            this.btnMoveFiles.UseVisualStyleBackColor = true;
-            this.btnMoveFiles.Click += new System.EventHandler(this.btnMoveFiles_Click);
-            // 
-            // movePathTxtErrorProv
-            // 
-            this.movePathTxtErrorProv.ContainerControl = this;
-            // 
             // genericErrorProv
             // 
             this.genericErrorProv.ContainerControl = this;
@@ -239,19 +192,21 @@
             // 
             this.operationOptionCombo.FormattingEnabled = true;
             this.operationOptionCombo.Items.AddRange(new object[] {
-            "File(s)",
+            "File Name(s)",
             "Parent Directory",
-            "Full Path"});
-            this.operationOptionCombo.Location = new System.Drawing.Point(804, 134);
+            "Full Path",
+            "File Contents"});
+            this.operationOptionCombo.Location = new System.Drawing.Point(801, 96);
             this.operationOptionCombo.Name = "operationOptionCombo";
             this.operationOptionCombo.Size = new System.Drawing.Size(109, 21);
             this.operationOptionCombo.TabIndex = 53;
+            this.operationOptionCombo.SelectedIndexChanged += new System.EventHandler(this.operationOptionCombo_SelectedIndexChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(801, 109);
+            this.label7.Location = new System.Drawing.Point(798, 71);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(109, 15);
             this.label7.TabIndex = 54;
@@ -265,8 +220,8 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(935, 18);
             this.label9.TabIndex = 56;
-            this.label9.Text = "These controls allow you to change specific parts of the file names in the file l" +
-    "ist.";
+            this.label9.Text = "These controls allow you to change specific parts of the text in files, file name" +
+    "s, and directories.";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label8
@@ -278,7 +233,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(935, 26);
             this.label8.TabIndex = 55;
-            this.label8.Text = "Find and Replace Tools";
+            this.label8.Text = "Find and Replace Text";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // FindAndReplaceControls
@@ -289,10 +244,6 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.operationOptionCombo);
-            this.Controls.Add(this.btnMoveFiles);
-            this.Controls.Add(this.btnOpenPath);
-            this.Controls.Add(this.movePathTxt);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.btnPreAppend);
             this.Controls.Add(this.appendLbl);
             this.Controls.Add(this.prependLbl);
@@ -304,14 +255,13 @@
             this.Controls.Add(this.inTxt);
             this.Controls.Add(this.textInLbl);
             this.Name = "FindAndReplaceControls";
-            this.Size = new System.Drawing.Size(935, 171);
+            this.Size = new System.Drawing.Size(935, 140);
             ((System.ComponentModel.ISupportInitialize)(this.inTxtErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.prependErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.outTxtErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.appendErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.replaceAllErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PreAppendErrorProv)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.movePathTxtErrorProv)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.genericErrorProv)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -342,11 +292,6 @@
         private System.Windows.Forms.ErrorProvider appendErrorProv;
         private System.Windows.Forms.ErrorProvider replaceAllErrorProv;
         private System.Windows.Forms.ErrorProvider PreAppendErrorProv;
-        private System.Windows.Forms.Button btnMoveFiles;
-        private System.Windows.Forms.Button btnOpenPath;
-        private System.Windows.Forms.TextBox movePathTxt;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.ErrorProvider movePathTxtErrorProv;
         private System.Windows.Forms.ErrorProvider genericErrorProv;
         private System.Windows.Forms.ComboBox operationOptionCombo;
         private System.Windows.Forms.Label label7;

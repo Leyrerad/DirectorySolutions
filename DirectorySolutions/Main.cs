@@ -2,6 +2,7 @@
 using DirectorySolutions.Presenters;
 using DirectorySolutions.UserControls;
 using DirectorySolutions.Views;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,6 +18,8 @@ namespace DirectorySolutions
         private readonly MainModel m_Model;
         private int mainFormStartingHeight;
         private Color buttonColor;
+        private Dictionary<string, bool> fileColumns;
+        private Dictionary<string, bool> movieColumns;
 
         public string path
         {
@@ -37,7 +40,7 @@ namespace DirectorySolutions
             presenter = new MainPresenter(this, m_Model);
             mainFormStartingHeight = Height;
             freshDir.Checked = true;
-            freshListRad.Checked = true;
+            appendListRad.Checked = true;
             displayGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             SubscribeToModelEvents();
             CreateDragAndDropEvents();
@@ -45,22 +48,9 @@ namespace DirectorySolutions
             LoadDefaults();
             buttonColor = btnFilterFiles.BackColor;
             displayGrid.CellDoubleClick += DisplayGrid_CellDoubleClick;
-        }
-
-        private void DisplayGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            string error;
-            var frm = new FileDetails(m_Model.GetFiles().ElementAt(e.RowIndex), m_Model, presenter);
-            frm.Location = this.Location;
-            frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { 
-                this.Show(); 
-                presenter.RefreshModelLists(out error); 
-            };
-            frm.Show();
-            this.Hide();
-
-        }
+            BuildFastPathContextMenuItems();
+          
+        }        
 
         private void SubscribeToModelEvents()
         {
@@ -72,9 +62,39 @@ namespace DirectorySolutions
             m_Model.activeControlChanged += M_Model_activeControlChanged;
         }
 
-      
-
         #region Display
+
+        private void DisplayGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                string error;
+                var frm = new FileDetails(m_Model.GetFiles().ElementAt(e.RowIndex), m_Model, presenter);
+                frm.Location = this.Location;
+                frm.StartPosition = FormStartPosition.Manual;
+                frm.FormClosing += delegate {
+                    this.Show();
+                    presenter.RefreshModelLists(out error);
+                };
+                frm.Show();
+                this.Hide();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to open this file.", "Error");
+            }
+
+        }
+
+        private void BuildFastPathContextMenuItems()
+        {
+            var fastPaths = JsonConvert.DeserializeObject<List<string>>(Properties.Settings.Default.FastPaths);
+            string error;
+            if (!presenter.PopulateFastPathContextMenu(fastPathMenuStrip, out error, ref fastPaths))
+            {
+                MessageBox.Show(error, "Error");
+            }
+        }
 
         private void LoadDefaults()
         {
@@ -83,6 +103,7 @@ namespace DirectorySolutions
                 path = Properties.Settings.Default["Path"].ToString();
                 webBrowser1.Url = new Uri(path);
                 filePath.Text = path;
+                mainTipLbl.Text = m_Model.GetRandomTip();
             }
             catch(Exception e)
             {
@@ -106,30 +127,21 @@ namespace DirectorySolutions
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+
+            string error;
+            if (!presenter.AddFilesFromFileList(fileOpenList.Items, out error, freshListRad.Checked))
+            {
+                filePathErrorProv.SetError(filePath, error);
+            }
+            else
+            {
+                filePathErrorProv.Clear();
+            }
         }
 
         private void M_Model_appStateChanged(object sender, MainModel.StateChangeEventArgs args)
         {
             statusLabel.Text = m_Model.GetApplicationState().GetDescription();
-        }
-
-        private void M_Model_gridViewOptionChanged(object sender, MainModel.GridViewEventArgs args)
-        {
-            string error;
-            switch (args.Option)
-            {
-                case GridViewOptionEnum.Files:
-                    m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
-                    break;
-                case GridViewOptionEnum.Movies:                    
-                    if (!presenter.ParseMovieInfoFilesInPath(out error, m_Model.GetSortedBy(false)))
-                    {
-                        MessageBox.Show(error);
-                    }
-                    break;
-                default:
-                    break;
-            }
         }
 
         private void picInfoFreshDir_Click(object sender, EventArgs e)
@@ -138,15 +150,10 @@ namespace DirectorySolutions
             MessageBox.Show(string.Join("\n", dirs), "All File Paths for the File List");
         }
 
-        private void M_Model_activeControlChanged(object sender, MainModel.ControlEventArgs args)
-        {
-            UpdateFileToolSetButtonDisplay();
-        }
-
         private void UpdateFileToolSetButtonDisplay()
         {
             
-            List <Control> controls = new List<Control>() { btnFilterFiles, btnFindandReplace, btnFindDuplicates, btnMovieManagement, btnNameFilesForPath };
+            List <Control> controls = new List<Control>() { btnFilterFiles, btnFindandReplace, btnFindDuplicates, btnMovieManagement, btnNameFilesForPath, btnMoveCopyDelete };
             foreach(var cntrl in controls)
             {
                 if (cntrl.Focused)
@@ -164,6 +171,31 @@ namespace DirectorySolutions
         #endregion
 
         #region DirectorySelection
+
+
+        private void btnOpenFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Multiselect = true;
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var file in dialog.FileNames)
+                    {
+                        fileOpenList.Items.Add(file);
+                    }
+                }
+            }
+        }
+
+        private void btnAddFiles_Click(object sender, EventArgs e)
+        {
+            string error;
+            if (!presenter.AddFilesFromFileList(fileOpenList.Items, out error, freshListRad.Checked))
+            {
+                MessageBox.Show(error, "Error");
+            }
+        }
 
         private void CreateDragAndDropEvents()
         {
@@ -195,15 +227,60 @@ namespace DirectorySolutions
         {
             try
             {
+                fileColumns = JsonConvert.DeserializeObject<Dictionary<string, bool>>(Properties.Settings.Default.FileColumns);
+                movieColumns = JsonConvert.DeserializeObject<Dictionary<string, bool>>(Properties.Settings.Default.MovieColumns);
                 displayGrid.DataSource = null;
                 var option = m_Model.GetGridViewOption();
                 switch (option)
                 {
                     case GridViewOptionEnum.Files:
                         displayGrid.DataSource = m_Model.GetFiles();
+                        if(fileColumns != null)
+                        {
+                            foreach (var column in fileColumns)
+                            {
+                                if (!column.Value)
+                                {
+                                    if (displayGrid.Columns[column.Key].Visible == true)
+                                    {
+                                        displayGrid.Columns[column.Key].Visible = false;
+                                    }
+                                }
+                                else
+                                {
+                                    if (displayGrid.Columns[column.Key].Visible == false)
+                                    {
+                                        displayGrid.Columns[column.Key].Visible = true;
+                                    }
+                                }
+                            }
+                        }
                         break;
                     case GridViewOptionEnum.Movies:
                         displayGrid.DataSource = m_Model.GetMovieList();
+                        if (movieColumns != null)
+                        {
+                            foreach (var column in movieColumns)
+                            {
+                                if (displayGrid.Columns.Contains(column.Key))
+                                {
+                                    if (!column.Value)
+                                    {
+                                        if (displayGrid.Columns[column.Key].Visible == true)
+                                        {
+                                            displayGrid.Columns[column.Key].Visible = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (displayGrid.Columns[column.Key].Visible == false)
+                                        {
+                                            displayGrid.Columns[column.Key].Visible = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         break;
                     default:
                         displayGrid.DataSource = m_Model.GetFiles();
@@ -211,6 +288,7 @@ namespace DirectorySolutions
                 }
                 
                 UpdateStatusDisplay(m_Model.GetGridViewOption());
+                displayGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 filePathErrorProv.Clear();
             }
             catch(Exception e)
@@ -229,8 +307,7 @@ namespace DirectorySolutions
             else
             {
                 filePathErrorProv.Clear();
-            }
-            
+            }           
         }
       
         private void btnOpenDir_Click(object sender, EventArgs e)
@@ -334,32 +411,8 @@ namespace DirectorySolutions
             if (controls.Length < 1)
             {
                 MovieManagement movieManagement = new MovieManagement(m_Model, presenter);
-                ShiftUserControlDisplay(movieManagement);
+                ShiftUserControlDisplay(movieManagement, GridViewOptionEnum.Movies);
             }
-        }
-
-        private void btnOpenFile_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                dialog.Multiselect = true;
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    foreach(var file in dialog.FileNames)
-                    {
-                        fileOpenList.Items.Add(file);
-                    }                    
-                }
-            }
-        }
-
-        private void btnAddFiles_Click(object sender, EventArgs e)
-        {
-            string error;
-            if(!presenter.AddFilesFromFileList(fileOpenList.Items, out error, freshListRad.Checked))
-            {
-                MessageBox.Show(error, "Error");
-            }           
         }
 
         private void saveFileListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -461,28 +514,52 @@ namespace DirectorySolutions
             }
         }
 
+        private void btnMoveCopyDelete_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("MoveOrDelete", true);
+            if (controls.Length < 1)
+            {
+                MoveOrDelete moveDelete = new MoveOrDelete(m_Model, presenter);
+                ShiftUserControlDisplay(moveDelete);
+            }
+        }
+
         #endregion
 
         #region MovieOperations
 
         private void M_Model_movieListChanged(object sender, MainModel.MoviesEventArgs args)
         {
-            try
-            {
-                displayGrid.DataSource = null;
-                displayGrid.DataSource = m_Model.GetMovieList();
-                UpdateStatusDisplay(m_Model.GetGridViewOption());
-                filePathErrorProv.Clear();
-            }
-            catch (Exception e)
-            {
-                filePathErrorProv.SetError(filePath, e.Message);
-            }
+            m_Model.RaiseFileListChangedEvent(m_Model.GetFiles());
         }
 
         #endregion
 
         #region UserControl
+
+        private void M_Model_gridViewOptionChanged(object sender, MainModel.GridViewEventArgs args)
+        {
+            string error;
+            switch (args.Option)
+            {
+                case GridViewOptionEnum.Files:
+                    m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+                    break;
+                case GridViewOptionEnum.Movies:
+                    if (!presenter.ParseMovieInfoFilesInPath(out error, m_Model.GetSortedBy(false)))
+                    {
+                        MessageBox.Show(error);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void M_Model_activeControlChanged(object sender, MainModel.ControlEventArgs args)
+        {
+            UpdateFileToolSetButtonDisplay();
+        }
 
         private void RemoveUnactiveUserControl()
         {
@@ -497,11 +574,18 @@ namespace DirectorySolutions
             }
         }
 
-        private void ShiftUserControlDisplay(UserControl control)
+        private void ShiftUserControlDisplay(UserControl control, GridViewOptionEnum gridViewOption = GridViewOptionEnum.Files)
         {
+            if (tipsPanel.Visible)
+            {
+                tipsPanel.Hide();
+            }
             RemoveUnactiveUserControl();
             m_Model.SetActiveControl(control);
-            m_Model.SetGridViewOption(m_Model.DetermineGridViewOption(control));
+            if(m_Model.GetGridViewOption() != gridViewOption)
+            {
+                m_Model.SetGridViewOption(gridViewOption);
+            }
             fileToolsPanel.Controls.Add(control);
             control.Location =
                 new Point(3,5);
@@ -509,25 +593,26 @@ namespace DirectorySolutions
 
         #endregion
 
+        #region General ops
+
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string error;
-            if(!presenter.SaveToExcel(displayGrid, out error))
+            if (!presenter.SaveToExcel(displayGrid, out error))
             {
                 filePathErrorProv.SetError(filePath, error);
             }
             else
             {
                 filePathErrorProv.Clear();
-            }           
+            }
         }
 
         private void btnClearFileList_Click(object sender, EventArgs e)
         {
             fileOpenList.Items.Clear();
+            m_Model.SetFileList(new List<FileInfo>(), true);
         }
-
-        #region General ops
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -536,19 +621,21 @@ namespace DirectorySolutions
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var frm = new Options();
+            var frm = new Options(m_Model, presenter);
             frm.Location = this.Location;
             frm.StartPosition = FormStartPosition.Manual;
-            frm.FormClosing += delegate { this.Show(); };
+            frm.FormClosing += delegate {
+                BuildFastPathContextMenuItems();
+                Show(); 
+            };
             frm.Show();
-            this.Hide();
+            Hide();
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
-
 
 
         #endregion
@@ -558,6 +645,9 @@ namespace DirectorySolutions
 
         }
 
-      
+        private void btnMoreTips_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not yet implemented.");
+        }
     }
 }
