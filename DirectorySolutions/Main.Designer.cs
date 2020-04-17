@@ -64,18 +64,14 @@ namespace DirectorySolutions
             this.btnBack = new System.Windows.Forms.Button();
             this.btnForward = new System.Windows.Forms.Button();
             this.filePath = new System.Windows.Forms.TextBox();
-            this.btnOpenDirMain = new System.Windows.Forms.Button();
             this.fastPathMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.btnRefresh = new System.Windows.Forms.Button();
-            this.btnOpenFile = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.appendListRad = new System.Windows.Forms.RadioButton();
             this.freshListRad = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
-            this.btnAddFiles = new System.Windows.Forms.Button();
             this.fileOpenList = new System.Windows.Forms.ListBox();
-            this.btnClearFileList = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
@@ -100,15 +96,19 @@ namespace DirectorySolutions
             this.panel2 = new System.Windows.Forms.Panel();
             this.label10 = new System.Windows.Forms.Label();
             this.file = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.directoryListLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.directoryListLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnAddFiles = new System.Windows.Forms.Button();
+            this.btnClearFileList = new System.Windows.Forms.Button();
+            this.btnOpenFile = new System.Windows.Forms.Button();
+            this.btnOpenDirMain = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filePathErrorProv)).BeginInit();
@@ -125,9 +125,9 @@ namespace DirectorySolutions
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.file.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
-            this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -344,9 +344,11 @@ namespace DirectorySolutions
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(97, 3);
+            this.btnBack.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnBack.Location = new System.Drawing.Point(105, 6);
+            this.btnBack.Margin = new System.Windows.Forms.Padding(6);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(50, 23);
+            this.btnBack.Size = new System.Drawing.Size(50, 26);
             this.btnBack.TabIndex = 8;
             this.btnBack.Text = "<<";
             this.btnBack.UseVisualStyleBackColor = true;
@@ -354,9 +356,11 @@ namespace DirectorySolutions
             // 
             // btnForward
             // 
-            this.btnForward.Location = new System.Drawing.Point(157, 3);
+            this.btnForward.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnForward.Location = new System.Drawing.Point(175, 6);
+            this.btnForward.Margin = new System.Windows.Forms.Padding(6);
             this.btnForward.Name = "btnForward";
-            this.btnForward.Size = new System.Drawing.Size(56, 23);
+            this.btnForward.Size = new System.Drawing.Size(48, 26);
             this.btnForward.TabIndex = 9;
             this.btnForward.Text = ">>";
             this.btnForward.UseVisualStyleBackColor = true;
@@ -364,23 +368,13 @@ namespace DirectorySolutions
             // 
             // filePath
             // 
-            this.filePath.Location = new System.Drawing.Point(290, 3);
+            this.filePath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.filePath.Location = new System.Drawing.Point(285, 6);
+            this.filePath.Margin = new System.Windows.Forms.Padding(6);
             this.filePath.Name = "filePath";
-            this.filePath.Size = new System.Drawing.Size(480, 20);
+            this.filePath.Size = new System.Drawing.Size(524, 20);
             this.filePath.TabIndex = 10;
             this.filePath.TextChanged += new System.EventHandler(this.filePath_TextChanged);
-            // 
-            // btnOpenDirMain
-            // 
-            this.btnOpenDirMain.AccessibleName = "btnOpenDir";
-            this.btnOpenDirMain.ContextMenuStrip = this.fastPathMenuStrip;
-            this.btnOpenDirMain.Location = new System.Drawing.Point(776, 3);
-            this.btnOpenDirMain.Name = "btnOpenDirMain";
-            this.btnOpenDirMain.Size = new System.Drawing.Size(142, 23);
-            this.btnOpenDirMain.TabIndex = 11;
-            this.btnOpenDirMain.Text = "Open Directory";
-            this.btnOpenDirMain.UseVisualStyleBackColor = true;
-            this.btnOpenDirMain.Click += new System.EventHandler(this.btnOpenDir_Click);
             // 
             // fastPathMenuStrip
             // 
@@ -391,52 +385,53 @@ namespace DirectorySolutions
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.label1.Location = new System.Drawing.Point(240, 0);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(232, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.label1.Name = "label1";
-            this.label1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label1.Size = new System.Drawing.Size(32, 18);
+            this.label1.Size = new System.Drawing.Size(44, 35);
             this.label1.TabIndex = 12;
             this.label1.Text = "Path:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Location = new System.Drawing.Point(3, 3);
+            this.btnRefresh.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnRefresh.Image = global::DirectorySolutions.Properties.Resources.Refresh_16x;
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.Location = new System.Drawing.Point(24, 6);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(6);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.Size = new System.Drawing.Size(68, 26);
             this.btnRefresh.TabIndex = 16;
             this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // btnOpenFile
-            // 
-            this.btnOpenFile.Location = new System.Drawing.Point(379, 3);
-            this.btnOpenFile.Name = "btnOpenFile";
-            this.btnOpenFile.Size = new System.Drawing.Size(71, 23);
-            this.btnOpenFile.TabIndex = 19;
-            this.btnOpenFile.Text = "Open";
-            this.btnOpenFile.UseVisualStyleBackColor = true;
-            this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Margin = new System.Windows.Forms.Padding(3, 0, 3, 6);
             this.label2.Name = "label2";
-            this.label2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label2.Size = new System.Drawing.Size(121, 20);
+            this.label2.Size = new System.Drawing.Size(126, 39);
             this.label2.TabIndex = 20;
             this.label2.Text = "Manually Add File(s):";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // appendListRad
             // 
             this.appendListRad.AutoSize = true;
             this.appendListRad.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.appendListRad.Location = new System.Drawing.Point(761, 3);
+            this.appendListRad.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.appendListRad.Location = new System.Drawing.Point(753, 3);
             this.appendListRad.Name = "appendListRad";
-            this.appendListRad.Size = new System.Drawing.Size(97, 17);
+            this.appendListRad.Size = new System.Drawing.Size(97, 39);
             this.appendListRad.TabIndex = 21;
             this.appendListRad.TabStop = true;
             this.appendListRad.Text = "Append To List";
@@ -446,9 +441,10 @@ namespace DirectorySolutions
             // 
             this.freshListRad.AutoSize = true;
             this.freshListRad.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.freshListRad.Location = new System.Drawing.Point(864, 3);
+            this.freshListRad.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.freshListRad.Location = new System.Drawing.Point(856, 3);
             this.freshListRad.Name = "freshListRad";
-            this.freshListRad.Size = new System.Drawing.Size(70, 17);
+            this.freshListRad.Size = new System.Drawing.Size(83, 39);
             this.freshListRad.TabIndex = 22;
             this.freshListRad.TabStop = true;
             this.freshListRad.Text = "Fresh List";
@@ -458,41 +454,23 @@ namespace DirectorySolutions
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.label3.Location = new System.Drawing.Point(598, 0);
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(590, 0);
             this.label3.Name = "label3";
-            this.label3.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label3.Size = new System.Drawing.Size(155, 31);
+            this.label3.Size = new System.Drawing.Size(157, 45);
             this.label3.TabIndex = 23;
-            this.label3.Text = " NOTE: Drag and drop enabled in   the \"Add File(s)\" text box.";
-            // 
-            // btnAddFiles
-            // 
-            this.btnAddFiles.Location = new System.Drawing.Point(456, 3);
-            this.btnAddFiles.Name = "btnAddFiles";
-            this.btnAddFiles.Size = new System.Drawing.Size(63, 23);
-            this.btnAddFiles.TabIndex = 24;
-            this.btnAddFiles.Text = "Add";
-            this.btnAddFiles.UseVisualStyleBackColor = true;
-            this.btnAddFiles.Click += new System.EventHandler(this.btnAddFiles_Click);
+            this.label3.Text = " NOTE: Drag and drop enabled in the \"Add File(s)\" text box.";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // fileOpenList
             // 
             this.fileOpenList.AllowDrop = true;
+            this.fileOpenList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fileOpenList.FormattingEnabled = true;
-            this.fileOpenList.Location = new System.Drawing.Point(130, 3);
+            this.fileOpenList.Location = new System.Drawing.Point(135, 3);
             this.fileOpenList.Name = "fileOpenList";
-            this.fileOpenList.Size = new System.Drawing.Size(243, 30);
+            this.fileOpenList.Size = new System.Drawing.Size(254, 39);
             this.fileOpenList.TabIndex = 25;
-            // 
-            // btnClearFileList
-            // 
-            this.btnClearFileList.Location = new System.Drawing.Point(525, 3);
-            this.btnClearFileList.Name = "btnClearFileList";
-            this.btnClearFileList.Size = new System.Drawing.Size(67, 23);
-            this.btnClearFileList.TabIndex = 26;
-            this.btnClearFileList.Text = "Clear";
-            this.btnClearFileList.UseVisualStyleBackColor = true;
-            this.btnClearFileList.Click += new System.EventHandler(this.btnClearFileList_Click);
             // 
             // label4
             // 
@@ -548,10 +526,10 @@ namespace DirectorySolutions
             this.tableLayoutPanel1.ColumnCount = 6;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.71429F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.28571F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 83F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 486F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 168F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 536F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 126F));
             this.tableLayoutPanel1.Controls.Add(this.btnOpenDirMain, 5, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnForward, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnRefresh, 0, 0);
@@ -573,26 +551,26 @@ namespace DirectorySolutions
             this.tableLayoutPanel2.ColumnCount = 8;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.77309F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.22691F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 69F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 73F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 66F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 163F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 103F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88F));
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.fileOpenList, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnOpenFile, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnAddFiles, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.freshListRad, 7, 0);
             this.tableLayoutPanel2.Controls.Add(this.label3, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.appendListRad, 6, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnClearFileList, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnOpenFile, 2, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 38);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(942, 40);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(942, 45);
             this.tableLayoutPanel2.TabIndex = 33;
             // 
             // middlePanel
@@ -719,7 +697,7 @@ namespace DirectorySolutions
             // label9
             // 
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.Location = new System.Drawing.Point(3, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(191, 31);
@@ -804,6 +782,46 @@ namespace DirectorySolutions
             this.file.Size = new System.Drawing.Size(1245, 168);
             this.file.TabIndex = 36;
             // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.panel6.Controls.Add(this.label11);
+            this.panel6.Controls.Add(this.label8);
+            this.panel6.Controls.Add(this.directoryListLayout);
+            this.panel6.Location = new System.Drawing.Point(943, 0);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(302, 172);
+            this.panel6.TabIndex = 15;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(5, 41);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(71, 13);
+            this.label11.TabIndex = 1;
+            this.label11.Text = "Directory List:";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(5, 3);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(285, 26);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Open a directory to add it to your directory list. Files from all \r\nyour director" +
+    "ies will be included in your file list.";
+            // 
+            // directoryListLayout
+            // 
+            this.directoryListLayout.AutoScroll = true;
+            this.directoryListLayout.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.directoryListLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.directoryListLayout.Location = new System.Drawing.Point(8, 57);
+            this.directoryListLayout.Name = "directoryListLayout";
+            this.directoryListLayout.Size = new System.Drawing.Size(291, 108);
+            this.directoryListLayout.TabIndex = 2;
+            // 
             // panel4
             // 
             this.panel4.Controls.Add(this.webBrowser1);
@@ -817,7 +835,7 @@ namespace DirectorySolutions
             // webBrowser1
             // 
             this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.webBrowser1.Location = new System.Drawing.Point(0, 78);
+            this.webBrowser1.Location = new System.Drawing.Point(0, 83);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
             this.webBrowser1.Size = new System.Drawing.Size(942, 87);
@@ -844,46 +862,6 @@ namespace DirectorySolutions
             this.label7.Text = "Create Your File List";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // panel6
-            // 
-            this.panel6.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.panel6.Controls.Add(this.label11);
-            this.panel6.Controls.Add(this.label8);
-            this.panel6.Controls.Add(this.directoryListLayout);
-            this.panel6.Location = new System.Drawing.Point(943, 0);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(302, 172);
-            this.panel6.TabIndex = 15;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(5, 3);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(285, 26);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "Open a directory to add it to your directory list. Files from all \r\nyour director" +
-    "ies will be included in your file list.";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(5, 41);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(71, 13);
-            this.label11.TabIndex = 1;
-            this.label11.Text = "Directory List:";
-            // 
-            // directoryListLayout
-            // 
-            this.directoryListLayout.AutoScroll = true;
-            this.directoryListLayout.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.directoryListLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.directoryListLayout.Location = new System.Drawing.Point(8, 57);
-            this.directoryListLayout.Name = "directoryListLayout";
-            this.directoryListLayout.Size = new System.Drawing.Size(291, 108);
-            this.directoryListLayout.TabIndex = 2;
-            // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
@@ -893,6 +871,65 @@ namespace DirectorySolutions
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
+            // 
+            // btnAddFiles
+            // 
+            this.btnAddFiles.Image = global::DirectorySolutions.Properties.Resources.Add_16x;
+            this.btnAddFiles.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAddFiles.Location = new System.Drawing.Point(460, 9);
+            this.btnAddFiles.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.btnAddFiles.Name = "btnAddFiles";
+            this.btnAddFiles.Size = new System.Drawing.Size(54, 23);
+            this.btnAddFiles.TabIndex = 24;
+            this.btnAddFiles.Text = "Add";
+            this.btnAddFiles.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnAddFiles.UseVisualStyleBackColor = true;
+            this.btnAddFiles.Click += new System.EventHandler(this.btnAddFiles_Click);
+            // 
+            // btnClearFileList
+            // 
+            this.btnClearFileList.Image = global::DirectorySolutions.Properties.Resources.ClearWindowContent_16x;
+            this.btnClearFileList.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClearFileList.Location = new System.Drawing.Point(524, 9);
+            this.btnClearFileList.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.btnClearFileList.Name = "btnClearFileList";
+            this.btnClearFileList.Size = new System.Drawing.Size(58, 23);
+            this.btnClearFileList.TabIndex = 26;
+            this.btnClearFileList.Text = "Clear";
+            this.btnClearFileList.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnClearFileList.UseVisualStyleBackColor = true;
+            this.btnClearFileList.Click += new System.EventHandler(this.btnClearFileList_Click);
+            // 
+            // btnOpenFile
+            // 
+            this.btnOpenFile.Image = global::DirectorySolutions.Properties.Resources.SearchFolderOpened_16x;
+            this.btnOpenFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnOpenFile.Location = new System.Drawing.Point(395, 9);
+            this.btnOpenFile.Margin = new System.Windows.Forms.Padding(3, 9, 3, 3);
+            this.btnOpenFile.Name = "btnOpenFile";
+            this.btnOpenFile.Size = new System.Drawing.Size(57, 23);
+            this.btnOpenFile.TabIndex = 19;
+            this.btnOpenFile.Text = "Find";
+            this.btnOpenFile.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnOpenFile.UseVisualStyleBackColor = true;
+            this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnOpenDirMain
+            // 
+            this.btnOpenDirMain.AccessibleName = "btnOpenDir";
+            this.btnOpenDirMain.ContextMenuStrip = this.fastPathMenuStrip;
+            this.btnOpenDirMain.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnOpenDirMain.Image = global::DirectorySolutions.Properties.Resources.AddFolder_16x;
+            this.btnOpenDirMain.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnOpenDirMain.Location = new System.Drawing.Point(827, 6);
+            this.btnOpenDirMain.Margin = new System.Windows.Forms.Padding(6);
+            this.btnOpenDirMain.Name = "btnOpenDirMain";
+            this.btnOpenDirMain.Size = new System.Drawing.Size(109, 26);
+            this.btnOpenDirMain.TabIndex = 11;
+            this.btnOpenDirMain.Text = "Open Directory";
+            this.btnOpenDirMain.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnOpenDirMain.UseVisualStyleBackColor = true;
+            this.btnOpenDirMain.Click += new System.EventHandler(this.btnOpenDir_Click);
             // 
             // MainForm
             // 
@@ -930,10 +967,10 @@ namespace DirectorySolutions
             this.panel3.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.file.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            this.panel4.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

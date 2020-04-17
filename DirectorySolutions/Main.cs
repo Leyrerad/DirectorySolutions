@@ -667,7 +667,7 @@ namespace DirectorySolutions
         private void btnClearFileList_Click(object sender, EventArgs e)
         {
             fileOpenList.Items.Clear();
-            m_Model.SetFileList(new List<FileInfo>(), true);
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)

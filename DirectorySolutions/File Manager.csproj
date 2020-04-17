@@ -161,7 +161,22 @@
     </Compile>
     <Compile Include="Views\MainView.cs" />
     <Content Include="logomakr_9vp3o7_fWC_icon.ico" />
+    <None Include="Resources\Refresh_greyThin_16x.png" />
+    <None Include="Resources\Refresh_grey_16x.png" />
+    <None Include="Resources\Refresh_16x.png" />
+    <None Include="Resources\PendingAdd_7x_16x.png" />
+    <None Include="Resources\SearchFolderOpened_16x.png" />
     <None Include="Resources\DeleteFolder_16x.png" />
+    <None Include="Resources\AddFolder_16x.png" />
+    <None Include="Resources\AddFolder_inverse_16x.png" />
+    <None Include="Resources\Add_8x_16x.png" />
+    <None Include="Resources\Add_16x.png" />
+    <None Include="Resources\Add_grey_8x_16x.png" />
+    <None Include="Resources\Add_grey_16x.png" />
+    <None Include="Resources\Add_white_16x.png" />
+    <None Include="Resources\ASX_Add_blue_16x.png" />
+    <None Include="Resources\ASX_Add_grey_16x.png" />
+    <None Include="Resources\ClearWindowContent_16x.png" />
     <Content Include="Resources\LogoMakr_9Vp3o7.png" />
     <Content Include="Resources\logomakr_9vp3o723_K8l_icon.ico" />
     <Content Include="Resources\logomakr_9vp3o72_Q5d_icon.ico" />
