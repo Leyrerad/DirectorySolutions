@@ -39,12 +39,10 @@ namespace DirectorySolutions
             InitializeComponent();
             presenter = new MainPresenter(this, m_Model);
             mainFormStartingHeight = Height;
-            freshDir.Checked = true;
             appendListRad.Checked = true;
             displayGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             SubscribeToModelEvents();
             CreateDragAndDropEvents();
-            SetToolTips();            
             LoadDefaults();
             buttonColor = btnFilterFiles.BackColor;
             displayGrid.CellDoubleClick += DisplayGrid_CellDoubleClick;
@@ -69,7 +67,17 @@ namespace DirectorySolutions
             try
             {
                 string error;
-                var frm = new FileDetails(m_Model.GetFiles().ElementAt(e.RowIndex), m_Model, presenter);
+                var viewOption = m_Model.GetGridViewOption();
+                FileDetails frm;
+                if(viewOption == GridViewOptionEnum.Files)
+                {
+                    frm = new FileDetails(m_Model.GetFiles().ElementAt(e.RowIndex), m_Model, presenter);
+                }
+                else
+                {
+                    frm = new FileDetails(m_Model.GetFiles().ElementAt(e.RowIndex), m_Model, presenter, m_Model.GetMovieList().ElementAt(e.RowIndex));
+                }
+               
                 frm.Location = this.Location;
                 frm.StartPosition = FormStartPosition.Manual;
                 frm.FormClosing += delegate {
@@ -111,12 +119,6 @@ namespace DirectorySolutions
             }
         }
 
-        private void SetToolTips()
-        {
-            tooltipFreshDir.SetToolTip(picInfoFreshDir, "By clicking 'Save Directory' the previously compiled file list " +
-                "will be appended to that of the next path that is opened. Click this icon to view all saved file paths.");
-        }
-
         private void UpdateStatusDisplay(GridViewOptionEnum displayOption)
         {
             countLbl.Text = m_Model.GetFileCount(displayOption).ToString() + " Files";
@@ -126,7 +128,7 @@ namespace DirectorySolutions
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
 
             string error;
             if (!presenter.AddFilesFromFileList(fileOpenList.Items, out error, freshListRad.Checked))
@@ -166,6 +168,47 @@ namespace DirectorySolutions
                 }
             }
             
+        }
+
+        private void RefreshDirectoryList()
+        {
+            var paths = m_Model.GetAllFilePaths();
+            directoryListLayout.Controls.Clear();
+            for (int i = 0; i < paths.Count; i++)
+            {
+                var pathLayout = new FlowLayoutPanel()
+                {
+                    Size = new Size(directoryListLayout.Width - 20, 30),
+                    Name = "pathLayout" + i.ToString()
+                };
+                var button = new Button() {
+                    Name = "btnRemovePath" + i.ToString(),
+                    Text = "Remove",
+                    ImageAlign = ContentAlignment.MiddleLeft,
+                    TextImageRelation = TextImageRelation.ImageBeforeText,                    
+                    Image = Properties.Resources.DeleteFolder_16x
+                };
+                button.Click += Remove_Click;
+                pathLayout.Controls.Add(button);
+                pathLayout.Controls.Add(new Label() { Text = paths[i], Padding = new Padding(0, 6, 0, 0) });
+                directoryListLayout.Controls.Add(pathLayout);
+            }
+        }
+
+        private void Remove_Click(object sender, EventArgs e)
+        {
+            var paths = m_Model.GetAllFilePaths();
+            var ctrl = sender as Control;
+            var newName = ctrl.Name.Replace("btnRemovePath", "");
+            int index;
+            var validIndex = int.TryParse(newName, out index);
+            if (validIndex && paths.Count > 0)
+            {
+                paths.RemoveAt(index);
+                m_Model.ReplaceFilePaths(paths, true);
+                RefreshDirectoryList();
+                m_Model.RaiseFilePathChangedEvent(paths);
+            }
         }
 
         #endregion
@@ -307,7 +350,18 @@ namespace DirectorySolutions
             else
             {
                 filePathErrorProv.Clear();
-            }           
+            }
+
+            if (!presenter.AddFilesFromFileList(fileOpenList.Items, out error, freshListRad.Checked))
+            {
+                filePathErrorProv.SetError(filePath, error);
+            }
+            else
+            {
+                filePathErrorProv.Clear();
+            }
+
+            RefreshDirectoryList();
         }
       
         private void btnOpenDir_Click(object sender, EventArgs e)
@@ -316,7 +370,9 @@ namespace DirectorySolutions
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    webBrowser1.Url = new Uri(fbd.SelectedPath);                    
+                    webBrowser1.Url = new Uri(fbd.SelectedPath);
+                    filePath.Text = fbd.SelectedPath;
+                    m_Model.SetActiveFilePath(filePath.Text);
                 }
             }
         }
@@ -339,19 +395,9 @@ namespace DirectorySolutions
 
         private void filePath_TextChanged(object sender, EventArgs e)
         {
-            m_Model.SetActiveFilePath(filePath.Text, saveDir.Checked);
-        }
-
-        private void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            var path = e.Url.ToString().Replace("file:///", "").Replace("file://", "");           
-            if(string.Equals(filePath.Text, path))
+            if (Directory.Exists(filePath.Text))
             {
-                m_Model.RaiseFilePathChangedEvent(path, m_Model.GetAllFilePaths());
-            }
-            else
-            {
-                filePath.Text = path;
+                m_Model.SetActiveFilePath(filePath.Text);                
             }
         }
 
@@ -524,6 +570,16 @@ namespace DirectorySolutions
             }
         }
 
+        private void btnFindDuplicates_Click(object sender, EventArgs e)
+        {
+            Control[] controls = Controls.Find("FindDuplicates", true);
+            if (controls.Length < 1)
+            {
+                FindDuplicates findDuplicates = new FindDuplicates(m_Model, presenter);
+                ShiftUserControlDisplay(findDuplicates);
+            }
+        }
+
         #endregion
 
         #region MovieOperations
@@ -543,7 +599,7 @@ namespace DirectorySolutions
             switch (args.Option)
             {
                 case GridViewOptionEnum.Files:
-                    m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+                    m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
                     break;
                 case GridViewOptionEnum.Movies:
                     if (!presenter.ParseMovieInfoFilesInPath(out error, m_Model.GetSortedBy(false)))
@@ -640,10 +696,7 @@ namespace DirectorySolutions
 
         #endregion
 
-        private void btnFindDuplicates_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void btnMoreTips_Click(object sender, EventArgs e)
         {

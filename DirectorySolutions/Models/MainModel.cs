@@ -34,7 +34,7 @@ namespace DirectorySolutions.Models
 
         #region member variables
 
-        private List<string> userControlsForFileOperations = new List<string>() { "FindAndReplaceControls", "RenameFileForPath", "FilterFiles", "MoveOrDelete" };
+        private List<string> userControlsForFileOperations = new List<string>() { "FindAndReplaceControls", "RenameFileForPath", "FilterFiles", "MoveOrDelete", "FindDuplicates" };
         private List<string> userControlsForMovieOperations = new List<string>() { "MovieManagement" };
         private Dictionary<string, string> buttonToTextKeyPair = new Dictionary<string, string>()
         {
@@ -52,7 +52,6 @@ namespace DirectorySolutions.Models
             "Tip: Select the 'Inverse Results' checkbox when filtering files to return all files containing the opposite of your filter requirements, such as all filenames NOT containing a certain keyword."
         };
         private List<string> userControlsForDirectoryOperations = new List<string>();
-        private string activeFilePath;
         private string searchString;
         private List<string> allFilePaths;
         private string genericErrorMessage;
@@ -69,7 +68,6 @@ namespace DirectorySolutions.Models
 
         public MainModel()
         {
-            activeFilePath = "";
             files = new List<FileInfo>();
             directories = new List<DirectoryInfo>();
             allFilePaths = new List<string>();
@@ -116,19 +114,13 @@ namespace DirectorySolutions.Models
 
         #region filePath
 
-        public void SetActiveFilePath(string value, bool saveDir)
+        public void SetActiveFilePath(string value)
         {
-            activeFilePath = value;
-            if (saveDir)
+            if (!allFilePaths.Contains(value))
             {
                 allFilePaths.Add(value);
+                RaiseFilePathChangedEvent(allFilePaths);
             }
-            else
-            {
-                allFilePaths.Clear();
-                allFilePaths.Add(value);
-            }
-            RaiseFilePathChangedEvent(value, allFilePaths);
         }
 
         public void ClearFilePaths()
@@ -136,20 +128,13 @@ namespace DirectorySolutions.Models
             allFilePaths.Clear();
         }
 
-        public void ReplaceFilePaths(List<string> filePaths, string activeFilePath, bool raiseEvent)
+        public void ReplaceFilePaths(List<string> filePaths, bool raiseEvent)
         {
-            ClearFilePaths();
             allFilePaths = filePaths;
-            this.activeFilePath = activeFilePath;
             if (raiseEvent)
             {
-                RaiseFilePathChangedEvent(activeFilePath, filePaths);
+                RaiseFilePathChangedEvent(filePaths);
             }
-        }
-
-        public string GetActiveFilePath()
-        {
-            return activeFilePath;
         }
 
         public List<string> GetAllFilePaths()
@@ -159,18 +144,16 @@ namespace DirectorySolutions.Models
 
         public class PathEventArgs : EventArgs
         {
-            public string Data { get; set; }
             public List<string> AllPaths { get; set; }
-            public PathEventArgs(string data, List<string> allPaths)
+            public PathEventArgs(List<string> allPaths)
             {
-                Data = data;
                 AllPaths = allPaths;
             }
         }
 
-        public void RaiseFilePathChangedEvent(string filePath, List<string> allFilePaths)
+        public void RaiseFilePathChangedEvent(List<string> allFilePaths)
         {
-            filePathChanged(this, new PathEventArgs(filePath, allFilePaths));
+            filePathChanged(this, new PathEventArgs(allFilePaths));
         }               
 
         #endregion
@@ -601,11 +584,8 @@ namespace DirectorySolutions.Models
     public interface IMainModel
     {
         string GetRandomTip();
-        void SetActiveFilePath(string value, bool saveDir);
         
         void ClearFilePaths();
-
-        string GetActiveFilePath();
 
         List<string> GetAllFilePaths();
 
@@ -627,7 +607,7 @@ namespace DirectorySolutions.Models
 
         void RaiseFileListChangedEvent(List<FileInfo> fileList);
 
-        void RaiseFilePathChangedEvent(string filePath, List<string> allFilePaths);
+        void RaiseFilePathChangedEvent(List<string> allFilePaths);
 
         Tuple<string, string> GetFileNameByPathSeperatorTuple(NameByPathSeperatorEnum seperator);
 
@@ -651,7 +631,7 @@ namespace DirectorySolutions.Models
 
         void AddFilesToFileList(List<FileInfo> fileList, bool raiseEvent);
 
-        void ReplaceFilePaths(List<string> filePaths, string activeFilePath, bool raiseEvent);
+        void ReplaceFilePaths(List<string> filePaths, bool raiseEvent);
 
         string SizeSuffix(Int64 value, int decimalPlaces = 2);
 

@@ -139,6 +139,6 @@ namespace DirectorySolutions.UserControls
             presenter.ClearAllTextFields(Controls);
             modifiedStartTime.Value = new DateTime(1970, 1, 1, 0, 0, 0);
             modifiedEndTime.Value = DateTime.Now;
-        }
+        }               
     }
 }

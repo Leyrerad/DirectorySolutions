@@ -135,6 +135,12 @@
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\FindDuplicates.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\FindDuplicates.Designer.cs">
+      <DependentUpon>FindDuplicates.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MoveOrDelete.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -155,6 +161,7 @@
     </Compile>
     <Compile Include="Views\MainView.cs" />
     <Content Include="logomakr_9vp3o7_fWC_icon.ico" />
+    <None Include="Resources\DeleteFolder_16x.png" />
     <Content Include="Resources\LogoMakr_9Vp3o7.png" />
     <Content Include="Resources\logomakr_9vp3o723_K8l_icon.ico" />
     <Content Include="Resources\logomakr_9vp3o72_Q5d_icon.ico" />
@@ -202,6 +209,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UserControls\FindDuplicates.resx">
+      <DependentUpon>FindDuplicates.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\MoveOrDelete.resx">
       <DependentUpon>MoveOrDelete.cs</DependentUpon>
     </EmbeddedResource>

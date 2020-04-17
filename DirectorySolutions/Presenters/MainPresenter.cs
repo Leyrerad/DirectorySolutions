@@ -44,7 +44,7 @@ namespace DirectorySolutions.Presenters
                 }
 
                 error = "";
-                if (allFiles != null && allFiles.Count() > 0)
+                if (allFiles != null)
                 {
                     if (sortedBy != DisplaySortOptionEnum.None)
                     {
@@ -140,7 +140,7 @@ namespace DirectorySolutions.Presenters
                 logger.Debug(error);
                 return false;
             }
-            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
             return true;          
         }
 
@@ -175,7 +175,7 @@ namespace DirectorySolutions.Presenters
                     }
                     if(newSearchDirectories != null && newSearchDirectories.Count > 0)
                     {
-                        m_Model.ReplaceFilePaths(newSearchDirectories, newSearchDirectories.First(), false);
+                        m_Model.ReplaceFilePaths(newSearchDirectories, false);
                     }
                     break;
                 default:
@@ -187,7 +187,7 @@ namespace DirectorySolutions.Presenters
                     }
                     break;
             }
-            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
             return true;           
         }
 
@@ -200,7 +200,7 @@ namespace DirectorySolutions.Presenters
                 logger.Debug(error);
                 return false;
             }
-            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
             return true;
         }
 
@@ -246,7 +246,7 @@ namespace DirectorySolutions.Presenters
                 logger.Debug(error);
                 return false;
             }
-            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
             return true;
         }
 
@@ -471,7 +471,7 @@ namespace DirectorySolutions.Presenters
         {
             m_Model.SetApplicationState(ApplicationStateEnum.FileOperation);
             var filesCreated = await ApiManager.CreateMovieInfoFiles(m_Model.GetFiles());
-            m_Model.RaiseFilePathChangedEvent(m_Model.GetActiveFilePath(), m_Model.GetAllFilePaths());
+            m_Model.RaiseFilePathChangedEvent(m_Model.GetAllFilePaths());
             return filesCreated ? true : false;
         }
 
